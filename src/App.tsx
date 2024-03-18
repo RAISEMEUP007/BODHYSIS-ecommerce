@@ -14,6 +14,7 @@ const App = () => {
   useEffect(() => {
     getTestToken((jsonRes:any)=>{
       setAccessToken(jsonRes.refreshToken);
+      localStorage.setItem('access-token', jsonRes.refreshToken);
     });
   }, []);
 
