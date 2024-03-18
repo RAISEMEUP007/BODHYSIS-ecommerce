@@ -4,7 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import { getTestToken } from './api/Auth';
 import Desktop1 from './reservation/reserve';
-import Desktop2 from './reservation/desktop2';
+import Payment from './reservation/payment';
 import ReservationDetails from './reservation/detail';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +26,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Desktop1 />} />
-          <Route path="/desktop2" element={<Desktop2 />} />
+          <Route path="/payment" element={<Payment />} />
           {/* <Route path="/detail" element={<ReservationDetails />} /> */}
         </Routes>
       </Router>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, Grid } from '@mui/material';
+import { Link } from 'react-router-dom';
 import bikeIcon from "../img/bikeIcon.png";
 import yellowbike from "../img/yellowbike.png"
 import redbike from "../img/redbike.png"
@@ -20,7 +21,7 @@ const CustomSelect = (props: any) => {
         value={value}
         inputProps={{ 'aria-label': 'select' }}
         onChange={onChange}
-        sx={{ mt: '12px', p:'4px'}}
+        sx={{ mt: '12px', p: '4px' }}
         displayEmpty
       >
         {items.map((item: any) => {
@@ -47,7 +48,7 @@ const CustomCalendar = (props: any) => {
       <DateTimePicker
         value={value}
         onChange={onChange}
-        sx={{ mt: '12px', pt: '8px'}}
+        sx={{ mt: '12px', pt: '8px' }}
         referenceDate={dayjs()}
         slotProps={{ textField: { variant: 'standard', } }}
       />
@@ -61,9 +62,9 @@ const ProductDetail = (props: any) => {
     <Button
       disableRipple
       onClick={handleDetailDialogOpen}
-      sx={{ mt: '20px', color: 'black' }}
+      sx={{ mt: '20px', color: 'black', width: '100%', textAlign:'left' }}
     >
-      <Box sx={{ border: '1px solid #ABABAB', padding: '30px', display: 'flex', justifyContent: 'space-between', borderRadius: '10px' }}>
+      <Box sx={{ border: '1px solid #ABABAB', padding: '30px', display: 'flex', justifyContent: 'space-between', borderRadius: '10px', width: '100%' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ width: '30%', maxWidth: '300px', mt: '10px' }}>
             <img src={yellowbike} style={{ maxWidth: '100%', width: '100%' }} />
@@ -145,7 +146,7 @@ const Reserve: React.FC = () => {
               sx={{ boxSizing: 'boder-box', width: '30%', pt: 5, pr: 5 }}
             />
           </Box>
-          <CategorySlot sx={{mt:'50px'}}/>
+          <CategorySlot sx={{ mt: '50px' }} />
           <Box sx={{ mt: '70px', pr: 2 }}>
             <Typography sx={{ fontWeight: '900' }}>There are 2 products available.</Typography>
             <ProductDetail price={45} handleDetailDialogOpen={handleDetailDialogOpen} />
@@ -178,7 +179,7 @@ const Reserve: React.FC = () => {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button variant="contained" sx={{ pr: 6, pl: 6 }}>
+            <Button variant="contained" sx={{ pr: 6, pl: 6 }} component={Link} to="/payment">
               Complete Purchase
             </Button>
           </Box>

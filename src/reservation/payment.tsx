@@ -80,7 +80,7 @@ const ProductDetail = (props: any) => {
   )
 }
 
-const Desktop2: React.FC = () => {
+const Payment: React.FC = () => {
   const [pickup, setPickup] = useState("");
   const [duration, setDuration] = useState("");
   const [category, setCategory] = useState("");
@@ -252,4 +252,4 @@ const Desktop2: React.FC = () => {
   );
 }
 
-export default Desktop2;
+export default Payment;
