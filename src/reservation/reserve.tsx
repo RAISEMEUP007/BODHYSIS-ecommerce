@@ -139,7 +139,7 @@ const Reserve: React.FC = () => {
               name="Duration"
               value={duration}
               onChange={handleDurationChange}
-              items={["Item1", "Item2", "Item3"]}
+              items={[]}
               sx={{ boxSizing: 'boder-box', width: '30%', pt: 5, pr: 5 }}
             />
             <CustomCalendar
