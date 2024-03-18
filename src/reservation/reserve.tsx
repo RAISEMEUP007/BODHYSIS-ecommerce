@@ -91,7 +91,8 @@ const Reserve: React.FC = () => {
   const [duration, setDuration] = useState("");
   const [category, setCategory] = useState("");
   const [bike, setBike] = useState("");
-  const [detailDialogOpen, setDetailDialogOpen] = useState(false)
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState();
 
   const handlePickupChange = (e: any) => {
     setPickup(e.target.value as string);
@@ -146,7 +147,7 @@ const Reserve: React.FC = () => {
               sx={{ boxSizing: 'boder-box', width: '30%', pt: 5, pr: 5 }}
             />
           </Box>
-          <CategorySlot sx={{ mt: '50px' }} />
+          <CategorySlot sx={{ mt: '50px' }} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}  />
           <Box sx={{ mt: '70px', pr: 2 }}>
             <Typography sx={{ fontWeight: '900' }}>There are 2 products available.</Typography>
             <ProductDetail price={45} handleDetailDialogOpen={handleDetailDialogOpen} />
