@@ -22,7 +22,7 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
 
   return (
     <Box sx={sx}>
-      <Typography sx={{ fontWeight: '900' }}>{'Categories'}</Typography>
+      <Box sx={{ fontWeight: '800' }}>{'Categories'} {selectedCategory === undefined ? <Typography sx={{fontWeight: '100', display:'inline-block', ml: 3}}>Please select a category</Typography> : ''}</Box>
       <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', flexWrap:'wrap'}}>
         {categories && categories.map((category:any) => (
           <Button
