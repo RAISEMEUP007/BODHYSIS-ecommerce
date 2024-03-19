@@ -3,9 +3,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import { getTestToken } from './api/Auth';
-import Desktop1 from './reservation/reserve';
-import Payment from './reservation/payment';
-import ReservationDetails from './reservation/detail';
+import Reservation from './reservation/Reserve';
+import Payment from './payment/Payment';
+
+import ReservationDetails from './reservation/Detail';
 import { useEffect, useState } from 'react';
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
   useEffect(() => {
     getTestToken((jsonRes:any)=>{
       setAccessToken(jsonRes.refreshToken);
+      localStorage.setItem('access-token', jsonRes.refreshToken);
     });
   }, []);
 
@@ -25,7 +27,7 @@ const App = () => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Router>
         <Routes>
-          <Route path="/" element={<Desktop1 />} />
+          <Route path="/" element={<Reservation />} />
           <Route path="/payment" element={<Payment />} />
           {/* <Route path="/detail" element={<ReservationDetails />} /> */}
         </Routes>

@@ -1,3 +1,19 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* App css start */
+
 .App {
   text-align: center;
 }
@@ -36,3 +52,49 @@
     transform: rotate(360deg);
   }
 }
+
+/* App css end */
+
+/* Reservation css start */
+
+.price p {
+  margin: 0.2em;
+  font-weight: 700;
+}
+
+.reservationDetail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reservationDetail p {
+  margin: 5px;
+  /* font-size: 16; */
+  /* font-weight: 700; */
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary p {
+  margin: 10;
+  /* font-size: 16; */
+  font-weight: 500;
+}
+
+/* Reservation css end */
+
+/* Common css start */
+
+.purchase {
+  display: flex;
+  justify-content: space-between;
+}
+
+.purchase p {
+  margin: 5px;
+}
+
+/* Common css end */
