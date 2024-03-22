@@ -67,7 +67,7 @@ export const CustomerReservationContext = createContext<ContextProps>({
   setReservationItems: () => {},
 });
 
-export const CrustomerReservationProvider = ({ children }:{children:React.ReactNode}) => {
+export const CustomerReservationProvider = ({ children }:{children:React.ReactNode}) => {
   const [ReservationMain, setReservationMain] = useState<ReservationMainProps>(initializedMain);
   const [ReservationItems, setReservationItems] = useState<Array<any>>([]);
 

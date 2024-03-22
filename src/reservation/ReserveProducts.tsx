@@ -64,30 +64,28 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   }, [ReservationMain.price_table_id]);
 
   useEffect(()=>{
-    const calcData = async () =>{
-      if(ReservationMain.pickup && ReservationMain.dropoff){
-        const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
-        setReservationItems(calculatedReservedItems);
+    calcData(ReservationItems);
+  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff])
 
-        let prices = {
-          subtotal: 0,
-          tax: 0,
-          total: 0,
-        }
-        calculatedReservedItems.map((item:any)=>{
-          let subtotal = item.price || 0;
-          let tax = (item.price || 0) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-          let total = subtotal - tax;
-          prices.subtotal += subtotal;
-          prices.tax += tax;
-          prices.total += total;
-        });
-        
-        setReservationValue('prices', prices);
-      }
+  const calcData = async (ReservationItems:Array<any>) =>{
+    const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
+    setReservationItems(calculatedReservedItems);
+
+    let prices = {
+      subtotal: 0,
+      tax: 0,
+      total: 0,
     }
-    calcData();
-  }, [headerData, ReservationMain.price_table_id, ReservationItems.length, ReservationMain.pickup, ReservationMain.dropoff])
+    calculatedReservedItems.map((item:any)=>{
+      let subtotal = item.price || 0;
+      let tax = (item.price || 0) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
+      let total = subtotal - tax;
+      prices.subtotal += subtotal;
+      prices.tax += tax;
+      prices.total += total;
+    });
+    setReservationValue('prices', prices);
+  }
 
   const handlePickupChange = (value: any) => {
     const pickupDateTime = new Date(value);
@@ -124,10 +122,9 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
     setDetailDialogOpen(true);
   }
 
-  const handleDetailDialogOK = (product: any) => {
-    let updatedReservedProducts = ReservationItems;
-    updatedReservedProducts.push(product);
-    setReservationItems(updatedReservedProducts);
+  const handleDetailDialogOK = async (product: any) => {
+    const updatedReservedProducts = [...ReservationItems, product];
+    await calcData(updatedReservedProducts);
     setDetailDialogOpen(false);
   }
   

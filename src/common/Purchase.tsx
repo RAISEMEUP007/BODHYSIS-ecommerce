@@ -16,19 +16,17 @@ const Purchase: React.FC<props> = ({ title, sx }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
-  useEffect(()=>{}, [ReservationItems]);
-
   return (
     <Box sx={{width:'500px', ...sx}}>
       <Typography sx={{ fontWeight: '900', mb: '30px', textAlign: 'center' }}>{title}</Typography>
       {ReservationItems.length ?
         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
-          {ReservationItems.map((product: any, index:number) => {
+          {ReservationItems.map((item: any, index:number) => {
             return (
               <img 
                 key={index} 
-                src={product && product.img_url ? `${API_URL}${product.img_url}` : iconPlaceholder} 
-                alt={product.img_url}
+                src={item && item.img_url ? `${API_URL}${item.img_url}` : iconPlaceholder} 
+                alt={item.img_url}
                 style={{ width: '43%', padding: '2%', marginLeft:'', marginBottom:'6%', boxShadow:'2px 2px 4px #999' }} />
             )
           })}
