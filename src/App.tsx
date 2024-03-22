@@ -1,38 +1,62 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import { getTestToken } from './api/Auth';
 import Reservation from './reservation/Reserve';
 import Payment from './payment/Payment';
 
-import ReservationDetails from './reservation/Detail';
 import { useEffect, useState } from 'react';
+import Providers from './common/Providers/Provider';
+import { useStoreDetails } from './common/Providers/UseStoreDetails';
+import { getStoreDetailDB } from './api/Store';
 
-const App = () => {
-  const [accessToken, setAccessToken] = useState(null); // Initializing access token state
+const InitializeApp = ({ children } : {children:any}) => {
+  const [accessToken, setAccessToken] = useState(null);
+
+  const { getStoreDetails, setStoreDetails } = useStoreDetails();
 
   useEffect(() => {
-    getTestToken((jsonRes:any)=>{
-      setAccessToken(jsonRes.refreshToken);
-      localStorage.setItem('access-token', jsonRes.refreshToken);
-    });
+    const fetchData = async () => {
+      await getTestToken((jsonRes:any, status)=>{
+        if(status == 200){
+          setAccessToken(jsonRes.refreshToken);
+          localStorage.setItem('access-token', jsonRes.refreshToken);
+        }
+      });
+  
+      const currentURL = window.location.href;
+      const host = new URL(currentURL).host;
+      console.log(host);
+      await getStoreDetailDB({store_url:host}, (jsonRes:any, status)=>{
+        if(status == 200) setStoreDetails(jsonRes);
+      });
+    };
+
+    fetchData();
   }, []);
 
   if (accessToken === null) {
-    return <div>Loading...</div>;
+    return <div>Invalid token...</div>;
   }
 
+  if (getStoreDetails() === null) {
+    return <div>Not registered store...</div>;
+  }
+
+  return children;
+};
+
+const App = () => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Reservation />} />
-          <Route path="/payment" element={<Payment />} />
-          {/* <Route path="/detail" element={<ReservationDetails />} /> */}
-        </Routes>
-      </Router>
-    </LocalizationProvider>
+    <Providers>
+      <InitializeApp>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Reservation />} />
+            <Route path="/payment" element={<Payment />} />
+          </Routes>
+        </Router>
+      </InitializeApp>
+    </Providers>
   );
 }
 

@@ -22,7 +22,10 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
 
   return (
     <Box sx={sx}>
-      <Box sx={{ fontWeight: '800' }}>{'Categories'} {selectedCategory === undefined ? <Typography sx={{fontWeight: '100', display:'inline-block', ml: 3}}>Please select a category</Typography> : ''}</Box>
+      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center', fontWeight: '800' }}>
+        <Typography sx={{fontWeight:'bold'}}>{'Categories'}</Typography>
+        <Typography sx={{ml:'40px', fontSize:14, color:'#e6ac00'}}>{selectedCategory === undefined ? 'Please select a category' : ''}</Typography>
+      </Box>
       <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', flexWrap:'wrap'}}>
         {categories && categories.map((category:any) => (
           <Button
@@ -35,7 +38,9 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
              flexDirection: 'column',
              alignItems: 'center',
              justifyContent: 'center',
-             border: selectedCategory && selectedCategory.id === category.id ? '1px solid black' : 'none',
+             borderWidth: '1px',
+             borderStyle: 'solid',
+             borderColor: selectedCategory && selectedCategory.id === category.id ? 'black' : 'transparent',
            }}
            onClick={() => setSelectedCategory(category)}
          >
