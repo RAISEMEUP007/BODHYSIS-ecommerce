@@ -118,7 +118,7 @@ const Payment: React.FC = () => {
           </Box>
         </Box>
         <Box sx={{ width: '400px', pr: '50px', pl: '50px', borderLeft: '1px solid #ABABAB' }}>
-          <Purchase sx={{}} title="Summary" reservedProducts={[]} pickup={new Date()} dropoff={new Date()} />
+          <Purchase title="Summary"/>
           <Box sx={{textAlign: 'center'}}>
             Stripe
           </Box>

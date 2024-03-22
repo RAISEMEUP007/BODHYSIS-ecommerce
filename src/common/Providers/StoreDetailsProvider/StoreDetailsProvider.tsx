@@ -19,26 +19,43 @@ export interface StoreDetailProps {
 }
 
 interface ContextProps {
-  storeDetails: StoreDetailProps | null;
+  storeDetails: StoreDetailProps;
   setStoreDetails: (storeDetails: StoreDetailProps) => void;
-  getStoreDetails: () => StoreDetailProps | null;
+  getStoreDetails: () => StoreDetailProps;
   setStoreValue: (key: keyof StoreDetailProps, value: any) => void;
   getStoreValue: (key: keyof StoreDetailProps) => any | null;
 }
 
+const initializedDetail: StoreDetailProps = {
+  id: 0,
+  brand_id: 0,
+  store_name: "",
+  language_id: "",
+  logo_url: "",
+  address_line1: "",
+  address_line2: "",
+  city: "",
+  state: "",
+  postal_code: "",
+  latitude: null,
+  longitude: null,
+  phone_number: "",
+  sales_tax: null,
+}
+
 export const StoreDetailsContext = createContext<ContextProps>({
-  storeDetails: null,
+  storeDetails: initializedDetail,
   setStoreDetails: () => {},
-  getStoreDetails: () => null,
+  getStoreDetails: () => initializedDetail,
   setStoreValue: () => {},
   getStoreValue: () => null,
 });
 
 export const StoreDetailsProvider = ({ children }:{children:React.ReactNode}) => {
-  const [storeDetails, setStoreDetails] = useState<StoreDetailProps | null>(null);
+  const [storeDetails, setStoreDetails] = useState<StoreDetailProps>(initializedDetail);
 
   const getStoreDetails = () => {
-    return storeDetails || null;
+    return storeDetails;
   };
 
   const setStoreValue = (key: keyof StoreDetailProps, value: string | number | null) => {
@@ -46,22 +63,6 @@ export const StoreDetailsProvider = ({ children }:{children:React.ReactNode}) =>
       if (prevDetails) {
         return { ...prevDetails, [key]: value };
       } else {
-        const initializedDetail: StoreDetailProps = {
-          id: 0,
-          brand_id: 0,
-          store_name: "",
-          language_id: "",
-          logo_url: "",
-          address_line1: "",
-          address_line2: "",
-          city: "",
-          state: "",
-          postal_code: "",
-          latitude: null,
-          longitude: null,
-          phone_number: "",
-          sales_tax: null,
-        }
         return { ...initializedDetail, [key]: value }
       }
     });

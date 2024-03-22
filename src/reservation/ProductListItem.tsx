@@ -9,8 +9,7 @@ interface props {
   sx?: object;
 }
 
-const ProductDetail: React.FC<props> = ({ sx, product, handleDetailDialogOpen }) => {
-  // const { line, family: { display_name, img_url }, size, description } = product;
+const ProductListItem: React.FC<props> = ({ sx, product, handleDetailDialogOpen }) => {
 
   return (
     <Button
@@ -42,4 +41,4 @@ const ProductDetail: React.FC<props> = ({ sx, product, handleDetailDialogOpen })
   )
 }
 
-export default ProductDetail;
+export default ProductListItem;

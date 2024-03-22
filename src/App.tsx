@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { getTestToken } from './api/Auth';
-import Reservation from './reservation/Reserve';
+import Reservation from './reservation/Reservation';
 import Payment from './payment/Payment';
 
 import { useEffect, useState } from 'react';
 import Providers from './common/Providers/Provider';
-import { useStoreDetails } from './common/Providers/UseStoreDetails';
+import { useStoreDetails } from './common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { getStoreDetailDB } from './api/Store';
 
 const InitializeApp = ({ children } : {children:any}) => {
