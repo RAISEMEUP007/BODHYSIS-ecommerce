@@ -4,12 +4,12 @@ import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, Gri
 import ProductDetail from './ProductDetail';
 
 interface props {
-  sx: object;
-  productlines: any;
+  lists: Array<any>;
   handleDetailDialogOpen: (product: any) => void;
+  sx?: object;
 }
 
-const Products: React.FC<props> = ({ sx, productlines, handleDetailDialogOpen }) => {
+const Products: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
 
   const [products, setProducts] = useState<any>([]);
 
@@ -20,14 +20,14 @@ const Products: React.FC<props> = ({ sx, productlines, handleDetailDialogOpen })
 
   return (
     <Box sx={sx}>
-      {productlines.length ?
-        <Typography sx={{ fontWeight: '900' }}>There are {productlines.length} products available.</Typography>
+      {lists.length ?
+        <Typography sx={{ fontWeight: '900', mb:'12px' }}>There are {lists.length} products available.</Typography>
         :
-        <Typography sx={{ fontWeight: '900' }}>There are no products available.</Typography>
+        <Typography sx={{ fontWeight: '900', mb:'12px' }}>There are no products available.</Typography>
       }
-      {productlines && productlines.map((product: any) => {
+      {lists && lists.map((product: any) => {
         return (
-          <ProductDetail key={product.id} sx={{ mt: '20px', border: '1px solid #ABABAB', padding: '30px', display: 'flex', justifyContent: 'space-between', borderRadius: '10px', width: '100%' }} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
+          <ProductDetail key={product.id} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
         )
       })}
     </Box>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { Box, Typography, TextField, Grid, Checkbox, FormControlLabel } from '@mui/material';
-import bikeIcon from "../img/bikeIcon.png";
 import CustomSelect from '../common/CustomSelect';
 import CustomInput from '../common/CustomInput';
 import Purchase from '../common/Purchase';

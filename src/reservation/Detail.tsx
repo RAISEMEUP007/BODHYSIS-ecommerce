@@ -5,12 +5,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-
 import { Box, Typography, Button, TextField } from '@mui/material';
-import CustomInput from '../common/CustomInput';
 
+import CustomInput from '../common/CustomInput';
 import { API_URL } from '../common/AppConstants';
-import { postAPICall } from '../api/BaseAPI';
+import iconPlaceholder from '../img/icons-placeholder.png';
 
 interface ReservationDetailDialogProps {
   open: boolean
@@ -23,7 +22,7 @@ interface ReservationDetailDialogProps {
 const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open, product, extras, handleDetailDialogOK, handleDetailDialogClose }) => {
   // const { line, family: { display_name, img_url }, size, description } = product;
   const [quantity, setQuantity] = useState<number>(1);
-  const [selectedExtras, setSelectedExtras] = useState<any>([]);
+  const [selectedExtras, setSelectedExtras] = useState<Array<any>>([]);
   const [specInstructions, setSpecInstructions] = useState("");
 
   useEffect(() => {
@@ -33,7 +32,9 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
   }, [open])
 
   const handleQuantityChange = (e: any) => {
-    setQuantity(e.target.value)
+    if(isNaN(parseInt(e.target.value))){
+      setQuantity(0)
+    }else setQuantity(parseFloat(e.target.value))
   }
 
   const handleSpecInstructionsChange = (e: any) => {
@@ -59,7 +60,7 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
               <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                   <Box sx={{ width: '30%', maxWidth: '300px', mt: '10px' }}>
-                    <img src={API_URL + product?.family?.img_url ?? ''} alt="product_image" style={{ maxWidth: '100%', width: '100%' }} />
+                    <img src={product && product.img_url? API_URL + product.img_url : iconPlaceholder} alt="product_image" style={{ maxWidth: '100%', width: '100%' }} />
                   </Box>
                   <Box sx={{ flex: 1, ml: '30px' }}>
                     <Box sx={{}}>
@@ -83,30 +84,34 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
               <Box>
                 <Typography sx={{ mt: 3, fontWeight: '700' }}>Extras</Typography>
                 <Box sx={{ mt: 3, display: 'flex', flexWrap: 'wrap' }}>
-                  {
-                    extras && extras.map((extra: any) => {
-                      let selectedId = extra?.id ?? '';
-                      return (
-                        <div style={{ padding: '5px' }} key={selectedId}>
-                          <img
-                            src={API_URL + extra?.img_url ?? ''}
-                            alt="extra_img"
-                            style={selectedExtras.includes(selectedId) ? styles.selectedExtraImg : styles.extraImg}
-                            key={extra?.id ?? ''}
-                            id={extra?.id ?? ''}
-                            onClick={() => {
-                              if (selectedExtras.includes(selectedId)) {
-                                const updatedSelectedExtras = selectedExtras.filter((item: any) => item !== selectedId)
-                                setSelectedExtras(updatedSelectedExtras);
-                              } else {
-                                const updatedSelectedExtras = [...selectedExtras, selectedId];
-                                setSelectedExtras(updatedSelectedExtras)
-                              }
-                            }}
-                          />
-                        </div>)
-                    })
-                  }
+                  {extras && extras.map((extra: any, index:number) => {
+                    return (
+                      <Box 
+                        style={{ padding: '5px' }} 
+                        key={index}
+                        onClick={() => {
+                          console.log(selectedExtras.includes(extra));
+                          if (selectedExtras.includes(extra)) {
+                            console.log('aaa');
+                            console.log(extra);
+                            const updatedSelectedExtras = selectedExtras.filter((item: any) => item.id !== extra.id)
+                            setSelectedExtras(updatedSelectedExtras);
+                          } else {
+                            console.log('bbb');
+                            const updatedSelectedExtras = [...selectedExtras, extra];
+                            setSelectedExtras(updatedSelectedExtras)
+                          }
+                        }}
+                      >
+                        <img
+                          src={API_URL + extra?.img_url ?? ''}
+                          alt="extra_img"
+                          style={selectedExtras.includes(extra) ? styles.selectedExtraImg : styles.extraImg}
+                          key={extra?.id ?? ''}
+                          id={extra?.id ?? ''}
+                        />
+                      </Box>)
+                  })}
                 </Box>
                 <Typography sx={{ mt: 3 }}>Special Instructions</Typography>
                 <TextField
@@ -127,7 +132,7 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
               variant="contained" 
               sx={styles.button} 
               onClick={() => {                 
-                handleDetailDialogOK({line_id: product?.id??"", quantity: quantity, extras: selectedExtras, special_instructions: specInstructions, img_url: product?.family?.img_url ?? ''}) 
+                handleDetailDialogOK({line_id: product?.id??"", quantity: quantity, price_group_id:product?.lines[0]?.price_group_id??0, extras: selectedExtras, special_instructions: specInstructions, img_url: product?.family?.img_url ?? ''}) 
               }}>
               Reserve
             </Button>
