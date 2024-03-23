@@ -27,3 +27,7 @@ export const getPriceLogicData = async (callback=defaultCallback) => {
 export const getHeaderData = (tableId:string|number, callback=defaultCallback) => {
   getAPICall({route:'price/getheaderdata/' + tableId, callback});
 }
+
+export const createReservation = async (payload:any, callback=defaultCallback) => {
+  return await postAPICall({ route : 'reservations/createreservation', payload, callback});
+};
