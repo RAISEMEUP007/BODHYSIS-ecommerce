@@ -43,7 +43,7 @@ const Reservation: React.FC = () => {
     <BasicLayout>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <ReserveProducts sx={{flex:1}}/>
-        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
+        <Purchase title='Reservation Details' target="/payment" sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
       </Box>
     </BasicLayout>
   );

@@ -3,6 +3,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StoreDetailsProvider } from './StoreDetailsProvider/StoreDetailsProvider';
 import { CustomerReservationProvider } from './CustomerReservationProvider/CustomerReservationProvider';
 import { CustomSnackbarProvider } from './SnackbarProvider/CustomSnackbarProvider';
+import { CustomStripeProvider } from './CustomStripeProvider/CustomStripeProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -13,7 +14,9 @@ const Providers = ({ children }: Props) => (
     <StoreDetailsProvider>
       <CustomerReservationProvider>
         <CustomSnackbarProvider>
-          {children}
+          <CustomStripeProvider>
+            {children}
+          </CustomStripeProvider>
         </CustomSnackbarProvider>
       </CustomerReservationProvider>
     </StoreDetailsProvider>

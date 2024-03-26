@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Providers from './common/Providers/Provider';
 import { useStoreDetails } from './common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { getStoreDetailDB } from './api/Store';
+import CompletePurchase from './completepurchase/CompletePurchase';
 
 const InitializeApp = ({ children } : {children:any}) => {
   const [accessToken, setAccessToken] = useState(null);
@@ -53,6 +54,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Reservation />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/completepurchase" element={<CompletePurchase />} />
           </Routes>
         </Router>
       </InitializeApp>

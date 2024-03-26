@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -6,14 +6,16 @@ import dayjs from 'dayjs';
 import { API_URL } from './AppConstants';
 import iconPlaceholder from '../img/icons-placeholder.png';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
+import { useCustomStripe } from './Providers/CustomStripeProvider/UseCustomStripe';
 
 interface Props {
   title: string;
+  target: string;
   sx?: object;
-  onComplete: (event: any) => void;
+  onComplete?: (event: any) => void;
 }
 
-const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
+const Purchase: React.FC<Props> = ({ title, target, sx, onComplete }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
@@ -37,7 +39,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
         <Typography sx={{ fontSize: 14, }}>
           {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY hh:mm A') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY hh:mm A') : 'n/a'}</Typography>
       </Box>
-      <Box sx={{ mt: "100px", mb: '20px' }}>
+      <Box sx={{ mt: "80px", mb: '20px' }}>
         <Box sx={styles.purchase}>
           <div>{"Subtotal"}</div>
           <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
@@ -51,17 +53,19 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
           <div>{ReservationMain.prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px' }}>
-        <Button
-          variant="contained"
-          sx={{ pr: 6, pl: 6 }}
-          component={Link}
-          to="/payment"
-          onClick={onComplete}
-        >
-          {"Complete Purchase"}
-        </Button>
-      </Box>
+      {onComplete && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px' }}>
+          <Button
+            variant="contained"
+            sx={{ pr: 6, pl: 6 }}
+            component={Link}
+            to={target}
+            onClick={onComplete}
+          >
+            {"Complete Purchase"}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }
