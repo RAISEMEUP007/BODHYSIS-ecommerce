@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import ReservationMainDetail from './ReservationMainDetail';
 import Purchase from '../common/Purchase';
@@ -8,81 +8,56 @@ import { createReservation } from '../api/Product';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router';
+import { getClientSecret } from '../api/Stripe';
 
 const Payment: React.FC = () => {
 
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
-  const { storeDetails } = useStoreDetails();
-  const { setAmount } = useCustomStripe();
+  const { setClientSecret, setAmount } = useCustomStripe();
+
+  useEffect(()=>{
+    if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
+      navigate('/');
+    }
+  }, []);
 
   const onComplete = (event: any) => {
-    if (!ReservationMain.pickup) {
-      enqueueSnackbar("Select pickup date", {
-        variant: 'error',
-        style: { width: '350px' },
-        autoHideDuration: 3000,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      })
-    }else if(!ReservationMain.dropoff) {
-      enqueueSnackbar("Select dropoff date", {
-        variant: 'error',
-        style: { width: '350px' },
-        autoHideDuration: 3000,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      })
-    }else if(!ReservationItems.length) {
-      enqueueSnackbar("Select products", {
-        variant: 'error',
-        style: { width: '350px' },
-        autoHideDuration: 3000,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      })
-    }
-    if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length) {
+    if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total) {
+      event.preventDefault();
       return;
     }
 
     setAmount(ReservationMain.prices.total);
 
-    // const payload = {
-    //   start_date : ReservationMain.pickup,
-    //   end_date : ReservationMain.dropoff,
-    //   subtotal : ReservationMain.prices.subtotal,
-    //   tax_rate : storeDetails.sales_tax,
-    //   tax_amount : ReservationMain.prices,
-    //   total_price: ReservationMain.prices.total,
-    //   price_table_id: ReservationMain.price_table_id,
-    //   stage : 1,
-    //   items : ReservationItems,
-    // };
+    event.preventDefault();
 
-    // console.log('dww');
+    const payload:any = {
+      ...ReservationMain,
+      amount : Math.round(ReservationMain.prices.total * 100),
+    }
 
-    // createReservation(payload, (jsonRes: any, status?: number | null)=>{
-    //   if(status == 201){
-    //     enqueueSnackbar("Great, Reserved successfully", {
-    //       variant: 'success',
-    //       style: { width: '350px' },
-    //       autoHideDuration: 3000,
-    //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
-    //     })
-    //   }else{
-    //     enqueueSnackbar("Sorry, Reserve failed", {
-    //       variant: 'error',
-    //       style: { width: '350px' },
-    //       autoHideDuration: 3000,
-    //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
-    //     })
-    //   }
-    // });
-    // event.preventDefault();
+    getClientSecret(payload, (jsonRes:any, status:any)=>{
+      if(status == 200){
+        setClientSecret(jsonRes.client_secret);
+        navigate("/completepurchase");
+      }else{
+        enqueueSnackbar("Error occured on the server.", {
+          variant: 'error',
+          style: { width: '350px' },
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        })
+      }
+    });
   }
 
   return (
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <ReservationMainDetail sx={{pr: '50px'}}/>
+        <ReservationMainDetail sx={{flex:1, pr: '50px'}}/>
         <Purchase title='Reservation Details' target='/completepurchase' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} />
       </Box>
     </BasicLayout>

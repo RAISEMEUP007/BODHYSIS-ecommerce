@@ -79,7 +79,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
     calculatedReservedItems.map((item:any)=>{
       let subtotal = item.price || 0;
       let tax = (item.price || 0) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-      let total = subtotal - tax;
+      let total = subtotal + tax;
       prices.subtotal += subtotal;
       prices.tax += tax;
       prices.total += total;
