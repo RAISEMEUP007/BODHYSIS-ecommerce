@@ -11,15 +11,15 @@ import CustomInput from '../common/CustomInput';
 import { API_URL } from '../common/AppConstants';
 import iconPlaceholder from '../img/icons-placeholder.png';
 
-interface ReservationDetailDialogProps {
-  open: boolean
+interface ProductItemDetailProps {
+  open: boolean;
   product: any;
   extras: any;
   handleDetailDialogOK: Function,
   handleDetailDialogClose: Function,
 }
 
-const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open, product, extras, handleDetailDialogOK, handleDetailDialogClose }) => {
+const ProductItemDetail: React.FC<ProductItemDetailProps> = ({ open, product, extras, handleDetailDialogOK, handleDetailDialogClose }) => {
   // const { line, family: { display_name, img_url }, size, description } = product;
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedExtras, setSelectedExtras] = useState<Array<any>>([]);
@@ -90,14 +90,10 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
                         style={{ padding: '5px' }} 
                         key={index}
                         onClick={() => {
-                          console.log(selectedExtras.includes(extra));
                           if (selectedExtras.includes(extra)) {
-                            console.log('aaa');
-                            console.log(extra);
                             const updatedSelectedExtras = selectedExtras.filter((item: any) => item.id !== extra.id)
                             setSelectedExtras(updatedSelectedExtras);
                           } else {
-                            console.log('bbb');
                             const updatedSelectedExtras = [...selectedExtras, extra];
                             setSelectedExtras(updatedSelectedExtras)
                           }
@@ -132,11 +128,17 @@ const ReservationDetailsDialog: React.FC<ReservationDetailDialogProps> = ({ open
               variant="contained" 
               sx={styles.button} 
               onClick={() => {                 
-                handleDetailDialogOK({line_id: product?.id??"", quantity: quantity, price_group_id:product?.lines[0]?.price_group_id??0, extras: selectedExtras, special_instructions: specInstructions, img_url: product?.family?.img_url ?? ''}) 
+                handleDetailDialogOK({
+                  family_id: product.id,
+                  quantity: quantity, 
+                  price_group_id: product?.lines[0]?.price_group_id ?? 0, 
+                  extras: selectedExtras,
+                  special_instructions: specInstructions, 
+                  img_url: product?.img_url ?? ''}) 
               }}>
               Reserve
             </Button>
-            <Button variant="text" sx={styles.button} onClick={() => { handleDetailDialogClose() }}>
+            <Button variant="text" sx={styles.button} onClick={() => {handleDetailDialogClose()}}>
               Cancel
             </Button>
           </Box>
@@ -166,4 +168,4 @@ const styles = {
   }
 }
 
-export default ReservationDetailsDialog;
+export default ProductItemDetail;

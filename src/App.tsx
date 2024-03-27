@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { getTestToken } from './api/Auth';
-import Reservation from './reservation/Reserve';
+import Reservation from './reservation/Reservation';
 import Payment from './payment/Payment';
 
 import { useEffect, useState } from 'react';
 import Providers from './common/Providers/Provider';
-import { useStoreDetails } from './common/Providers/UseStoreDetails';
+import { useStoreDetails } from './common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { getStoreDetailDB } from './api/Store';
+import CompletePurchase from './completepurchase/CompletePurchase';
+import Thankyou from './thankyou/Thankyou';
 
 const InitializeApp = ({ children } : {children:any}) => {
   const [accessToken, setAccessToken] = useState(null);
@@ -53,6 +55,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Reservation />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/completepurchase" element={<CompletePurchase />} />
+            <Route path="/thankyou" element={<Thankyou/>} />
           </Routes>
         </Router>
       </InitializeApp>

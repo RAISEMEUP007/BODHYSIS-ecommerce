@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, Grid } from '@mui/material';
-import ProductDetail from './ProductDetail';
+import ProductListItem from './ProductListItem';
 
 interface props {
   lists: Array<any>;
@@ -9,15 +9,7 @@ interface props {
   sx?: object;
 }
 
-const Products: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
-
-  const [products, setProducts] = useState<any>([]);
-
-  useEffect(() => {
-    let testData = [{ id: 1, price: 45 }, { id: 2, price: 65 }]
-    setProducts(testData);
-  }, []);
-
+const ProductList: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
   return (
     <Box sx={sx}>
       {lists.length ?
@@ -27,11 +19,11 @@ const Products: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
       }
       {lists && lists.map((product: any) => {
         return (
-          <ProductDetail key={product.id} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
+          <ProductListItem key={product.id} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
         )
       })}
     </Box>
   );
 }
 
-export default Products;
+export default ProductList;

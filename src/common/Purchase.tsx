@@ -1,87 +1,72 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { API_URL } from './AppConstants';
 import dayjs from 'dayjs';
-import { useStoreDetails } from './Providers/UseStoreDetails';
-import iconPlaceholder from '../img/icons-placeholder.png';
 
-interface props {
+import { API_URL } from './AppConstants';
+import iconPlaceholder from '../img/icons-placeholder.png';
+import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
+import { useCustomStripe } from './Providers/CustomStripeProvider/UseCustomStripe';
+
+interface Props {
   title: string;
-  sx: object;
-  reservedProducts: any;
-  pickup: any;
-  dropoff: any;
+  target: string;
+  sx?: object;
+  onComplete?: (event: any) => void;
 }
 
-const Purchase: React.FC<props> = ({ sx, title, reservedProducts, pickup, dropoff }) => {
-  let displayPickup = dayjs(pickup).format('MMMM DD, YYYY hh:mm A');
-  let displayDropoff = dayjs(dropoff).format('MMMM DD, YYYY hh:mm A');
+const Purchase: React.FC<Props> = ({ title, target, sx, onComplete }) => {
 
-  const { getStoreDetails } = useStoreDetails();
-  const storeDetails:any = useMemo(()=>{
-    return getStoreDetails();
-  }, []);
-
-  const prices = useMemo<any>(()=>{
-    let prices = {
-      subtotal: 0,
-      tax: 0,
-      total: 0,
-    }
-    reservedProducts.map((item:any)=>{
-      let subtotal = item.price || 0;
-      let tax = (item.price || 0) * (storeDetails.sales_tax/100 || 0) ?? 0;
-      let total = subtotal - tax;
-      prices.subtotal += subtotal;
-      prices.tax += tax;
-      prices.total += total;
-    });
-    return prices
-  }, [reservedProducts]);
+  const { ReservationItems, ReservationMain } = useCustomerReservation();
 
   return (
-    <Box sx={sx}>
+    <Box sx={{ width: '500px', ...sx }}>
       <Typography sx={{ fontWeight: '900', mb: '30px', textAlign: 'center' }}>{title}</Typography>
-      {
-        reservedProducts.length
-          ?
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
-            {
-              reservedProducts.map((product: any, index:number) => {
-                return (
-                  <img key={index} src={product && product.img_url ? `${API_URL}${product.img_url}` : iconPlaceholder} alt="reservedProduct" style={{ width: '150px', padding: '15px', marginBottom:'20px', boxShadow:'2px 2px 4px #999' }} />
-                )
-              })
-            }
-          </Box>
-          :
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color:'#999' }}>No one reserved</div>
-      }
-
+      {ReservationItems.length ?
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          {ReservationItems.map((item: any, index: number) => {
+            return (
+              <img
+                key={index}
+                src={item && item.img_url ? `${API_URL}${item.img_url}` : iconPlaceholder}
+                alt={item.img_url}
+                style={{ width: '43%', padding: '2%', marginLeft: '', marginBottom: '6%', boxShadow: '2px 2px 4px #999' }} />
+            )
+          })}
+        </Box>
+        : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
       <Box sx={{ textAlign: 'center' }}>
-        <Typography sx={{ fontSize: 14, }}>{displayPickup !== "Invalid Date" ? displayPickup : 'n/a'} - {displayDropoff !== "Invalid Date" ? displayDropoff : 'n/a'}</Typography>
+        <Typography sx={{ fontSize: 14, }}>
+          {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY hh:mm A') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY hh:mm A') : 'n/a'}
+        </Typography>
       </Box>
-
-      <Box sx={{ mt: "100px", mb: '20px' }}>
+      <Box sx={{ mt: "80px", mb: '20px' }}>
         <Box sx={styles.purchase}>
-          <div>Subtotal</div>
-          <div>{prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+          <div>{"Subtotal"}</div>
+          <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
         <Box sx={styles.purchase}>
-          <div>Tax(8.1%)</div>
-          <div>{prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+          <div>{"Tax(8.1%)"}</div>
+          <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
         <Box sx={styles.purchase}>
-          <div>Total</div>
-          <div>{prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+          <div>{"Total"}</div>
+          <div>{ReservationMain.prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt:'40px' }}>
-        <Button variant="contained" sx={{ pr: 6, pl: 6 }} component={Link} to="/payment">
-          Complete Purchase
-        </Button>
-      </Box>
+      {onComplete && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px' }}>
+          <Button
+            variant="contained"
+            sx={{ pr: 6, pl: 6 }}
+            component={Link}
+            to={target}
+            onClick={onComplete}
+          >
+            {"Complete Purchase"}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }

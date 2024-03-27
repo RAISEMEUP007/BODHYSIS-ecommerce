@@ -12,13 +12,12 @@ interface props{
 const CustomSelect: React.FC<props> = ({ sx, name, value, onChange, items }) => {
   return (
     <FormControl variant="standard" sx={sx}>
-      <Typography sx={{ fontWeight: '900' }}>{name}</Typography>
+      <Typography sx={{ fontWeight: '900', fontSize: '12px' }}>{name}</Typography>
       <Select
         labelId="select-placeholder-label"
         value={value}
         inputProps={{ 'aria-label': 'select' }}
         onChange={onChange}
-        sx={{ mt: '12px', p: '4px' }}
         displayEmpty
       >
         {items.map((item: any) => {
