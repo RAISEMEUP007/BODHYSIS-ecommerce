@@ -1,42 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   PaymentElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
 import { Button } from "@mui/material";
-import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCustomStripe";
-import { sendReservationConfirmationEmail } from "../api/Stripe";
-import { useCustomerReservation } from "../common/Providers/CustomerReservationProvider/UseCustomerReservation";
 import dayjs from "dayjs";
+import { useSnackbar } from 'notistack';
+
+import { createReservation } from "../api/Product";
+import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCustomStripe";
+import { useCustomerReservation } from "../common/Providers/CustomerReservationProvider/UseCustomerReservation";
+import { useStoreDetails } from "../common/Providers/StoreDetailsProvider/UseStoreDetails";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const { enqueueSnackbar } = useSnackbar();
   const { amount, clientSecret } = useCustomStripe();
-  const [ message, setMessage ] = useState("");
   const [ isLoading, setIsLoading ] = useState(false);
-  const { ReservationMain } = useCustomerReservation();
+  const { ReservationItems, ReservationMain } = useCustomerReservation();
+  const { storeDetails } = useStoreDetails();
   
   const handleSubmit = async (e:any) => {
-    console.log('ddd');
     e.preventDefault();
 
-    if (!stripe || !elements) {
-      return;
-    }
-    console.log(stripe);
+    if (!stripe || !elements) return;
 
     setIsLoading(true);
 
-    if (!stripe) {
-      return;
-    }
-    
-    if (!clientSecret) {
-      return;
-    }
+    if (!stripe) return;
+    if (!clientSecret) return;
 
     await stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       // console.log(paymentIntent);
@@ -57,20 +52,26 @@ export default function CheckoutForm() {
       // }
     });
 
-    localStorage.setItem('pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY hh:mm A'));
-    localStorage.setItem('dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY hh:mm A'));
-    
-    const mailParams = {
-      name: ReservationMain.name,
-      email: ReservationMain.email,
-    }
-    sendReservationConfirmationEmail(mailParams);
+    const forSavingOnDB = {
+      start_date : ReservationMain.pickup,
+      end_date : ReservationMain.dropoff,
+      subtotal : ReservationMain.prices.subtotal,
+      tax_rate : storeDetails.sales_tax,
+      tax_amount : ReservationMain.prices,
+      total_price: ReservationMain.prices.total,
+      price_table_id: ReservationMain.price_table_id,
+      stage : 2,
+      items : ReservationItems,
+    };
+    await createReservation(forSavingOnDB);
 
     const currentURL = window.location.href;
     const url = new URL(currentURL);
     const protocol = url.protocol;
     const host = url.host;
     const fullHost = protocol + "//" + host; 
+
+    setStorageValues();
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -79,15 +80,40 @@ export default function CheckoutForm() {
       },
     });
 
-
     if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message as string);
+      enqueueSnackbar(error.message as string, {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      removeStorageValues();
     } else {
-      setMessage("An unexpected error occurred.");
+      enqueueSnackbar("An unexpected error occurred.", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      removeStorageValues();
     }
 
     setIsLoading(false);
   };
+
+  const setStorageValues = () =>{
+    localStorage.setItem('_r_name', ReservationMain.name);
+    localStorage.setItem('_r_email', ReservationMain.email);
+    localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY'));
+    localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY'));
+  }
+
+  const removeStorageValues = () =>{
+    localStorage.removeItem('_r_name');
+    localStorage.removeItem('_r_email');
+    localStorage.removeItem('_r_pickup');
+    localStorage.removeItem('_r_dropoff');
+  }
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
@@ -97,7 +123,6 @@ export default function CheckoutForm() {
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
       </Button>
-      {message && <div style={{color: "rgb(105, 115, 134)", fontSize: "16px", lineHeight: "20px", paddingTop: "12px", textAlign: "center"}}>{message}</div>}
     </form>
   );
 }

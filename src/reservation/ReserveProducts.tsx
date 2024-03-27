@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData, getProductLinesData } from '../api/Product';
-import CustomCalendar from '../common/CustomCalendar';
+import CustomDatePicker from '../common/CustomDatePicker';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
@@ -127,25 +127,25 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
     await calcData(updatedReservedProducts);
     setDetailDialogOpen(false);
   }
-  
+
   return (
     <Box sx={sx}>
       <Box>
         <Box sx={{ display: 'flex' }}>
-          <CustomCalendar
+          <CustomDatePicker
             name="Pick up"
-            sx={{ boxSizing: 'boder-box', width: '300px', pt: 5, pr: 5 }}
+            sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
             value={dayjs(ReservationMain.pickup)}
             onChange={handlePickupChange}
-            maxDateTime={dayjs(ReservationMain.dropoff)}
-            minDateTime = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
+            maxDate={dayjs(ReservationMain.dropoff)}
+            minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
           />
-          <CustomCalendar
+          <CustomDatePicker
             name="Drop off"
-            sx={{ boxSizing: 'boder-box', width: '300px', pt: 5, pr: 5 }}
+            sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
             value={dayjs(ReservationMain.dropoff)}
             onChange={handleDropoffChange}
-            minDateTime={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
+            minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
           />
         </Box>
         <CategorySlot sx={{ mt: '50px' }} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />

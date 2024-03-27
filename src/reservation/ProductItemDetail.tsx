@@ -56,69 +56,60 @@ const ProductItemDetail: React.FC<ProductItemDetailProps> = ({ open, product, ex
         </DialogTitle>
         <DialogContent>
           <Box sx={{}}>
-            <Box sx={{ pt: 5, pb: 3, borderBottom: '2px solid #ABABAB' }}>
-              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Box sx={{ width: '30%', maxWidth: '300px', mt: '10px' }}>
-                    <img src={product && product.img_url? API_URL + product.img_url : iconPlaceholder} alt="product_image" style={{ maxWidth: '100%', width: '100%' }} />
-                  </Box>
-                  <Box sx={{ flex: 1, ml: '30px' }}>
-                    <Box sx={{}}>
-                      <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.line ?? ''}</h2>
-                      <div>{product?.family?.display_name ?? ''}</div>
-                      <div>{product?.size ?? ''}</div>
-                      {/* <div>25 fit rides 53 to 52</div> */}
-                      <div style={{ marginTop: '20px' }}>{product?.description ?? ''}</div>
-                      {/* <div>baskets needed</div>
-                      <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box>
-                  <CustomInput sx={{ mr: 2 }} label="Quantity" placeholder="Quantity" value={quantity} onChange={handleQuantityChange} type="number" min={1}/>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', pt: '30px', pb: '30px', borderBottom: '2px solid #ABABAB'  }}>
+              <Box sx={{ width: '300px'}}>
+                <img src={product && product.img_url? API_URL + product.img_url : iconPlaceholder} alt="product_image" style={{ maxWidth: '100%', width: '100%' }} />
+              </Box>
+              <Box sx={{ flex: 1, }}>
+                <Box sx={{}}>
+                  <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.line ?? ''}</h2>
+                  <div>{product?.family?.display_name ?? ''}</div>
+                  <div>{product?.size ?? ''}</div>
+                  {/* <div>25 fit rides 53 to 52</div> */}
+                  <div style={{ marginTop: '20px' }}>{product?.description ?? ''}</div>
+                  {/* <div>baskets needed</div>
+                  <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
                 </Box>
               </Box>
+              <CustomInput sx={{ width: '80px' }} label="Quantity" placeholder="Quantity" value={quantity} onChange={handleQuantityChange} type="number" min={1}/>
             </Box>
-
             <Box sx={{ width: '100%' }}>
-              <Box>
-                <Typography sx={{ mt: 3, fontWeight: '700' }}>Extras</Typography>
-                <Box sx={{ mt: 3, display: 'flex', flexWrap: 'wrap' }}>
-                  {extras && extras.map((extra: any, index:number) => {
-                    return (
-                      <Box 
-                        style={{ padding: '5px' }} 
-                        key={index}
-                        onClick={() => {
-                          if (selectedExtras.includes(extra)) {
-                            const updatedSelectedExtras = selectedExtras.filter((item: any) => item.id !== extra.id)
-                            setSelectedExtras(updatedSelectedExtras);
-                          } else {
-                            const updatedSelectedExtras = [...selectedExtras, extra];
-                            setSelectedExtras(updatedSelectedExtras)
-                          }
-                        }}
-                      >
-                        <img
-                          src={API_URL + extra?.img_url ?? ''}
-                          alt="extra_img"
-                          style={selectedExtras.includes(extra) ? styles.selectedExtraImg : styles.extraImg}
-                          key={extra?.id ?? ''}
-                          id={extra?.id ?? ''}
-                        />
-                      </Box>)
-                  })}
-                </Box>
-                <Typography sx={{ mt: 3 }}>Special Instructions</Typography>
-                <TextField
-                  id="outlined-multiline-flexible"
-                  multiline
-                  rows={4}
-                  sx={{ width: '100%' }}
-                  value={specInstructions}
-                  onChange={handleSpecInstructionsChange}
-                />
+              <Typography sx={{ mt: 3, fontWeight: '700' }}>Extras</Typography>
+              <Box sx={{ mt: 3, display: 'flex', flexWrap: 'wrap' }}>
+                {extras && extras.map((extra: any, index:number) => {
+                  return (
+                    <Box 
+                      style={{ padding: '5px' }} 
+                      key={index}
+                      onClick={() => {
+                        if (selectedExtras.includes(extra)) {
+                          const updatedSelectedExtras = selectedExtras.filter((item: any) => item.id !== extra.id)
+                          setSelectedExtras(updatedSelectedExtras);
+                        } else {
+                          const updatedSelectedExtras = [...selectedExtras, extra];
+                          setSelectedExtras(updatedSelectedExtras)
+                        }
+                      }}
+                    >
+                      <img
+                        src={API_URL + extra?.img_url ?? ''}
+                        alt="extra_img"
+                        style={selectedExtras.includes(extra) ? styles.selectedExtraImg : styles.extraImg}
+                        key={extra?.id ?? ''}
+                        id={extra?.id ?? ''}
+                      />
+                    </Box>)
+                })}
               </Box>
+              <Typography sx={{ mt: 3 }}>Special Instructions</Typography>
+              <TextField
+                id="outlined-multiline-flexible"
+                multiline
+                rows={4}
+                sx={{ width: '100%' }}
+                value={specInstructions}
+                onChange={handleSpecInstructionsChange}
+              />
             </Box>
           </Box>
         </DialogContent>

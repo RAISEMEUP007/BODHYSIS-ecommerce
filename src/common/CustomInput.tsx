@@ -14,7 +14,7 @@ interface props{
 const CustomInput: React.FC<props> = ({ sx, label, placeholder, value, type = "text", min, onChange }) => {
   return (
     <Box sx={sx}>
-      <Typography sx={{ fontWeight: '900', fontSize: "12px" }}>{label}</Typography>
+      <Typography sx={{ fontWeight: '900', fontSize: "14px" }}>{label}</Typography>
       <Input sx={{ pl: 1, pr: 1, width: '100%' }} placeholder={placeholder} value={value} type={type} inputProps={{min: min}} onChange={onChange}/>
     </Box>
   )

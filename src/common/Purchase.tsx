@@ -37,7 +37,7 @@ const Purchase: React.FC<Props> = ({ title, target, sx, onComplete }) => {
         : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
       <Box sx={{ textAlign: 'center' }}>
         <Typography sx={{ fontSize: 14, }}>
-          {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY hh:mm A') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY hh:mm A') : 'n/a'}
+          {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}
         </Typography>
       </Box>
       <Box sx={{ mt: "80px", mb: '20px' }}>
