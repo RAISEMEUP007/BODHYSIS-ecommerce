@@ -10,12 +10,11 @@ import { useCustomStripe } from './Providers/CustomStripeProvider/UseCustomStrip
 
 interface Props {
   title: string;
-  target: string;
   sx?: object;
   onComplete?: (event: any) => void;
 }
 
-const Purchase: React.FC<Props> = ({ title, target, sx, onComplete }) => {
+const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
@@ -59,8 +58,6 @@ const Purchase: React.FC<Props> = ({ title, target, sx, onComplete }) => {
           <Button
             variant="contained"
             sx={{ pr: 6, pl: 6 }}
-            component={Link}
-            to={target}
             onClick={onComplete}
           >
             {"Complete Purchase"}

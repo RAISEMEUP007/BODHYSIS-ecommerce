@@ -14,21 +14,20 @@ const Thankyou: React.FC = () => {
   const dropoff = localStorage.getItem('_r_dropoff');
 
   useEffect(()=>{
-    if(!name || !email || !pickup || !dropoff){
+    if(!pickup || !dropoff){
       navigate('/');
     }
+  }, [])
 
-    const mailParams = { name, email }
+  const mailParams = { name, email }
+  sendReservationConfirmationEmail(mailParams);
 
-    sendReservationConfirmationEmail(mailParams);
-
-    setTimeout(()=>{
-      localStorage.removeItem('_r_name');
-      localStorage.removeItem('_r_email');
-      localStorage.removeItem('_r_pickup');
-      localStorage.removeItem('_r_dropoff');
-    }, 1000);
-  }, []);
+  setTimeout(()=>{
+    localStorage.removeItem('_r_name');
+    localStorage.removeItem('_r_email');
+    localStorage.removeItem('_r_pickup');
+    localStorage.removeItem('_r_dropoff');
+  }, 1000);
 
   return (
     <BasicLayout>

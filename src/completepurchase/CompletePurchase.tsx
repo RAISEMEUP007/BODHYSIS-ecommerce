@@ -20,7 +20,7 @@ const CompletePurchase: React.FC = () => {
   return (
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row', marginTop:'50px', justifyContent:'center' }}>
-        <Purchase title='Reservation Details' target='/completepurchase' sx={{paddingRight:'50px'}} />
+        <Purchase title='Reservation Details' sx={{paddingRight:'50px'}} />
         {amount > 0 && clientSecret &&(
           <Box sx={{ flex:1, paddingTop: '50px', padding:'50px', borderLeft:'1px solid #ccc'}}>
             <CheckoutForm/>

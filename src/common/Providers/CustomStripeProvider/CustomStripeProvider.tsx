@@ -39,8 +39,7 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
 
   const options = {
     clientSecret: clientSecret,
-    appearance: appearanceOptions,
-
+    // appearance: appearanceOptions,
   };
 
   const values = {

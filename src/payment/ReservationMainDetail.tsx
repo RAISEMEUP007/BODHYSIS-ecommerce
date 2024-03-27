@@ -13,7 +13,7 @@ interface props {
 
 const ReservationMainDetail: React.FC<props> = ({ sx }) => {
   const { ReservationMain, setReservationValue } = useCustomerReservation();
-  console.log(ReservationMain);
+
   const {
     name,
     special_instructions,

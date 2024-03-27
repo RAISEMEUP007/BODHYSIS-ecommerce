@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 
 const Reservation: React.FC = () => {
 
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
@@ -43,16 +44,14 @@ const Reservation: React.FC = () => {
         autoHideDuration: 3000,
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
-    }
-
-    if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total) event.preventDefault();
+    }else navigate('/payment');
   }
 
   return (
     <BasicLayout>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <ReserveProducts sx={{flex:1}}/>
-        <Purchase title='Reservation Details' target="/payment" sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
+        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
       </Box>
     </BasicLayout>
   );

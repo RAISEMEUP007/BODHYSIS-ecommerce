@@ -29,8 +29,7 @@ export default function CheckoutForm() {
     if (!stripe || !elements) return;
 
     setIsLoading(true);
-
-    if (!stripe) return;
+    
     if (!clientSecret) return;
 
     await stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
