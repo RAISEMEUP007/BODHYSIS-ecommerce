@@ -18,6 +18,8 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
+  console.log(ReservationMain.prices);
+
   return (
     <Box sx={{ width: '500px', ...sx }}>
       <Typography sx={{ fontWeight: '900', mb: '30px', textAlign: 'center' }}>{title}</Typography>
