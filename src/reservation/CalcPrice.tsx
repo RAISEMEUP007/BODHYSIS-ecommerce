@@ -53,11 +53,14 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
     const reversedHeaderData = headerData.slice().reverse();
     const updatedReversedHeaderData = reversedHeaderData.map((item) => {
       const value = rows.find((row:any) => row.point_id === item.id)?.value || 0;
-      const pricePMS = value/item.milliseconds;
-      const pricePH = value / (item.milliseconds / (1000 * 60 * 60));
-      const pricePD = value / (item.milliseconds / (1000 * 60 * 60 * 24));
+      const pricePMS = item.milliseconds > 0 ? value / item.milliseconds : 0;
+      const pricePH = item.milliseconds > 0 ? value / (item.milliseconds / (1000 * 60 * 60)) : 0;
+      const pricePD = item.milliseconds > 0 ? value / (item.milliseconds / (1000 * 60 * 60 * 24)) : 0;
       return { ...item, value, pricePH, pricePD };
     });
+
+    console.log("------updatedReversedHeaderData----------------");
+    console.log(updatedReversedHeaderData);
 
     const diff = new Date(endDate).getTime() - new Date(startDate).getTime();
 
