@@ -4,9 +4,9 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import { Button } from "@mui/material";
 import dayjs from "dayjs";
 import { useSnackbar } from 'notistack';
+import { LoadingButton } from '@mui/lab';
 
 import { createReservation } from "../api/Product";
 import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCustomStripe";
@@ -18,7 +18,7 @@ export default function CheckoutForm() {
   const elements = useElements();
 
   const { enqueueSnackbar } = useSnackbar();
-  const { amount, clientSecret } = useCustomStripe();
+  const { clientSecret } = useCustomStripe();
   const [ isLoading, setIsLoading ] = useState(false);
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
@@ -117,11 +117,14 @@ export default function CheckoutForm() {
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element"/>
-      <Button variant="contained"  disabled={isLoading || !stripe || !elements} sx={{ mt: '20px', float:'right'}} onClick={handleSubmit}>
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </Button>
+      <LoadingButton 
+        variant="contained"
+        disabled={isLoading || !stripe || !elements}
+        loading={isLoading}
+        sx={{ mt: '20px', float:'right'}}
+        onClick={handleSubmit}>
+        {"Pay now"}
+      </LoadingButton>
     </form>
   );
 }

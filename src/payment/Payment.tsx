@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import ReservationMainDetail from './ReservationMainDetail';
 import Purchase from '../common/Purchase';
@@ -15,6 +15,7 @@ const Payment: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
+  const [ isLoading, setIsLoading ] = useState(false);
 
   useEffect(()=>{
     if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
@@ -37,10 +38,8 @@ const Payment: React.FC = () => {
       amount : Math.round(ReservationMain.prices.total * 100),
     }
 
+    setIsLoading(true);
     getClientSecret(payload, (jsonRes:any, status:any, error:any)=>{
-      console.log(jsonRes);
-      console.log(status);
-      console.log(error);
       if(status == 200){
         setClientSecret(jsonRes.client_secret);
         navigate("/completepurchase");
@@ -53,6 +52,7 @@ const Payment: React.FC = () => {
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
         })
       }
+      setIsLoading(false);
     });
   }
 
@@ -60,7 +60,7 @@ const Payment: React.FC = () => {
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ReservationMainDetail sx={{flex:1, pr: '50px'}}/>
-        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} />
+        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} isLoading={isLoading}/>
       </Box>
     </BasicLayout>
   );

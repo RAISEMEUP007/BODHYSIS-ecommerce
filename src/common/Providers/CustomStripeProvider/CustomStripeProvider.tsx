@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createContext } from 'react';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { STRIPE_PUBLIC_KEY } from '../../AppConstants';
-
 interface ContextProps {
   amount: number;
   clientSecret: string;
+  stripePromise: Promise<Stripe | null>;
   setAmount: (amount:number) => void;
   setClientSecret: (client_secret:string) => void;
 }
@@ -14,6 +13,7 @@ interface ContextProps {
 export const CustomStripeProviderContext = createContext<ContextProps>({
   amount: 0,
   clientSecret: '',
+  stripePromise: Promise.resolve(null),
   setAmount: () => {},
   setClientSecret: () => {},
 });
@@ -23,39 +23,20 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
   const [amount, setAmount] = useState<number>(0);
   const [clientSecret, setClientSecret] = useState<string>('');
 
-  const stripePromise = loadStripe(STRIPE_PUBLIC_KEY as string);
-
-  const appearanceOptions = {
-    rules: {
-      ".Input":{
-        borderColor: "#cccccc"
-      }
-    },
-    layout: {
-      type: 'accordion',
-      defaultCollapsed: true,
-    }
-  }
-
-  const options = {
-    clientSecret: clientSecret,
-    // appearance: appearanceOptions,
-  };
+  const stripePromise: Promise<Stripe | null> = loadStripe(STRIPE_PUBLIC_KEY as string);
+  console.log(typeof(stripePromise));
 
   const values = {
-    amount: amount,
+    amount,
     clientSecret,
+    stripePromise,
     setAmount,
     setClientSecret,
   }
 
   return (
     <CustomStripeProviderContext.Provider value={values}>
-      {(amount > 0 && clientSecret) ? (
-        <Elements stripe={stripePromise} options={options}>
-          {children}
-        </Elements>
-      ):(children)}
+      {children}
     </CustomStripeProviderContext.Provider>
   );
 };

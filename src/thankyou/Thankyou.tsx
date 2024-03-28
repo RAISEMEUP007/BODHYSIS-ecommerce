@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BasicLayout from '../common/BasicLayout';
 import { useNavigate } from 'react-router';
 import { sendReservationConfirmationEmail } from '../api/Stripe';
@@ -17,11 +17,17 @@ const Thankyou: React.FC = () => {
     if(!pickup || !dropoff){
       navigate('/');
     }
+
+    const sendMail = setTimeout(()=>{
+      const mailParams = { name, email }
+      sendReservationConfirmationEmail(mailParams);
+    }, 100);
+    
+    return () =>{
+      clearTimeout(sendMail);
+    }
   }, [])
-
-  const mailParams = { name, email }
-  sendReservationConfirmationEmail(mailParams);
-
+  
   setTimeout(()=>{
     localStorage.removeItem('_r_name');
     localStorage.removeItem('_r_email');

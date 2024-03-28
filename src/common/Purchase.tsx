@@ -1,20 +1,20 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { LoadingButton } from '@mui/lab';
 
 import { API_URL } from './AppConstants';
 import iconPlaceholder from '../img/icons-placeholder.png';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
-import { useCustomStripe } from './Providers/CustomStripeProvider/UseCustomStripe';
 
 interface Props {
   title: string;
   sx?: object;
   onComplete?: (event: any) => void;
+  isLoading?:boolean;
 }
 
-const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
+const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
@@ -55,13 +55,14 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete }) => {
       </Box>
       {onComplete && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px' }}>
-          <Button
+          <LoadingButton
             variant="contained"
             sx={{ pr: 6, pl: 6 }}
+            loading={isLoading}
             onClick={onComplete}
           >
             {"Complete Purchase"}
-          </Button>
+          </LoadingButton>
         </Box>
       )}
     </Box>
