@@ -103,7 +103,6 @@ export const basePostAPICall = async ({route, headers, body, callback}:basePostA
     
     return response;
   } catch (error) {
-    console.log(error);
     callback(null, 500, error);
     return error;
   }

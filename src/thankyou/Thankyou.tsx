@@ -1,11 +1,39 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BasicLayout from '../common/BasicLayout';
+import { useNavigate } from 'react-router';
+import { sendReservationConfirmationEmail } from '../api/Stripe';
 
 const Thankyou: React.FC = () => {
 
-  const pickup = localStorage.getItem('pickup');
-  const dropoff = localStorage.getItem('dropoff');
+  const navigate = useNavigate();
+
+  const name = localStorage.getItem('_r_name');
+  const email = localStorage.getItem('_r_email');
+  const pickup = localStorage.getItem('_r_pickup');
+  const dropoff = localStorage.getItem('_r_dropoff');
+
+  useEffect(()=>{
+    if(!pickup || !dropoff){
+      navigate('/');
+    }
+
+    const sendMail = setTimeout(()=>{
+      const mailParams = { name, email }
+      sendReservationConfirmationEmail(mailParams);
+    }, 100);
+    
+    return () =>{
+      clearTimeout(sendMail);
+    }
+  }, [])
+  
+  setTimeout(()=>{
+    localStorage.removeItem('_r_name');
+    localStorage.removeItem('_r_email');
+    localStorage.removeItem('_r_pickup');
+    localStorage.removeItem('_r_dropoff');
+  }, 1000);
 
   return (
     <BasicLayout>

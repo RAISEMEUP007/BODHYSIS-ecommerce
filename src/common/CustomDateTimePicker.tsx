@@ -12,8 +12,7 @@ interface props {
   maxDateTime?:any;
 }
 
-// const CustomCalendar: React.FC<props> = ({ sx, name, value, onChange }) => {
-const CustomCalendar: React.FC<props> = ({ sx, name, value, onChange, minDateTime, maxDateTime }) => {
+const CustomDateTimePicker: React.FC<props> = ({ sx, name, value, onChange, minDateTime, maxDateTime }) => {
 
   return (
     <FormControl variant="standard" sx={sx}>
@@ -32,4 +31,4 @@ const CustomCalendar: React.FC<props> = ({ sx, name, value, onChange, minDateTim
   )
 }
 
-export default CustomCalendar;
+export default CustomDateTimePicker;

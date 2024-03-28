@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import ReservationMainDetail from './ReservationMainDetail';
 import Purchase from '../common/Purchase';
 import BasicLayout from '../common/BasicLayout';
-import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
-import { createReservation } from '../api/Product';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
 import { useSnackbar } from 'notistack';
@@ -17,6 +15,7 @@ const Payment: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
+  const [ isLoading, setIsLoading ] = useState(false);
 
   useEffect(()=>{
     if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
@@ -39,18 +38,21 @@ const Payment: React.FC = () => {
       amount : Math.round(ReservationMain.prices.total * 100),
     }
 
-    getClientSecret(payload, (jsonRes:any, status:any)=>{
+    setIsLoading(true);
+    getClientSecret(payload, (jsonRes:any, status:any, error:any)=>{
       if(status == 200){
         setClientSecret(jsonRes.client_secret);
         navigate("/completepurchase");
       }else{
-        enqueueSnackbar("Error occured on the server.", {
+        const errorMessage = jsonRes?.raw?.message??"Error occured on the server.";
+        enqueueSnackbar(errorMessage, {
           variant: 'error',
           style: { width: '350px' },
           autoHideDuration: 3000,
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
         })
       }
+      setIsLoading(false);
     });
   }
 
@@ -58,7 +60,7 @@ const Payment: React.FC = () => {
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ReservationMainDetail sx={{flex:1, pr: '50px'}}/>
-        <Purchase title='Reservation Details' target='/completepurchase' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} />
+        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} isLoading={isLoading}/>
       </Box>
     </BasicLayout>
   );
