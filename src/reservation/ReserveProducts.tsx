@@ -43,12 +43,17 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   useEffect(() => {
     if(ReservationMain.pickup){
+      // console.log(priceLogicData);
+      // console.log(storeDetails.brand_id);
+      // console.log(ReservationMain.pickup);
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
+      console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
     }
   }, [priceLogicData, storeDetails, ReservationMain.pickup])
 
   useEffect(() => {
+    // console.log(ReservationMain.price_table_id);
     if(ReservationMain.price_table_id){
       getHeaderData(ReservationMain.price_table_id, (jsonRes:any, status, error) => {
         switch (status) {
@@ -69,6 +74,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   const calcData = async (ReservationItems:Array<any>) =>{
     const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
+    // console.log(calculatedReservedItems);
     setReservationItems(calculatedReservedItems);
 
     let prices = {

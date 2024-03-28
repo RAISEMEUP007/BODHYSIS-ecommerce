@@ -18,7 +18,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
-  console.log(ReservationMain.prices);
+  // console.log(ReservationMain.prices);
 
   return (
     <Box sx={{ width: '500px', ...sx }}>
