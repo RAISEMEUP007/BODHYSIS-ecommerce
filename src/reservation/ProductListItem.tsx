@@ -4,6 +4,8 @@ import { API_URL } from '../common/AppConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import ExtraItem from './ExtraItem';
+import CustomBorderInput from '../common/CustomBorderInput';
+import CustomSelect from '../common/CustomSelect';
 
 interface props {
   product: any;
@@ -45,6 +47,23 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras, handleDetailDia
               {/* <div>{product?.description ?? ''}</div> */}
               {/* <div>baskets needed</div>
               <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
+          </Box>
+          <Box sx={{display:"flex", flexDirection:'column', width:'130px'}}>
+            <CustomSelect
+              label={"Size"}
+              items={[1,2,3]}
+              containerstyle={{ marginBottom:'10px' }}
+              variant={"outlined"}
+            />
+            <CustomBorderInput
+              label="Quantity"
+              value={""} 
+              required={true}
+              onChange={(event)=>{}} />
+            <Button 
+              variant="contained"
+              sx={{mt:'16px'}}
+            >{"Add to Cart"}</Button>
           </Box>
         </Box>
         <Box style={{position:'relative', paddingBottom:'90px', paddingTop:'12px', marginTop:'20px', borderTop:'1px solid #bababa'}}>

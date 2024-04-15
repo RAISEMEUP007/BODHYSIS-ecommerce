@@ -1,24 +1,26 @@
 import React from 'react';
 import { Typography, FormControl, TextField, TextFieldProps, FormHelperText } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 
 interface CustomBorderInputProps {
-  containerstyle: any;
+  containerstyle?: any;
   label: string;
+  labelVariant?: Variant;
 }
 
-const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ containerstyle, label, ...rest }) => {
+const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ containerstyle, label, labelVariant, ...rest }) => {
 
   const restInputProps:any = rest.inputProps;
   const FormHelperTextProps:any = rest.FormHelperTextProps;
 
   return (
     <FormControl sx={containerstyle}>
-      <Typography variant='subtitle2'>{label}</Typography>
+      <Typography variant={labelVariant || 'subtitle2'}>{label}</Typography>
       <TextField  
         {...rest}
         inputProps={{
           style: { 
-            width: '100%', 
+            width: '100%',
             border: 'none',
             boxShadow: '2px 2px 2px #ccc', 
             padding: '14px 10px',

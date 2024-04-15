@@ -162,7 +162,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
           <Typography sx={{margin:"30px 0"}}>
             {`Your rental starts on when delivered on `}
             <b>{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b>
-            {` and ends at`}
+            {` and ends at `}
             <b>{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b></Typography>
           <Typography variant='h6' sx={{margin:'10px 0'}}>{`Delivery Location`}</Typography>
           <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>

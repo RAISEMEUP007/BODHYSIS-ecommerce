@@ -31,7 +31,7 @@ const ExtraItem: React.FC<ExtraItemDetailProps> = ({ sx, extra, selected, onClic
         <Box style={{flex:1, marginLeft:'12px'}}>
           <Typography style={{paddingRight:'6px'}}>{extra.name}</Typography>
           <Box style={{textAlign:'right'}}>
-            <b style={{color:'#4599D6'}}>{extra.fixed_price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</b>
+            <b style={{color:'#4599D6'}}>{extra.fixed_price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} </b>
             <Checkbox style={{padding:0, color:'#4599D6'}} checked={selected} onChange={onClick} />
           </Box>
         </Box>

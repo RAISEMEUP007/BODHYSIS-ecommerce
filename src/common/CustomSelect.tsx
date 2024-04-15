@@ -1,24 +1,34 @@
 import React from 'react';
-import { Typography, FormControl, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Typography, FormControl, Select, MenuItem, SelectChangeEvent, SelectProps } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 
-interface props{
-  sx: any;
-  name: string;
-  value: string;
-  onChange: (event: SelectChangeEvent<string>) => void;
-  items: Array<string>;
+type props = {
+  containerstyle?: any;
+  label: string;
+  labelVariant?: Variant;
+  value?: any;
+  items: Array<any>;
 }
 
-const CustomSelect: React.FC<props> = ({ sx, name, value, onChange, items }) => {
+const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, labelVariant, value, items, ...rest }) => {
   return (
-    <FormControl variant="standard" sx={sx}>
-      <Typography sx={{ fontWeight: '900', fontSize: '12px' }}>{name}</Typography>
+    <FormControl sx={containerstyle}>
+      <Typography variant={labelVariant || 'subtitle2'}>{label}</Typography>
       <Select
         labelId="select-placeholder-label"
         value={value}
-        inputProps={{ 'aria-label': 'select' }}
-        onChange={onChange}
-        displayEmpty
+        inputProps={{ 
+          'aria-label': 'select',
+          style: { 
+            border: 'none',
+            boxShadow: '2px 2px 2px #ccc', 
+            padding: '14px 10px',
+            backgroundColor: 'white', 
+            borderRadius: '3px',
+          }
+        }}
+        style={{boxShadow: '2px 2px 2px #ccc', border:'none', padding: '0px',}}
+        {...rest}
       >
         {items.map((item: any) => {
           return (
