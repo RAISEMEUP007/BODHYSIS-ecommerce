@@ -50,15 +50,14 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
            }}
            onClick={() => setSelectedCategory(category)}
           >
-            {!imageError[index] && (
-              <img 
-                src={API_URL + category.img_url} 
-                alt={category.category}
-                style={{ width: '100px'}}
-                onError={()=>{console.log(index); handleImageError(index, true)}}
-                onLoad={()=>handleImageError(index, false)}
-              />
-            )}
+
+            <img 
+              src={API_URL + category.img_url} 
+              alt={category.category}
+              style={{ width: '100px', display:imageError[index]?'none':'block'}}
+              onError={()=>{console.log(index); handleImageError(index, true)}}
+              onLoad={()=>handleImageError(index, false)}
+            />
             {imageError[index] && <FontAwesomeIcon icon={faImage} style={{width:'100px', height:'100px', color:"#333"}}/>}
             <Typography style={{color:'#000', fontWeight:'bold', marginTop:'16px'}}>{category.category}</Typography>
           </Button>

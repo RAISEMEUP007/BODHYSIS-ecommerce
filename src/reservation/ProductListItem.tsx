@@ -62,7 +62,10 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras, handleDetailDia
               onChange={(event)=>{}} />
             <Button 
               variant="contained"
-              sx={{mt:'16px'}}
+              sx={{
+                mt:'16px',
+                padding:'14px 0'
+              }}
             >{"Add to Cart"}</Button>
           </Box>
         </Box>
