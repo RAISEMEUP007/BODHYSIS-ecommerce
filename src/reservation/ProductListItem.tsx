@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { API_URL } from '../common/AppConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,20 +10,29 @@ import CustomSelect from '../common/CustomSelect';
 interface props {
   product: any;
   extras: Array<any>;
-  handleDetailDialogOpen: (product: any) => void;
   sx?: object;
 }
 
-const ProductListItem: React.FC<props> = ({ sx, product, extras, handleDetailDialogOpen }) => {
+const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   const [imageLoadError, setImageLoadError] = useState(false);
+  const [extraItems, setExtraItems] = useState<Array<any>>([]);
 
-  console.log(product);
+  useEffect(()=>{
+    setExtraItems(extras.map(item => ({ ...item, selected: false })));
+  }, [extras])
+
+  const setSelected = (index:number, selected:boolean) => {
+    const updatedExtras = [...extraItems];
+    updatedExtras[index] = { ...updatedExtras[index], selected };
+    setExtraItems(updatedExtras);
+  };
+
+  const addToCart = () => {
+    console.log('dd');
+  }
+
   return (
     <Box
-      // disableRipple
-      // onClick={() => {
-      //   handleDetailDialogOpen(product);
-      // }}
       sx={{marginBottom:'10px', ...sx}}
     >
       <Box sx={{ border: '1px solid #ABABAB', padding: '30px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
@@ -66,18 +75,20 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras, handleDetailDia
                 mt:'16px',
                 padding:'14px 0'
               }}
+              onClick={()=>{addToCart()}}
             >{"Add to Cart"}</Button>
           </Box>
         </Box>
-        <Box style={{position:'relative', paddingBottom:'90px', paddingTop:'12px', marginTop:'20px', borderTop:'1px solid #bababa'}}>
+        <Box style={{position:'relative', paddingBottom:'92px', paddingTop:'12px', marginTop:'20px', borderTop:'1px solid #bababa'}}>
           <Typography style={{textAlign:'left', fontWeight:'700'}}>{"Extras"}</Typography>
           <Box style={{width:'100%', position:'absolute', overflow:'auto'}}>
             <Box style={{whiteSpace:'nowrap', textAlign:'left', padding:"12px 0 6px"}}>
-              {extras.map((extra)=>(
+              {extraItems.map((extra, index)=>(
                 <ExtraItem
                   sx={{display:'inline-block', marginRight:'16px', minWidth:'240px'}}
                   extra={extra}
-                  selected={false}
+                  selected={extra.selected}
+                  onClick={()=>{setSelected(index, !extra.selected)}}
                 />
               ))}
             </Box>

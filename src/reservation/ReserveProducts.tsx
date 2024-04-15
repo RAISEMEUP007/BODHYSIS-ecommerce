@@ -6,13 +6,12 @@ import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData
 import CustomDatePicker from '../common/CustomDatePicker';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
-
-import CategorySlot from './CategorySlots';
-import ProductItemDetail from './ProductItemDetail';
-import ProductList from './ProductList';
-import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
 import LogInAs from '../common/LogInAs';
 import CustomBorderInput from '../common/CustomBorderInput';
+
+import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
+import CategorySlot from './CategorySlots';
+import ProductList from './ProductList';
 
 interface props {
   sx?: object;
@@ -23,10 +22,8 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   const { storeDetails } = useStoreDetails();
   const { ReservationItems, ReservationMain, setReservationItems, setReservationValue } = useCustomerReservation();
 
-  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const [productFamilies, setProductFamilies] = useState<Array<any>>([]);
-  const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [extras, setExtras] = useState<Array<any>>([]);
   const [headerData, setHeaderData] = useState<Array<any>>([]);
@@ -45,9 +42,6 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   useEffect(() => {
     if(ReservationMain.pickup){
-      // console.log(priceLogicData);
-      // console.log(storeDetails.brand_id);
-      // console.log(ReservationMain.pickup);
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
       console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
@@ -55,7 +49,6 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   }, [priceLogicData, storeDetails, ReservationMain.pickup])
 
   useEffect(() => {
-    // console.log(ReservationMain.price_table_id);
     if(ReservationMain.price_table_id){
       getHeaderData(ReservationMain.price_table_id, (jsonRes:any, status, error) => {
         switch (status) {
@@ -121,21 +114,6 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
     }
   }
 
-  const handleDetailDialogClose = () => {
-    setDetailDialogOpen(false);
-  }
-
-  const handleDetailDialogOpen = (product: any) => {
-    setSelectedProduct(product);
-    setDetailDialogOpen(true);
-  }
-
-  const handleDetailDialogOK = async (product: any) => {
-    const updatedReservedProducts = [...ReservationItems, product];
-    await calcData(updatedReservedProducts);
-    setDetailDialogOpen(false);
-  }
-
   return (
     <Box sx={sx}>
       <Box>
@@ -186,11 +164,10 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
           <Typography style={{fontFamily:'Roboto', fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>
           <Box sx={{display:'flex'}}>
             <CategorySlot sx={{width:'300px', border:'1px solid #BCBCBC', borderRadius:'4px', alignSelf:'flex-start'}} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-            <ProductList sx={{flex:1, marginLeft:'24px'}} extras={extras} lists={productFamilies} handleDetailDialogOpen={handleDetailDialogOpen} />
+            <ProductList sx={{flex:1, marginLeft:'24px'}} extras={extras} lists={productFamilies} />
           </Box>
         </Box>
       </Box>
-      {/* <ProductItemDetail open={detailDialogOpen} product={selectedProduct} extras={extras} handleDetailDialogOK={handleDetailDialogOK} handleDetailDialogClose={handleDetailDialogClose} /> */}
     </Box>
   );
 }

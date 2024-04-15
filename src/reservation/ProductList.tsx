@@ -1,16 +1,14 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import ProductListItem from './ProductListItem';
 
 interface props {
   lists: Array<any>;
   extras: Array<any>;
-  handleDetailDialogOpen: (product: any) => void;
   sx?: object;
 }
 
-const ProductList: React.FC<props> = ({ sx, extras, lists, handleDetailDialogOpen }) => {
+const ProductList: React.FC<props> = ({ sx, extras, lists }) => {
   return (
     <Box sx={sx}>
       {/* {lists.length ?
@@ -20,7 +18,7 @@ const ProductList: React.FC<props> = ({ sx, extras, lists, handleDetailDialogOpe
       } */}
       {lists && lists.map((product: any) => {
         return (
-          <ProductListItem key={product.id} extras={extras} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
+          <ProductListItem key={product.id} extras={extras} product={product} />
         )
       })}
     </Box>

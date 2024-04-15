@@ -50,7 +50,6 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
            }}
            onClick={() => setSelectedCategory(category)}
           >
-
             <img 
               src={API_URL + category.img_url} 
               alt={category.category}
