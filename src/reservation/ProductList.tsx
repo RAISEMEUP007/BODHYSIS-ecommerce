@@ -12,11 +12,11 @@ interface props {
 const ProductList: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
   return (
     <Box sx={sx}>
-      {lists.length ?
+      {/* {lists.length ?
         <Typography sx={{ fontWeight: '900', mb:'12px' }}>There are {lists.length} products available.</Typography>
         :
         <Typography sx={{ fontWeight: '900', mb:'12px' }}>There are no products available.</Typography>
-      }
+      } */}
       {lists && lists.map((product: any) => {
         return (
           <ProductListItem key={product.id} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />

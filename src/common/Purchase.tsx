@@ -18,11 +18,9 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
-  // console.log(ReservationMain.prices);
-
   return (
-    <Box sx={{ width: '500px', ...sx }}>
-      <Typography sx={{ fontWeight: '900', mb: '30px', textAlign: 'center' }}>{title}</Typography>
+    <Box sx={{ width: '380px', paddingLeft:'30px', ...sx }}>
+      <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
       {ReservationItems.length ?
         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {ReservationItems.map((item: any, index: number) => {

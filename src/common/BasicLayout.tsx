@@ -16,8 +16,6 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
   const { storeDetails }:{storeDetails:any} = useStoreDetails();
   const [imageLoadError, setImageLoadError] = useState(false);
 
-  console.log(imageLoadError);
-  
   return (
     <Box sx={{boxSizing:'border-box', ...sx}}>
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems:'center', justifyContent:'space-between', backgroundColor:'#F0F0F0', borderBottom:'1px solid #b3b3b3', boxShadow:'0px 3px 4px #ccc', padding:'20px 3%'}}>
@@ -27,8 +25,8 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
             alt={storeDetails?.store_name}
             height={75}
             style={{display:imageLoadError?'none':'block'}}
-            onError={() =>{ console.log('error'); setImageLoadError(true)}}
-            onLoad={()=>{console.log('dddd'); setImageLoadError(false)}}
+            onError={() =>{setImageLoadError(true)}}
+            onLoad={()=>{setImageLoadError(false)}}
           />
           {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'75px', color:"#333"}}/>}
           <p style={{ textTransform: 'uppercase', fontWeight: 'bold', margin: '0px 0px 5px 10px', }}>{storeDetails?.store_name}</p>

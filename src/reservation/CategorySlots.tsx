@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { getProductCategoriesData } from '../api/Product';
 import { API_URL } from '../common/AppConstants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-regular-svg-icons';
 
 interface props {
   sx?: object;
@@ -13,27 +15,31 @@ interface props {
 const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
 
   const [categories, setCategories] = useState<any>();
+  const [imageError, setImgError] = useState<Array<boolean>>([]);
 
+  const handleImageError = (index:number, isError:boolean) => {
+    const updatedImageError = [...imageError];
+    updatedImageError[index] = isError;
+    setImgError(updatedImageError);  
+  };
+
+  // console.log(imageError);
   useEffect(()=>{
-    getProductCategoriesData((jsonRes)=>{
+    getProductCategoriesData((jsonRes:any)=>{
       setCategories(jsonRes);
+      setImgError(jsonRes.map(() => false));
     });
   }, []);
 
   return (
     <Box sx={sx}>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center', fontWeight: '800' }}>
-        <Typography sx={{fontWeight:'bold'}}>{'Categories'}</Typography>
-        <Typography sx={{ml:'40px', fontSize:14, color:'#e6ac00'}}>{selectedCategory === undefined ? 'Please select a category' : ''}</Typography>
-      </Box>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', flexWrap:'wrap'}}>
-        {categories && categories.map((category:any) => (
+      <Typography sx={{fontWeight:'bold', fontSize:'22px', textAlign:'center', backgroundColor:'#F0F0F0', padding:'16px'}}>{'Categories'}</Typography>
+      <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-end', flexWrap:'wrap', justifyContent:'space-around', padding:"20px 0 10px"}}>
+        {categories && categories.map((category:any, index:number) => (
           <Button
            key={category.id}
            sx={{
-             width: 150,
-             height: 140,
-             margin: 1,
+             width: '140px',
              display: 'flex',
              flexDirection: 'column',
              alignItems: 'center',
@@ -44,8 +50,17 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
            }}
            onClick={() => setSelectedCategory(category)}
          >
-            <img src={API_URL + category.img_url} alt={category.category} style={{ width: '100px', }} />
-            <Typography variant="body2" sx={{ position: 'absolute', bottom: 0 }}>{category.category}</Typography>
+            {!imageError[index] && (
+              <img 
+                src={API_URL + category.img_url} 
+                alt={category.category}
+                style={{ width: '100px'}}
+                onError={()=>{console.log(index); handleImageError(index, true)}}
+                onLoad={()=>handleImageError(index, false)}
+              />
+            )}
+            {imageError[index] && <FontAwesomeIcon icon={faImage} style={{width:'100px', height:'100px', color:"#333"}}/>}
+            <Typography style={{color:'#000', fontWeight:'bold', marginTop:'16px'}}>{category.category}</Typography>
           </Button>
         ))}
       </Box>

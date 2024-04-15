@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData, getProductLinesData } from '../api/Product';
@@ -11,6 +11,8 @@ import CategorySlot from './CategorySlots';
 import ProductItemDetail from './ProductItemDetail';
 import ProductList from './ProductList';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
+import LogInAs from '../common/LogInAs';
+import CustomBorderInput from '../common/CustomBorderInput';
 
 interface props {
   sx?: object;
@@ -137,25 +139,56 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   return (
     <Box sx={sx}>
       <Box>
-        <Box sx={{ display: 'flex' }}>
-          <CustomDatePicker
-            name="Start Date"
-            sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
-            value={dayjs(ReservationMain.pickup)}
-            onChange={handlePickupChange}
-            maxDate={dayjs(ReservationMain.dropoff)}
-            minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
-          />
-          <CustomDatePicker
-            name="End Date"
-            sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
-            value={dayjs(ReservationMain.dropoff)}
-            onChange={handleDropoffChange}
-            minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
-          />
+        <LogInAs/>
+        <Box>
+          <Typography style={{fontFamily:'Roboto', fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
+          <Box sx={{ display: 'flex', paddingLeft:"20px" }}>
+            <CustomDatePicker
+              name="Start Date"
+              sx={{ boxSizing: 'boder-box', width: '200px', pr: 5 }}
+              value={dayjs(ReservationMain.pickup)}
+              onChange={handlePickupChange}
+              maxDate={dayjs(ReservationMain.dropoff)}
+              minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
+            />
+            <CustomDatePicker
+              name="End Date"
+              sx={{ boxSizing: 'boder-box', width: '200px', pr: 5 }}
+              value={dayjs(ReservationMain.dropoff)}
+              onChange={handleDropoffChange}
+              minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
+            />
+          </Box>
+          <Typography sx={{margin:"30px 0"}}>
+            {`Your rental starts on when delivered on `}
+            <b>{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b>
+            {` and ends at`}
+            <b>{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b></Typography>
+          <Typography variant='h6' sx={{margin:'10px 0'}}>{`Delivery Location`}</Typography>
+          <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>
+          <CustomBorderInput
+            containerstyle={{ width: '60%', mt:'30px' }}
+            label="Search Address"
+            placeholder="Start typing to search for your address..." 
+            value={""} 
+            required={true}
+            onChange={(event)=>{}} />
+          <Box sx={{mt:'20px'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
+          <CustomBorderInput
+            containerstyle={{ width: '60%', mt:'30px' }}
+            label="Manual Address Entry"
+            placeholder="Resort, Street Address, Apt #/Suite/Etc." 
+            value={""} 
+            required={true}
+            onChange={(event)=>{}} />
         </Box>
-        <CategorySlot sx={{ mt: '50px' }} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-        <ProductList sx={{ mt: '70px', pr: 2 }} lists={productFamilies} handleDetailDialogOpen={handleDetailDialogOpen} />
+        <Box>
+          <Typography style={{fontFamily:'Roboto', fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>
+          <Box sx={{display:'flex'}}>
+            <CategorySlot sx={{width:'300px', border:'1px solid #BCBCBC', borderRadius:'4px', alignSelf:'flex-start'}} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+            <ProductList sx={{flex:1, marginLeft:'20px'}} lists={productFamilies} handleDetailDialogOpen={handleDetailDialogOpen} />
+          </Box>
+        </Box>
       </Box>
       <ProductItemDetail open={detailDialogOpen} product={selectedProduct} extras={extras} handleDetailDialogOK={handleDetailDialogOK} handleDetailDialogClose={handleDetailDialogClose} />
     </Box>

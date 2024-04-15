@@ -49,9 +49,9 @@ const Reservation: React.FC = () => {
 
   return (
     <BasicLayout>
-      <Box sx={{display:'flex', flexDirection:'row'}}>
-        <ReserveProducts sx={{flex:1}}/>
-        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
+      <Box sx={{display:'flex', flexDirection:'row', p:'60px 40px'}}>
+        <ReserveProducts sx={{flex:1, pr:'40px'}}/>
+        <Purchase title='Order Details' sx={{borderLeft:'1px solid #999'}} onComplete={onComplete}/>
       </Box>
     </BasicLayout>
   );

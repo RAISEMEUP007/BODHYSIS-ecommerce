@@ -24,7 +24,6 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
   const [clientSecret, setClientSecret] = useState<string>('');
 
   const stripePromise: Promise<Stripe | null> = loadStripe(STRIPE_PUBLIC_KEY as string);
-  console.log(typeof(stripePromise));
 
   const values = {
     amount,
