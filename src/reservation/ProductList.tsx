@@ -5,11 +5,12 @@ import ProductListItem from './ProductListItem';
 
 interface props {
   lists: Array<any>;
+  extras: Array<any>;
   handleDetailDialogOpen: (product: any) => void;
   sx?: object;
 }
 
-const ProductList: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => {
+const ProductList: React.FC<props> = ({ sx, extras, lists, handleDetailDialogOpen }) => {
   return (
     <Box sx={sx}>
       {/* {lists.length ?
@@ -19,7 +20,7 @@ const ProductList: React.FC<props> = ({ sx, lists, handleDetailDialogOpen }) => 
       } */}
       {lists && lists.map((product: any) => {
         return (
-          <ProductListItem key={product.id} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
+          <ProductListItem key={product.id} extras={extras} product={product} handleDetailDialogOpen={handleDetailDialogOpen} />
         )
       })}
     </Box>

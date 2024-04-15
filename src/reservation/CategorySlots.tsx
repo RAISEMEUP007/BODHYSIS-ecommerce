@@ -34,7 +34,7 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
   return (
     <Box sx={sx}>
       <Typography sx={{fontWeight:'bold', fontSize:'22px', textAlign:'center', backgroundColor:'#F0F0F0', padding:'16px'}}>{'Categories'}</Typography>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-end', flexWrap:'wrap', justifyContent:'space-around', padding:"20px 0 10px"}}>
+      <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-end', flexWrap:'wrap', justifyContent:'space-around', padding:"20px 6px 10px"}}>
         {categories && categories.map((category:any, index:number) => (
           <Button
            key={category.id}
@@ -49,7 +49,7 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
              borderColor: selectedCategory && selectedCategory.id === category.id ? 'black' : 'transparent',
            }}
            onClick={() => setSelectedCategory(category)}
-         >
+          >
             {!imageError[index] && (
               <img 
                 src={API_URL + category.img_url} 

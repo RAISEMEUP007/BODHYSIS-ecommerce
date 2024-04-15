@@ -186,11 +186,11 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
           <Typography style={{fontFamily:'Roboto', fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>
           <Box sx={{display:'flex'}}>
             <CategorySlot sx={{width:'300px', border:'1px solid #BCBCBC', borderRadius:'4px', alignSelf:'flex-start'}} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-            <ProductList sx={{flex:1, marginLeft:'20px'}} lists={productFamilies} handleDetailDialogOpen={handleDetailDialogOpen} />
+            <ProductList sx={{flex:1, marginLeft:'24px'}} extras={extras} lists={productFamilies} handleDetailDialogOpen={handleDetailDialogOpen} />
           </Box>
         </Box>
       </Box>
-      <ProductItemDetail open={detailDialogOpen} product={selectedProduct} extras={extras} handleDetailDialogOK={handleDetailDialogOK} handleDetailDialogClose={handleDetailDialogClose} />
+      {/* <ProductItemDetail open={detailDialogOpen} product={selectedProduct} extras={extras} handleDetailDialogOK={handleDetailDialogOK} handleDetailDialogClose={handleDetailDialogClose} /> */}
     </Box>
   );
 }
