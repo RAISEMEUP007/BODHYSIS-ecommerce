@@ -139,7 +139,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
       <Box>
         <Box sx={{ display: 'flex' }}>
           <CustomDatePicker
-            name="Pick up"
+            name="Start Date"
             sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
             value={dayjs(ReservationMain.pickup)}
             onChange={handlePickupChange}
@@ -147,7 +147,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
             minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
           />
           <CustomDatePicker
-            name="Drop off"
+            name="End Date"
             sx={{ boxSizing: 'boder-box', width: '200px', pt: 5, pr: 5 }}
             value={dayjs(ReservationMain.dropoff)}
             onChange={handleDropoffChange}
