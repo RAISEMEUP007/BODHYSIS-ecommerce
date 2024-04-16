@@ -18,7 +18,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
 
   return (
     <Box sx={{boxSizing:'border-box', ...sx}}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems:'center', justifyContent:'space-between', backgroundColor:'#F0F0F0', borderBottom:'1px solid #b3b3b3', boxShadow:'0px 3px 4px #ccc', padding:'20px 3%'}}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems:'center', marginBottom:'4px', justifyContent:'space-between', backgroundColor:'#F0F0F0', borderBottom:'1px solid #b3b3b3', boxShadow:'0px 3px 4px #ccc', padding:'20px 3%'}}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end'}}>
           <img
             src={API_URL + storeDetails?.logo_url}

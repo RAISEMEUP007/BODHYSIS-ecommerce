@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Alert } from '@mui/material';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 import { API_URL } from './AppConstants';
 import iconPlaceholder from '../img/icons-placeholder.png';
@@ -19,7 +20,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
   const { ReservationItems, ReservationMain } = useCustomerReservation();
 
   return (
-    <Box sx={{ width: '380px', paddingLeft:'30px', ...sx }}>
+    <Box sx={{ width: '350px', paddingLeft:'30px', ...sx }}>
       <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
       {ReservationItems.length ?
         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
@@ -34,12 +35,21 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           })}
         </Box>
         : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography sx={{ fontSize: 14, }}>
-          {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}
+      <Typography variant={"body1"}><b>{"Reservation Timing"}</b></Typography>
+      <Box sx={{m:"10px 0px"}}>
+        <Typography variant={"body1"} sx={{fontSize:'18px'}}>
+          <b>{ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} &nbsp;-&nbsp; {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Typography>
       </Box>
-      <Box sx={{ mt: "80px", mb: '20px' }}>
+      <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon fontSize='inherit'/>} style={{color:'black', border:'1px solid #F9C02F'}}>
+        {`Your reservation `}
+        <b style={{fontSize:'1.1em', fontWeight:'800'}}>ends</b>
+        {` at `}
+        <b style={{fontSize:'1.1em', fontWeight:'800'}}>8:30 am</b>
+        {` on `}
+        <b style={{fontSize:'1.1em', fontWeight:'800'}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
+      </Alert>
+      <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
           <div>{"Subtotal"}</div>
           <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
@@ -48,9 +58,9 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           <div>{"Tax(8.1%)"}</div>
           <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
-        <Box sx={styles.purchase}>
-          <div>{"Total"}</div>
-          <div>{ReservationMain.prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+        <Box sx={[styles.purchase, {borderTop:'1px solid black', marginTop:'16px', paddingTop:'16px'}]}>
+          <div><b>{"Total"}</b></div>
+          <div><b>{ReservationMain.prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</b></div>
         </Box>
       </Box>
       {onComplete && (
@@ -61,7 +71,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
             loading={isLoading}
             onClick={onComplete}
           >
-            {"Complete Purchase"}
+            {"Review & Pay"}
           </LoadingButton>
         </Box>
       )}

@@ -314,7 +314,7 @@ const Login: React.FC = () => {
             </Box>
           </Box>
         </Box>
-        <Box sx={{width:'28%', maxWidth:'800px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 120px)'}}>
+        <Box sx={{width:'28%', maxWidth:'800px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 130px)'}}>
           <Typography variant='h4' sx={{m:5, fontSize:'32px', textAlign:'center', fontWeight:700}}>{"Order Details"}</Typography>
           <Typography sx={{textAlign:'center'}}>{"You must be logged in to to add items to your cart."}</Typography>
         </Box>
