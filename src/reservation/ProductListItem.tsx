@@ -29,6 +29,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   const { addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
+  const [sizes, setSizes] = useState<Array<any>>([]);
 
   const [formValues, setFormValues] = useState<formValue>({
     size: null,
@@ -43,6 +44,12 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   useEffect(()=>{
     setExtraItems(extras.map(item => ({ ...item, selected: false })));
   }, [extras])
+
+  useEffect(()=>{
+    if(product.lines && product.lines.length){
+      setSizes(product.lines[0].linesSizes.split(','));
+    }else setSizes([]);
+  }, [product]);
 
   const setSelected = (index:number, selected:boolean) => {
     const updatedExtras = [...extraItems];
@@ -76,12 +83,14 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
             flag = false;
           }else updatedFormValidation.quantity = true;
           break;
-        default:
-          if (!formValues[key as keyof typeof formValues]) {
-            updatedFormValidation[key as keyof typeof formValues] = false;
-            flag = false;
-          } else {
-            updatedFormValidation[key as keyof typeof formValues] = true;
+        case 'size':
+          if(product.lines && product.lines.length){
+            if (!formValues[key as keyof typeof formValues]) {
+              updatedFormValidation[key as keyof typeof formValues] = false;
+              flag = false;
+            } else {
+              updatedFormValidation[key as keyof typeof formValues] = true;
+            }
           }
           break;
       }
@@ -135,15 +144,18 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
               <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
           </Box>
           <Box sx={{display:"flex", flexDirection:'column', width:'130px'}}>
-            <CustomSelect
-              error={formValidation.size === false?true:false}
-              label={"Size"}
-              value={formValues.size || ''} 
-              items={[1,2,3]}
-              containerstyle={{ marginBottom:'10px' }}
-              variant={"outlined"}
-              helperText={formValidation.size === false?'Not selected':''}
-              onChange={(event:any)=>updateFormValue('size', event.target.value)} />
+            {(product.lines && product.lines.length) ? 
+              <CustomSelect
+                error={formValidation.size === false?true:false}
+                label={"Size"}
+                value={formValues.size || ''} 
+                items={sizes}
+                containerstyle={{ marginBottom:'10px' }}
+                variant={"outlined"}
+                helperText={formValidation.size === false?'Not selected':''}
+                onChange={(event:any)=>updateFormValue('size', event.target.value)} />
+              : <></>
+            }
             <CustomBorderInput
               error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
               label="Quantity"
