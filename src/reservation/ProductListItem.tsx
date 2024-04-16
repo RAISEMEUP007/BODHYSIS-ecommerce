@@ -92,6 +92,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
 
     const newItem = {
       family_id: product.id,
+      family: product.family,
       quantity: formValues.quantity, 
       price_group_id: product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
