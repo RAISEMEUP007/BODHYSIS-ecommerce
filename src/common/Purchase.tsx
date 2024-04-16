@@ -1,14 +1,12 @@
 import React from 'react';
-import { Box, Typography, Button, Alert } from '@mui/material';
+import { Box, Typography, Button, Alert, Link } from '@mui/material';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
-
-import { API_URL } from './AppConstants';
-import iconPlaceholder from '../img/icons-placeholder.png';
-import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleArrowDown, faCircleXmark, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+
+import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
 
 interface Props {
@@ -22,8 +20,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
-  console.log(storeDetails);
-
+  
   return (
     <Box sx={{ width: '350px', paddingLeft:'30px', ...sx }}>
       <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
@@ -50,14 +47,14 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           </>
         : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
       </Box>
-      <Typography variant={"body1"}><b>{"Reservation Timing"}</b></Typography>
-      <Box sx={{m:"10px 0px"}}>
-        <Typography variant={"body1"} sx={{fontSize:'18px'}}>
+      <Typography sx={{fontSize:'18px', fontWeight:500}}><b>{"Reservation Timing"}</b></Typography>
+      <Box sx={{m:"10px 0px 16px"}}>
+        <Typography sx={{fontSize:'21px', fontWeight:700}}>
           <b>{ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} &nbsp;-&nbsp; {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Typography>
       </Box>
       {ReservationMain.dropoff &&
-      <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon fontSize='inherit'/>} style={{color:'black', border:'1px solid #F9C02F'}}>
+      <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon style={{marginTop:'4px', fontSize:'26px'}}/>} style={{color:'black', border:'1px solid #F9C02F', fontSize:'16px'}}>
         {`Your reservation `}
         <b style={{fontSize:'1.1em', fontWeight:'800'}}>ends</b>
         {` at `}
@@ -74,16 +71,16 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           <div>{`Tax(${(storeDetails.sales_tax ? (storeDetails.sales_tax / 100).toLocaleString(undefined, {style: 'percent'}) : 'n/a')})`}</div>
           <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
-        <Box sx={[styles.purchase, {borderTop:'1px solid black', marginTop:'16px', paddingTop:'16px'}]}>
+        <Box sx={[styles.purchase, {borderTop:'1px solid black', marginTop:'12px', paddingTop:'12px'}]}>
           <div><b>{"Total"}</b></div>
           <div><b>{ReservationMain.prices.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</b></div>
         </Box>
       </Box>
       {onComplete && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '40px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '24px' }}>
           <LoadingButton
             variant="contained"
-            sx={{ pr: 6, pl: 6 }}
+            sx={{ padding:'12px 0', width:'100%', textTransform: 'none', fontSize:'16px' }}
             loading={isLoading}
             onClick={onComplete}
           >
@@ -91,6 +88,10 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           </LoadingButton>
         </Box>
       )}
+      <Typography style={{textAlign:'center', marginTop:'20px', fontSize:'14px'}}>
+        {`Having trouble checking out and need help? Contact our team at `}
+        <Link>{`(843) 785-4321.`}</Link>
+      </Typography>
     </Box>
   );
 }
@@ -99,7 +100,8 @@ const styles = {
   purchase: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginBottom: '8px',
+    marginBottom: '6px',
+    fontSize:'18px'
   }
 }
 

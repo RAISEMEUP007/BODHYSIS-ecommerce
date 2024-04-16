@@ -14,14 +14,14 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
 
   return (
     <FormControl sx={containerstyle}>
-      <Typography variant={labelVariant || 'subtitle2'}>{label}</Typography>
+      <Typography variant={labelVariant || 'subtitle1'}>{label}</Typography>
       <TextField  
         {...rest}
         inputProps={{
           style: { 
             width: '100%',
             border: 'none',
-            boxShadow: '2px 2px 2px #ccc', 
+            boxShadow: '2px 3px 4px #ccc', 
             padding: '14px 10px',
             backgroundColor: 'white', 
             borderRadius: '3px',

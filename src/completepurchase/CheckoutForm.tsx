@@ -121,7 +121,7 @@ export default function CheckoutForm() {
         variant="contained"
         disabled={isLoading || !stripe || !elements}
         loading={isLoading}
-        sx={{ mt: '20px', float:'right'}}
+        sx={{ mt: '20px', float:'right', textTransform: 'none'}}
         onClick={handleSubmit}>
         {"Pay now"}
       </LoadingButton>

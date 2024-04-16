@@ -43,6 +43,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   useEffect(() => {
     if(ReservationMain.pickup){
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
+      console.log("----------- priceTable -----------");
       console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
     }
@@ -137,13 +138,13 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
               minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
             />
           </Box>
-          <Typography sx={{margin:"30px 0"}}>
+          <Typography sx={{margin:"30px 0", fontSize:'18px'}}>
             {`Your rental starts on when delivered on `}
             {ReservationMain.pickup ? <b>{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
             {` and ends at `}
             {ReservationMain.dropoff ? <b>{`8:00AM `}{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
           </Typography>
-          <Typography variant='h6' sx={{margin:'10px 0'}}>{`Delivery Location`}</Typography>
+          <Typography sx={{margin:'10px 0', textDecoration:'underline', fontSize:'20px'}}>{`Delivery Location`}</Typography>
           <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>
           <CustomBorderInput
             containerstyle={{ width: '60%', mt:'30px' }}
@@ -152,9 +153,9 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
             value={""} 
             required={true}
             onChange={(event)=>{}} />
-          <Box sx={{mt:'20px'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
+          <Box sx={{mt:'20px', fontSize:'18px'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
           <CustomBorderInput
-            containerstyle={{ width: '60%', mt:'30px' }}
+            containerstyle={{ width: '60%', mt:'20px' }}
             label="Manual Address Entry"
             placeholder="Resort, Street Address, Apt #/Suite/Etc." 
             value={""} 

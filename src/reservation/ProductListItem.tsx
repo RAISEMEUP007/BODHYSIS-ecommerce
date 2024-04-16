@@ -162,8 +162,10 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
             <Button 
               variant="contained"
               sx={{
-                mt:'16px',
-                padding:'14px 0'
+                mt:'20px',
+                padding:'13px 0',
+                textTransform: 'none',
+                // fontSize: '16px',
               }}
               onClick={()=>{addToCart()}}
             >{"Add to Cart"}</Button>
