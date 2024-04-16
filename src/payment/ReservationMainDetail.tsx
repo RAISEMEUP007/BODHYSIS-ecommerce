@@ -1,9 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
 import { Box, Typography, TextField, Grid, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
-import CustomSelect from '../common/CustomSelect';
 import CustomInput from '../common/CustomInput';
 import dayjs from 'dayjs';
 

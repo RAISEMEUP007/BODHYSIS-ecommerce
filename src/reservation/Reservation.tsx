@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Purchase from '../common/Purchase';
 import { Box } from '@mui/material';
 
@@ -47,11 +47,23 @@ const Reservation: React.FC = () => {
     }else navigate('/payment');
   }
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   return (
     <BasicLayout>
-      <Box sx={{display:'flex', flexDirection:'row'}}>
-        <ReserveProducts sx={{flex:1}}/>
-        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete}/>
+      <Box sx={{display:'flex', flexDirection:'row',}}>
+        <ReserveProducts sx={{flex:1, p:'60px 40px'}}/>
+        <Purchase
+          title='Order Details'
+          buttonTitle="Review & Pay"
+          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
+          onComplete={onComplete}
+          isShowItems={true}
+          isRemovalItems={true}
+        />
       </Box>
     </BasicLayout>
   );

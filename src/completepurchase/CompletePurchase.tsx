@@ -19,6 +19,11 @@ const CompletePurchase: React.FC = () => {
     }
   }, []);
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   const appearanceOptions = {
     rules: {
       ".Input":{
@@ -36,17 +41,34 @@ const CompletePurchase: React.FC = () => {
     appearance: appearanceOptions,
   };
 
+  console.log(amount);
+  console.log(clientSecret);
   return (
     <BasicLayout>
-      <Box sx={{ display: 'flex', flexDirection: 'row', marginTop:'50px', justifyContent:'center' }}>
-        <Purchase title='Reservation Details' sx={{paddingRight:'50px'}} />
+      <Box sx={{ display: 'flex', flexDirection: 'row', }}>
         {amount > 0 && clientSecret &&(
           <Elements stripe={stripePromise} options={options}>
-            <Box sx={{ flex:1, paddingTop: '50px', padding:'50px', borderLeft:'1px solid #ccc'}}>
-              <CheckoutForm/>
+            <Box 
+              sx={{ 
+                display: 'flex',
+                flex:1, 
+                padding:'50px', 
+                paddingTop: '100px', 
+                borderLeft:'1px solid #ccc',
+                // alignItems:'center',
+                justifyContent:'center',
+              }}>
+              <Box sx={{width:'100%', maxWidth:'900px'}}>
+                <CheckoutForm/>
+              </Box>
             </Box>
           </Elements>
         )}
+        <Purchase 
+          title='Reservation Details' 
+          buttonTitle="Complete Purchase"
+          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
+        />
       </Box>
     </BasicLayout>
   );

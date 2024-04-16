@@ -56,11 +56,23 @@ const Payment: React.FC = () => {
     });
   }
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   return (
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <ReservationMainDetail sx={{flex:1, pr: '50px'}}/>
-        <Purchase title='Reservation Details' sx={{borderLeft:'1px solid #999', paddingLeft:'50px'}} onComplete={onComplete} isLoading={isLoading}/>
+        <ReservationMainDetail sx={{flex:1, p:'60px 40px'}}/>
+        <Purchase 
+          title='Order Summary'
+          buttonTitle="Complete Purchase"
+          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
+          onComplete={onComplete}
+          isLoading={isLoading}
+          isShowItems={true}
+        />
       </Box>
     </BasicLayout>
   );

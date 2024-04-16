@@ -1,5 +1,5 @@
-import { basePostAPICall, getAPICall, defaultCallback } from './BaseAPI';
+import { basePostAPICall, postAPICall, defaultCallback } from './BaseAPI';
 
-export const getTestToken = async (callback=defaultCallback) => {
-  return await getAPICall({ route: 'auth/ttt', callback });
+export const logIn = async (payload:any, callback=defaultCallback) => {
+  return await postAPICall({ route: 'customer/login', payload, callback });
 }

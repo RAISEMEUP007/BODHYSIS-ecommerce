@@ -35,9 +35,14 @@ const Thankyou: React.FC = () => {
     localStorage.removeItem('_r_dropoff');
   }, 1000);
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   return (
     <BasicLayout>
-      <Box sx={{ mt:'50px'}}>
+      <Box sx={{ p:'50px'}}>
         <Typography variant="h5">{"Thank you for your reservation"}</Typography>
         <Box sx={{ mt:'30px', mb:'30px'}}>
           <Typography >{"Your reservation has been confirmed for"}</Typography>

@@ -15,17 +15,22 @@ interface props {
 const CustomDatePicker: React.FC<props> = ({ sx, name, value, onChange, minDate, maxDate }) => {
 
   return (
-    <FormControl variant="standard" sx={sx}>
-      <Typography sx={{ fontWeight: '900' }}>{name}</Typography>
+    <FormControl sx={sx}>
+      <Typography>{name}</Typography>
       <DatePicker
-        sx={{ mt: '12px', pt: '8px' }}
+        sx={{ 
+          mt: '12px', 
+        }}
         value={value}
         onChange={onChange}
         defaultValue={dayjs(Date.now())}
         minDate={minDate}
         maxDate={maxDate}
-        // referenceDate={dayjs()}
-        slotProps={{ textField: { variant: 'standard', } }}
+        slotProps={{ 
+          textField: { 
+            variant: 'standard',
+          },
+        }}
       />
     </FormControl>
   )

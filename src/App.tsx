@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { getTestToken } from './api/Auth';
 import Reservation from './reservation/Reservation';
 import Payment from './payment/Payment';
 
@@ -10,6 +9,7 @@ import { useStoreDetails } from './common/Providers/StoreDetailsProvider/UseStor
 import { getStoreDetailDB } from './api/Store';
 import CompletePurchase from './completepurchase/CompletePurchase';
 import Thankyou from './thankyou/Thankyou';
+import Login from './login/Login';
 
 const InitializeApp = ({ children } : {children:any}) => {
   const [accessToken, setAccessToken] = useState(null);
@@ -18,12 +18,12 @@ const InitializeApp = ({ children } : {children:any}) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getTestToken((jsonRes:any, status)=>{
-        if(status == 200){
-          setAccessToken(jsonRes.refreshToken);
-          localStorage.setItem('access-token', jsonRes.refreshToken);
-        }
-      });
+      // await getTestToken((jsonRes:any, status)=>{
+      //   if(status == 200){
+      //     setAccessToken(jsonRes.refreshToken);
+      //     localStorage.setItem('access-token', jsonRes.refreshToken);
+      //   }
+      // });
   
       const currentURL = window.location.href;
       const host = new URL(currentURL).host;
@@ -36,9 +36,9 @@ const InitializeApp = ({ children } : {children:any}) => {
     fetchData();
   }, []);
 
-  if (accessToken === null) {
-    return <div>Invalid token...</div>;
-  }
+  // if (accessToken === null) {
+  //   return <div>Invalid token...</div>;
+  // }
 
   if (getStoreDetails() === null) {
     return <div>Not registered store...</div>;
@@ -53,7 +53,8 @@ const App = () => {
       <InitializeApp>
         <Router>
           <Routes>
-            <Route path="/" element={<Reservation />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/reservation" element={<Reservation />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/completepurchase" element={<CompletePurchase />} />
             <Route path="/thankyou" element={<Thankyou/>} />
