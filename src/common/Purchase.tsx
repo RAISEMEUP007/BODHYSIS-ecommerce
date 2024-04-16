@@ -9,6 +9,7 @@ import iconPlaceholder from '../img/icons-placeholder.png';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowDown, faCircleXmark, faClose } from '@fortawesome/free-solid-svg-icons';
+import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
 
 interface Props {
   title: string;
@@ -20,6 +21,8 @@ interface Props {
 const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
 
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
+  const { storeDetails } = useStoreDetails();
+  console.log(storeDetails);
 
   return (
     <Box sx={{ width: '350px', paddingLeft:'30px', ...sx }}>
@@ -53,6 +56,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
           <b>{ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} &nbsp;-&nbsp; {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Typography>
       </Box>
+      {ReservationMain.dropoff &&
       <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon fontSize='inherit'/>} style={{color:'black', border:'1px solid #F9C02F'}}>
         {`Your reservation `}
         <b style={{fontSize:'1.1em', fontWeight:'800'}}>ends</b>
@@ -60,14 +64,14 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
         <b style={{fontSize:'1.1em', fontWeight:'800'}}>8:30 am</b>
         {` on `}
         <b style={{fontSize:'1.1em', fontWeight:'800'}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
-      </Alert>
+      </Alert>}
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
           <div>{"Subtotal"}</div>
           <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
         <Box sx={styles.purchase}>
-          <div>{"Tax(8.1%)"}</div>
+          <div>{`Tax(${(storeDetails.sales_tax ? (storeDetails.sales_tax / 100).toLocaleString(undefined, {style: 'percent'}) : 'n/a')})`}</div>
           <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
         <Box sx={[styles.purchase, {borderTop:'1px solid black', marginTop:'16px', paddingTop:'16px'}]}>
