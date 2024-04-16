@@ -10,8 +10,7 @@ interface CustomBorderInputProps {
 
 const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ containerstyle, label, labelVariant, ...rest }) => {
 
-  const restInputProps:any = rest.inputProps;
-  const FormHelperTextProps:any = rest.FormHelperTextProps;
+  const { inputProps, FormHelperTextProps, defaultValue, ...otherRest } = rest;
 
   return (
     <FormControl sx={containerstyle}>
@@ -27,7 +26,7 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
             backgroundColor: 'white', 
             borderRadius: '3px',
           },
-          ...restInputProps
+          ...inputProps
         }}
         FormHelperTextProps={{
           style: {

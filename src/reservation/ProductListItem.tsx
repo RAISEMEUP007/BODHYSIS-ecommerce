@@ -25,6 +25,7 @@ type formValidation = {
 }
 
 const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
+
   const { addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
@@ -64,6 +65,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   }
 
   const addToCart = () => {
+    console.log('dd');
     let flag = true;
     const updatedFormValidation = { ...formValidation };
     for (const key in formValues) {
@@ -89,6 +91,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       }
     }
     setFormValidation(updatedFormValidation);
+    if(flag == false) return false;
 
     const newItem = {
       family_id: product.id,
@@ -99,6 +102,12 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       img_url: product?.img_url ?? ''
     }
     addReservationItem(newItem);
+
+    setTimeout(()=>{
+      setFormValues({size:null, quantity:null});
+      setFormValidation({size:null, quantity:null});
+      setExtraItems(extras.map(item => ({ ...item, selected: false })));
+    }, 100);
   }
 
   return (
@@ -142,7 +151,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
               label="Quantity"
               type="number"
               // min={1}
-              defaultValue={formValues.quantity} 
+              value={formValues.quantity || ''} 
               required={true}
               helperText={
                 formValidation.quantity === false
