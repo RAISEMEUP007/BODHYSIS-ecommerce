@@ -62,7 +62,6 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   }
 
   const addToCart = () => {
-    console.log('dd');
     let flag = true;
     const updatedFormValidation = { ...formValidation };
     for (const key in formValues) {
@@ -93,6 +92,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     const newItem = {
       family_id: product.id,
       family: product.family,
+      display_name: product.display_name,
       quantity: formValues.quantity, 
       price_group_id: product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),

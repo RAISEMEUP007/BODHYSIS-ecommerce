@@ -1,10 +1,12 @@
-import React from 'react';
-import { Box, Typography, Button, Alert, Link } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Button, Alert, Link, Collapse, List } from '@mui/material';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { TransitionGroup } from 'react-transition-group';
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
@@ -21,31 +23,52 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   
+  console.log("------- ReservationItems -------------");
+  console.log(ReservationItems);
+
+  const [ expand, setExpand ] = useState<boolean>(true);
+
   return (
     <Box sx={{ width: '350px', paddingLeft:'30px', ...sx }}>
       <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
       <Box sx={{border:'1px solid #999', backgroundColor:'#F8F8F8', margin:'24px 0 60px', borderRadius:'4px', padding:"0, 16px"}}>
-        <Typography sx={{fontWeight:500, padding:'12px 16px', borderBottom:'1px solid #999'}}>{"Cart Items"}</Typography>
-        {ReservationItems.length ?
-          <>
-            {ReservationItems.map((item: any, index: number) => {
-              return (
-                <Box sx={{padding:'12px 16px', borderBottom:'1px solid #999'}}>
-                  <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <Typography sx={{fontWeight:800,}}>{item.family}</Typography>
-                    <Button onClick={()=>{removeReservationItem(index)}} ><FontAwesomeIcon icon={faCircleXmark} style={{height:'16px', color:"#4599D6"}}/></Button>
-                  </Box>
-                  <Box sx={{display:'flex', flexDirection:'row'}}>
-                    <Typography sx={{fontWeight:600, fontSize:'14px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
-                    <Typography sx={{fontWeight:700, fontSize:'14px', color:'#4599D6',}}>{`$50.00`}</Typography>
-                  </Box>
-                  <Typography variant='subtitle2' sx={{fontWeight:500}}>{"Wavier"}</Typography>
-                  <Typography variant='subtitle2' sx={{fontWeight:500}}>{"Free Basket"}</Typography>
-                </Box>
-              )
-            })}
-          </>
-        : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
+        <Box style={{display:'flex', alignItems:'center', padding:'14px', cursor:'pointer', borderBottom:'1px solid #999'}} onClick={()=>{setExpand(!expand)}}>
+          <ExpandCircleDownIcon style={{color:"#999999"}}/>
+          <Typography sx={{fontWeight:600, fontSize:'18px', paddingLeft:'10px'}}>{"Cart Items"}</Typography>
+        </Box>
+        <Collapse in={expand} timeout={400} easing={"ease-in-out"}>
+          <List sx={{padding:'0px 14px'}}>
+            <TransitionGroup>
+              {ReservationItems.length ?
+                <>
+                  {ReservationItems.map((item: any, index: number) => {
+                    return (
+                      <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999'}}>
+                        <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                          <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
+                          <Box style={{cursor:'pointer'}} onClick={()=>{removeReservationItem(index)}} ><FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/></Box>
+                        </Box>
+                        <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
+                          <Typography sx={{fontWeight:600, fontSize:'16px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
+                          <Typography sx={{fontWeight:700, fontSize:'16px', color:'#4599D6',}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
+                        </Box>
+                        {(item.extras && item.extras.length) ?
+                          <>
+                            {item.extras.map((extra: any, index: number) => {
+                              return (
+                                <Typography key={index} sx={{fontWeight:400, ml:'20px'}}>{extra.name}</Typography>
+                              )
+                            })}
+                          </>
+                        : <Typography sx={{fontWeight:400, ml:'20px'}}>{"No extras"}</Typography>}
+                      </Box>
+                    )
+                  })}
+                </>
+              : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
+            </TransitionGroup>
+          </List>
+        </Collapse>
       </Box>
       <Typography sx={{fontSize:'18px', fontWeight:500}}><b>{"Reservation Timing"}</b></Typography>
       <Box sx={{m:"10px 0px 16px"}}>
@@ -56,11 +79,11 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
       {ReservationMain.dropoff &&
       <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon style={{marginTop:'4px', fontSize:'26px'}}/>} style={{color:'black', border:'1px solid #F9C02F', fontSize:'16px'}}>
         {`Your reservation `}
-        <b style={{fontSize:'1.1em', fontWeight:'800'}}>ends</b>
+        <b style={{fontSize:'1.1em', fontWeight:700}}>ends</b>
         {` at `}
-        <b style={{fontSize:'1.1em', fontWeight:'800'}}>8:30 am</b>
+        <b style={{fontSize:'1.1em', fontWeight:700}}>8:30 am</b>
         {` on `}
-        <b style={{fontSize:'1.1em', fontWeight:'800'}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
+        <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
       </Alert>}
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
