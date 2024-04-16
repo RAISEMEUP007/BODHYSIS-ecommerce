@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Badge, Box } from '@mui/material';
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
 import { API_URL } from './AppConstants';
-import { faCarTunnel, faCartShopping} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faUserCircle, faImage, faChessBishop, } from '@fortawesome/free-regular-svg-icons';
+import { faImage } from '@fortawesome/free-regular-svg-icons';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 
 interface Props {
   children: React.ReactNode;
@@ -14,6 +16,7 @@ interface Props {
 
 const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
   const { storeDetails }:{storeDetails:any} = useStoreDetails();
+  const { ReservationItems } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
 
   return (
@@ -32,8 +35,12 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
           <p style={{ textTransform: 'uppercase', fontWeight: 'bold', margin: '0px 0px 5px 10px', }}>{storeDetails?.store_name}</p>
         </Box>
         <Box>
-          <FontAwesomeIcon icon={faUserCircle} size='2x' style={{marginRight:'20px'}}/>
-          <FontAwesomeIcon icon={faCartShopping} size='2x'/>
+          <Badge badgeContent={0} color="primary" style={{marginRight:'10px'}}>
+            <AccountCircleOutlinedIcon style={{height:'36px', width:'36px'}}/>
+          </Badge>
+          <Badge badgeContent={ReservationItems.length} color="primary">
+            <ShoppingCartOutlinedIcon style={{height:'36px', width:'36px'}}/>
+          </Badge>
         </Box>
       </Box>
       <Box sx={containerStyle}>
