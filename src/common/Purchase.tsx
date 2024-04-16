@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Alert, Link, Collapse, List } from '@mui/material';
 import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
@@ -24,15 +24,23 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   const { menuValues } = useMenuValues();
-  
   console.log("------- ReservationItems -------------");
   console.log(ReservationItems);
-
+  
+  const [ CartWidth, setCartWidth] = useState<any>('350px');
   const [ expand, setExpand ] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (sx && 'width' in sx) {
+      setCartWidth(sx.width);
+    } else {
+      setCartWidth('350px');
+    }
+  }, [sx]);
   
   return (
-    <Collapse in={menuValues.cartExpand} orientation={'horizontal'}>
-      <Box sx={{ width: '350px', paddingLeft:'30px', ...sx }}>
+    <Collapse in={menuValues.cartExpand} orientation={'horizontal'} sx={{ position:'relative', width: '350px', paddingLeft:'30px', ...sx }}>
+      <Box sx={{ width: CartWidth}}>
         <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
         <Box sx={{border:'1px solid #999', backgroundColor:'#F8F8F8', margin:'24px 0 60px', borderRadius:'4px', padding:"0, 16px"}}>
           <Box style={{display:'flex', alignItems:'center', padding:'14px', cursor:'pointer', borderBottom:'1px solid #999'}} onClick={()=>{setExpand(!expand)}}>
@@ -79,15 +87,17 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
             <b>{ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} &nbsp;-&nbsp; {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
           </Typography>
         </Box>
-        {ReservationMain.dropoff &&
-        <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon style={{marginTop:'4px', fontSize:'26px'}}/>} style={{color:'black', border:'1px solid #F9C02F', fontSize:'16px'}}>
-          {`Your reservation `}
-          <b style={{fontSize:'1.1em', fontWeight:700}}>ends</b>
-          {` at `}
-          <b style={{fontSize:'1.1em', fontWeight:700}}>8:30 am</b>
-          {` on `}
-          <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
-        </Alert>}
+        {/* {ReservationMain.dropoff && */}
+        <Collapse in={ReservationMain.dropoff?true:false}>
+          <Alert severity="warning" icon={<ErrorOutlineOutlinedIcon style={{marginTop:'4px', fontSize:'26px'}}/>} style={{color:'black', border:'1px solid #F9C02F', fontSize:'16px'}}>
+            {`Your reservation `}
+            <b style={{fontSize:'1.1em', fontWeight:700}}>ends</b>
+            {` at `}
+            <b style={{fontSize:'1.1em', fontWeight:700}}>8:30 am</b>
+            {` on `}
+            <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
+          </Alert>
+        </Collapse>
         <Box sx={{ mt:'30px', mb: '20px' }}>
           <Box sx={styles.purchase}>
             <div>{"Subtotal"}</div>
@@ -128,7 +138,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: '6px',
-    fontSize:'18px'
+    fontSize:'18px',
+    fontWeight: 400,
   }
 }
 
