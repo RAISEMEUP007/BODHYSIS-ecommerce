@@ -38,6 +38,7 @@ type signInFormValues = {
   email: string,
   password: string,
 }
+
 type signInFormValidation = {
   email: boolean | null,
   password: boolean | null

@@ -13,9 +13,29 @@ interface props {
   sx?: object;
 }
 
+type formValue = {
+  size: any,
+  quantity: number | null,
+}
+
+type formValidation = {
+  size: boolean | null,
+  quantity: boolean | null | 'negative',
+}
+
 const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
+
+  const [formValues, setFormValues] = useState<formValue>({
+    size: null,
+    quantity: null,
+  });
+
+  const [formValidation, setFormValidation] = useState<formValidation>({
+    size: null,
+    quantity: null,
+  });
 
   useEffect(()=>{
     setExtraItems(extras.map(item => ({ ...item, selected: false })));
@@ -27,10 +47,49 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     setExtraItems(updatedExtras);
   };
 
-  const addToCart = () => {
-    console.log('dd');
+  const updateFormValue = (key: string, value: any) => {
+    // if(key == 'quantity'){
+    //   if (value.includes('e') || parseFloat(value) < 0) return;
+    // }
+    setFormValues(prevState => ({
+      ...prevState,
+      [key]: value
+    }));
+    setFormValidation(prevState => ({
+      ...prevState,
+      [key]: null
+    }));
   }
 
+  const addToCart = () => {
+    let flag = true;
+    const updatedFormValidation = { ...formValidation };
+    for (const key in formValues) {
+      switch(key){
+        case 'quantity':
+          if(!formValues.quantity){
+            updatedFormValidation.quantity = false;
+            flag = false;
+          }
+          else if (formValues.quantity < 1){
+            updatedFormValidation.quantity = 'negative';
+            flag = false;
+          }else updatedFormValidation.quantity = true;
+          break;
+        default:
+          if (!formValues[key as keyof typeof formValues]) {
+            updatedFormValidation[key as keyof typeof formValues] = false;
+            flag = false;
+          } else {
+            updatedFormValidation[key as keyof typeof formValues] = true;
+          }
+          break;
+      }
+    }
+    setFormValidation(updatedFormValidation);
+  }
+
+  console.log(formValidation)
   return (
     <Box
       sx={{marginBottom:'10px', ...sx}}
@@ -59,16 +118,29 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           </Box>
           <Box sx={{display:"flex", flexDirection:'column', width:'130px'}}>
             <CustomSelect
+              error={formValidation.size === false?true:false}
               label={"Size"}
+              value={formValues.size || ''} 
               items={[1,2,3]}
               containerstyle={{ marginBottom:'10px' }}
               variant={"outlined"}
-            />
+              helperText={formValidation.size === false?'Not selected':''}
+              onChange={(event:any)=>updateFormValue('size', event.target.value)} />
             <CustomBorderInput
+              error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
               label="Quantity"
-              value={""} 
+              type="number"
+              // min={1}
+              defaultValue={formValues.quantity} 
               required={true}
-              onChange={(event)=>{}} />
+              helperText={
+                formValidation.quantity === false
+                  ? 'Invalid'
+                  : formValidation.quantity === 'negative'
+                  ? `Invalid`
+                  : ''
+              }
+              onChange={(event)=>updateFormValue('quantity', event.target.value)} />
             <Button 
               variant="contained"
               sx={{
@@ -85,6 +157,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
             <Box style={{whiteSpace:'nowrap', textAlign:'left', padding:"12px 0 6px"}}>
               {extraItems.map((extra, index)=>(
                 <ExtraItem
+                  key={index}
                   sx={{display:'inline-block', marginRight:'16px', minWidth:'240px'}}
                   extra={extra}
                   selected={extra.selected}

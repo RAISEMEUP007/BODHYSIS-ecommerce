@@ -26,14 +26,16 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
             padding: '14px 10px',
             backgroundColor: 'white', 
             borderRadius: '3px',
-          }
+          },
+          ...restInputProps
         }}
         FormHelperTextProps={{
           style: {
             color: '#f44336',
             marginLeft: '10px',
             fontSize: '14px',
-          }
+          },
+          ...FormHelperTextProps
         }}
       />
     </FormControl>

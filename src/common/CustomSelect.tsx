@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, FormControl, Select, MenuItem, SelectChangeEvent, SelectProps } from '@mui/material';
+import { Typography, FormControl, Select, MenuItem, SelectChangeEvent, SelectProps, FormHelperText } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
 type props = {
@@ -8,9 +8,10 @@ type props = {
   labelVariant?: Variant;
   value?: any;
   items: Array<any>;
+  helperText?: string;
 }
 
-const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, labelVariant, value, items, ...rest }) => {
+const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, labelVariant, value, items, helperText, ...rest }) => {
   return (
     <FormControl sx={containerstyle}>
       <Typography variant={labelVariant || 'subtitle2'}>{label}</Typography>
@@ -41,6 +42,7 @@ const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, la
           )
         })}
       </Select>
+      {helperText && <FormHelperText style={{color: '#f44336', marginLeft: '10px', fontSize: '14px'}}>{helperText}</FormHelperText>}
     </FormControl>
   )
 }
