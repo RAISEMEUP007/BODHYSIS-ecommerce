@@ -4,6 +4,7 @@ import { StoreDetailsProvider } from './StoreDetailsProvider/StoreDetailsProvide
 import { CustomerReservationProvider } from './CustomerReservationProvider/CustomerReservationProvider';
 import { CustomSnackbarProvider } from './SnackbarProvider/CustomSnackbarProvider';
 import { CustomStripeProvider } from './CustomStripeProvider/CustomStripeProvider';
+import { MenuValuesProvider } from './MenuValuesProvider/MenuValuesProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -15,7 +16,9 @@ const Providers = ({ children }: Props) => (
       <CustomerReservationProvider>
         <CustomSnackbarProvider>
           <CustomStripeProvider>
-            {children}
+            <MenuValuesProvider>
+              {children}
+            </MenuValuesProvider>
           </CustomStripeProvider>
         </CustomSnackbarProvider>
       </CustomerReservationProvider>

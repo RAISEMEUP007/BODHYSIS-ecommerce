@@ -7,6 +7,7 @@ import { faImage } from '@fortawesome/free-regular-svg-icons';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
+import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
 
 interface Props {
   children: React.ReactNode;
@@ -15,7 +16,10 @@ interface Props {
 }
 
 const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
+
   const { storeDetails }:{storeDetails:any} = useStoreDetails();
+  const { menuValues, setMenuValue } = useMenuValues();
+
   const { ReservationItems } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
 
@@ -38,7 +42,13 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
           <Badge badgeContent={0} color="primary" style={{marginRight:'10px'}}>
             <AccountCircleOutlinedIcon style={{height:'36px', width:'36px'}}/>
           </Badge>
-          <Badge badgeContent={ReservationItems.length} color="primary">
+          <Badge 
+            badgeContent={ReservationItems.length} 
+            color="primary" 
+            onClick={()=>{
+              setMenuValue('cartExpand', !menuValues.cartExpand);
+            }}
+          >
             <ShoppingCartOutlinedIcon style={{height:'36px', width:'36px'}}/>
           </Badge>
         </Box>
