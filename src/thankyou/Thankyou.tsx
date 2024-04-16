@@ -15,7 +15,7 @@ const Thankyou: React.FC = () => {
 
   useEffect(()=>{
     if(!pickup || !dropoff){
-      navigate('/');
+      navigate('/reservation');
     }
 
     const sendMail = setTimeout(()=>{
