@@ -14,12 +14,15 @@ import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
 
 interface Props {
   title: string;
+  buttonTitle: string;
   sx?: object;
   onComplete?: (event: any) => void;
   isLoading?:boolean;
+  isShowItems?:boolean;
+  isRemovalItems?:boolean;
 }
 
-const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
+const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoading, isShowItems, isRemovalItems }) => {
 
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
@@ -42,7 +45,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
     <Collapse in={menuValues.cartExpand} orientation={'horizontal'} sx={{ position:'relative', width: '350px', paddingLeft:'30px', ...sx }}>
       <Box sx={{ width: CartWidth}}>
         <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
-        <Box sx={{border:'1px solid #999', backgroundColor:'#F8F8F8', margin:'24px 0 60px', borderRadius:'4px', padding:"0, 16px"}}>
+        <Box sx={{display:isShowItems?'block':'none', border:'1px solid #999', backgroundColor:'#F8F8F8', margin:'24px 0 60px', borderRadius:'4px', padding:"0, 16px"}}>
           <Box style={{display:'flex', alignItems:'center', padding:'14px', cursor:'pointer', borderBottom:'1px solid #999'}} onClick={()=>{setExpand(!expand)}}>
             <ExpandCircleDownIcon style={{color:"#999999"}}/>
             <Typography sx={{fontWeight:600, fontSize:'18px', paddingLeft:'10px'}}>{"Cart Items"}</Typography>
@@ -57,7 +60,11 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
                         <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999'}}>
                           <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                             <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
-                            <Box style={{cursor:'pointer'}} onClick={()=>{removeReservationItem(index)}} ><FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/></Box>
+                            <Box 
+                              style={{display:isRemovalItems?'block':'none', cursor:'pointer'}} 
+                              onClick={()=>{removeReservationItem(index)}} >
+                              <FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/>
+                            </Box>
                           </Box>
                           <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
                             <Typography sx={{fontWeight:600, fontSize:'16px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
@@ -120,7 +127,7 @@ const Purchase: React.FC<Props> = ({ title, sx, onComplete, isLoading }) => {
               loading={isLoading}
               onClick={onComplete}
             >
-              {"Review & Pay"}
+              {buttonTitle}
             </LoadingButton>
           </Box>
         )}

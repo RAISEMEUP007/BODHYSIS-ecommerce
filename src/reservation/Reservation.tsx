@@ -56,7 +56,14 @@ const Reservation: React.FC = () => {
     <BasicLayout>
       <Box sx={{display:'flex', flexDirection:'row',}}>
         <ReserveProducts sx={{flex:1, p:'60px 40px'}}/>
-        <Purchase title='Order Details' sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}} onComplete={onComplete}/>
+        <Purchase
+          title='Order Details'
+          buttonTitle="Review & Pay"
+          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
+          onComplete={onComplete}
+          isShowItems={true}
+          isRemovalItems={true}
+        />
       </Box>
     </BasicLayout>
   );

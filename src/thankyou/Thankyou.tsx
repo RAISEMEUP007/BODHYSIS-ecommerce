@@ -42,7 +42,7 @@ const Thankyou: React.FC = () => {
 
   return (
     <BasicLayout>
-      <Box sx={{ mt:'50px'}}>
+      <Box sx={{ p:'50px'}}>
         <Typography variant="h5">{"Thank you for your reservation"}</Typography>
         <Box sx={{ mt:'30px', mb:'30px'}}>
           <Typography >{"Your reservation has been confirmed for"}</Typography>

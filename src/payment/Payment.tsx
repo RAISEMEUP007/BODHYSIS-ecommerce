@@ -65,7 +65,14 @@ const Payment: React.FC = () => {
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <ReservationMainDetail sx={{flex:1, p:'60px 40px'}}/>
-        <Purchase title='Order Summary' sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}} onComplete={onComplete} isLoading={isLoading}/>
+        <Purchase 
+          title='Order Summary'
+          buttonTitle="Complete Purchase"
+          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
+          onComplete={onComplete}
+          isLoading={isLoading}
+          isShowItems={true}
+        />
       </Box>
     </BasicLayout>
   );
