@@ -6,6 +6,7 @@ import { faImage } from '@fortawesome/free-regular-svg-icons';
 import ExtraItem from './ExtraItem';
 import CustomBorderInput from '../common/CustomBorderInput';
 import CustomSelect from '../common/CustomSelect';
+import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
 interface props {
   product: any;
@@ -24,6 +25,7 @@ type formValidation = {
 }
 
 const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
+  const { addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
 
@@ -87,9 +89,18 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       }
     }
     setFormValidation(updatedFormValidation);
+
+    const newItem = {
+      family_id: product.id,
+      quantity: formValues.quantity, 
+      price_group_id: product?.lines[0]?.price_group_id ?? 0, 
+      extras: extraItems.filter(item => item.selected),
+      special_instructions: "", 
+      img_url: product?.img_url ?? ''
+    }
+    addReservationItem(newItem);
   }
 
-  console.log(formValidation)
   return (
     <Box
       sx={{marginBottom:'10px', ...sx}}

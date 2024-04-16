@@ -32,6 +32,7 @@ interface ContextProps {
   setReservationValue: (key: keyof ReservationMainProps, value: any) => void;
   getReservationValue: (key: keyof ReservationMainProps) => any | null;
   setReservationItems: (ReservationItems: Array<any>) => void;
+  addReservationItem: (item: any) => void;
 }
 
 const initializedMain: ReservationMainProps = {
@@ -65,6 +66,7 @@ export const CustomerReservationContext = createContext<ContextProps>({
   setReservationValue: () => {},
   getReservationValue: () => null,
   setReservationItems: () => {},
+  addReservationItem: () => {},
 });
 
 export const CustomerReservationProvider = ({ children }:{children:React.ReactNode}) => {
@@ -92,6 +94,9 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     setReservationValue,
     getReservationValue,
     setReservationItems,
+    addReservationItem: (item) => {
+      setReservationItems((prevItems) => [...prevItems, item]);
+    },
   };
 
   return <CustomerReservationContext.Provider value={values}>{children}</CustomerReservationContext.Provider>;

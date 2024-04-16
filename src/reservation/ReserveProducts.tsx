@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Link, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData, getProductLinesData } from '../api/Product';
+import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData } from '../api/Product';
 import CustomDatePicker from '../common/CustomDatePicker';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
