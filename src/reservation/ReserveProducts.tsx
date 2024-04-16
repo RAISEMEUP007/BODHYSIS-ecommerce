@@ -65,7 +65,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   useEffect(()=>{
     calcData(ReservationItems);
-  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff])
+  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length])
 
   const calcData = async (ReservationItems:Array<any>) =>{
     const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);

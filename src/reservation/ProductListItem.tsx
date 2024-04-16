@@ -51,9 +51,6 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   };
 
   const updateFormValue = (key: string, value: any) => {
-    // if(key == 'quantity'){
-    //   if (value.includes('e') || parseFloat(value) < 0) return;
-    // }
     setFormValues(prevState => ({
       ...prevState,
       [key]: value
