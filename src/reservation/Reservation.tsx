@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Purchase from '../common/Purchase';
 import { Box } from '@mui/material';
 
@@ -46,6 +46,11 @@ const Reservation: React.FC = () => {
       })
     }else navigate('/payment');
   }
+
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
 
   return (
     <BasicLayout>

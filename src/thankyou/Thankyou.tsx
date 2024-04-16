@@ -35,6 +35,11 @@ const Thankyou: React.FC = () => {
     localStorage.removeItem('_r_dropoff');
   }, 1000);
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   return (
     <BasicLayout>
       <Box sx={{ mt:'50px'}}>

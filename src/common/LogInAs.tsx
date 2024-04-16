@@ -2,12 +2,15 @@ import React from 'react';
 import { Box, Typography, Input, Link } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router';
 
 interface props{
   sx?: any;
 }
 
 const LogInAs: React.FC<props> = ({ sx }) => {
+
+  const navigate = useNavigate();
 
   const fullName = localStorage.getItem('full-name');
 
@@ -21,8 +24,15 @@ const LogInAs: React.FC<props> = ({ sx }) => {
           </Typography>
           <Typography style={{ fontWeight: '400'}}>
             {/* {`You are currently logged in as `}<span style={{ fontWeight: '800', }}>{fullName}</span>{`. Your order will use your attached contact and billing information.`} */}
-            <Link>{`Edit account details`}</Link>
-            <Link style={{marginLeft:'20px'}}>{`Not `}<span style={{ fontWeight: '800', }}>{fullName}</span>{`? Log out now`}</Link>
+            <Link style={{cursor:'pointer'}}>{`Edit account details`}</Link>
+            <Link 
+              style={{cursor:'pointer', marginLeft:'20px'}} 
+              onClick={()=>{
+                localStorage.removeItem('access-token');
+                navigate('/');
+              }}>
+              {`Not `}<span style={{ fontWeight: '800', }}>{fullName}</span>{`? Log out now`}
+            </Link>
           </Typography>
         </Box>
       </Box>

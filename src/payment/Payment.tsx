@@ -56,6 +56,11 @@ const Payment: React.FC = () => {
     });
   }
 
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(!accessToken) navigate('/');
+  }, []);
+
   return (
     <BasicLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
