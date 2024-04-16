@@ -39,7 +39,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
           <p style={{ textTransform: 'uppercase', fontWeight: 'bold', margin: '0px 0px 5px 10px', }}>{storeDetails?.store_name}</p>
         </Box>
         <Box>
-          <Badge badgeContent={0} color="primary" style={{marginRight:'10px'}}>
+          <Badge badgeContent={0} color="primary" style={{marginRight:'10px', cursor:'pointer'}}>
             <AccountCircleOutlinedIcon style={{height:'36px', width:'36px'}}/>
           </Badge>
           <Badge 
@@ -48,6 +48,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
             onClick={()=>{
               setMenuValue('cartExpand', !menuValues.cartExpand);
             }}
+            style={{cursor:'pointer'}}
           >
             <ShoppingCartOutlinedIcon style={{height:'36px', width:'36px'}}/>
           </Badge>
