@@ -24,6 +24,7 @@ export interface ReservationMainProps {
   is_accept: boolean;
   img_url: string,
   address_id: number | null,
+  selectedAddress: any,
   use_manual: boolean;
   manual_address: string,
 }
@@ -62,6 +63,7 @@ const initializedMain: ReservationMainProps = {
   is_accept: false,
   img_url: "",
   address_id: null,
+  selectedAddress: null,
   use_manual: false,
   manual_address: "",
 }

@@ -12,13 +12,19 @@ interface props {
 
 const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
 
-  const [categories, setCategories] = useState<any>();
+  const [categories, setCategories] = useState<Array<any>>([]);
 
   useEffect(()=>{
     getProductCategoriesData((jsonRes:any)=>{
       setCategories(jsonRes);
     });
   }, []);
+
+  useEffect(()=>{
+    if(categories.length){
+      setSelectedCategory(categories[0]);
+    }
+  }, [categories]);
 
   return (
     <Box sx={sx}>

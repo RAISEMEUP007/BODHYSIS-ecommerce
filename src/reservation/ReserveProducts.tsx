@@ -30,7 +30,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   const [headerData, setHeaderData] = useState<Array<any>>([]);
   const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
 
-  const [address, setAddress] = useState<any>();
+  // const [address, setAddress] = useState<any>();
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchedAddresses, setSearchedAddresses] = useState<Array<any>>([]);
 
@@ -171,6 +171,11 @@ console.log(searchKey);
           </Typography>
           <Typography sx={{margin:'10px 0', textDecoration:'underline', fontSize:'20px'}}>{`Delivery Location`}</Typography>
           <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>
+          {/* <Collapse in={(ReservationMain.address_id && !ReservationMain.use_manual)?true:false}>
+            <Typography style={{marginTop:'20px', fontWeight:700, fontSize:'20px'}}>
+              {ReservationMain.selectedAddress && `${ReservationMain.selectedAddress.street || ''} ${ReservationMain.selectedAddress.number || ''} ${ReservationMain.selectedAddress.plantation || ''} ${ReservationMain.selectedAddress.property_name || ''}`}
+            </Typography>
+          </Collapse> */}
           {/* <CustomBorderInput
             containerstyle={{ width: '60%', mt:'30px' }}
             label="Search Address"
@@ -178,15 +183,16 @@ console.log(searchKey);
             value={searchKey} 
             required={true}
             onChange={(event)=>{setSearchKey(event.target.value)}} /> */}
-          <Typography style={{marginTop:'30px'}} variant={'subtitle1'}>{"Search Address"}</Typography>
+          <Typography style={{marginTop:'10px'}} variant={'subtitle1'}>{"Search Address"}</Typography>
           <Autocomplete
             freeSolo
             sx={{ width: '60%', mt:'6px' }}
             disableClearable
             options={searchedAddresses}
-            value={address}
+            value={ReservationMain.selectedAddress}
             onChange={(event, value)=>{
-              setAddress(value);
+              setReservationValue('selectedAddress', value);
+              setReservationValue('address_id', value.id);
             }}
             // inputValue={searchKey}
             onInputChange={(event, value)=>{setSearchKey(value)}}
