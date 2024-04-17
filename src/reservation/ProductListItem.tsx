@@ -187,7 +187,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           <Typography style={{textAlign:'left', fontWeight:'700'}}>{"Extras"}</Typography>
           <Box style={{width:'100%', position:'absolute', overflow:'auto'}}>
             <Box style={{whiteSpace:'nowrap', textAlign:'left', padding:"12px 0 6px"}}>
-              {extraItems.map((extra, index)=>(
+              {extraItems.length && extraItems.map((extra, index)=>(
                 <ExtraItem
                   key={index}
                   sx={{display:'inline-block', marginRight:'16px', minWidth:'240px'}}

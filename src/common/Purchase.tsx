@@ -52,7 +52,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
           </Box>
           <Collapse in={expand} timeout={400} easing={"ease-in-out"}>
             <List sx={{padding:'0px 14px'}}>
-              <TransitionGroup>
+              {/* <TransitionGroup> */}
                 {ReservationItems.length ?
                   <>
                     {ReservationItems.map((item: any, index: number) => {
@@ -84,7 +84,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
                     })}
                   </>
                 : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
-              </TransitionGroup>
+              {/* </TransitionGroup> */}
             </List>
           </Collapse>
         </Box>

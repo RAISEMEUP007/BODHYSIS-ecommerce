@@ -153,7 +153,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
             value={""} 
             required={true}
             onChange={(event)=>{}} />
-          <Box sx={{mt:'20px', fontSize:'18px'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
+          <Box sx={{mt:'20px', fontSize:'18px', cursor:'pointer'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
           <CustomBorderInput
             containerstyle={{ width: '60%', mt:'20px' }}
             label="Manual Address Entry"
