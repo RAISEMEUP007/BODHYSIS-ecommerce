@@ -2,8 +2,11 @@ import React from 'react';
 import { Box, Typography, TextField, Grid, Checkbox, FormControlLabel } from '@mui/material';
 
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
+import CustomBorderInput from '../common/CustomBorderInput';
 import CustomInput from '../common/CustomInput';
-import dayjs from 'dayjs';
+
+import ReservationTerm from '../reservation/ReservationTerm';
+import DeliveryLocation from '../reservation/DeliveryLocation';
 
 interface props {
   sx?: object;
@@ -70,53 +73,60 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
     setReservationValue('is_accept', e.target.checked)
   }
 
+  const fullName = localStorage.getItem('full-name');
   return (
     <Box sx={{ ...sx }}>
       <Box sx={{ mt: 3 }}>
-        <Typography sx={{ fontWeight: '900', fontSize: "24px" }}>Reservation Details</Typography>
+        <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'3 0px', marginBottom:'14px'}}>{`Accoount Details`}</Typography>
         <Typography>
-          {ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY hh:mm A') : 'n/a'} - {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY hh:mm A') : 'n/a'}
+          {`You are currently logged in as `}
+          <b>{fullName}</b>
+          {`. Please confirm that your email and phone number are correct. This is the information we will use to communicate with you about your order.`}
         </Typography>
-        <CustomInput sx={{ mt: 2, mr: 2 }} label="Name" placeholder="Your name" value={name} onChange={handleNameChange} />
-        <Box sx={{ mt: 2 }}>
-          <Typography sx={{ fontWeight: '900', fontSize: '12px' }}>Special Instructions</Typography>
-          <TextField value={special_instructions} placeholder="Your name" sx={{ width: '100%' }} multiline rows={6} onChange={handleSpecInstructionChange} />
-        </Box>
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <Typography sx={{ fontWeight: '900', fontSize: "24px" }}>Delivery Details</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <CustomInput sx={{ minWidth: '45%', mt: 2 }} label="Address" placeholder="Address" value={address} onChange={handleAddressChange} />
-          <CustomInput sx={{ minWidth: '45%', mt: 2 }} label="Address Line2" placeholder="Suite Number" value={address2} onChange={handleAddressLine2Change} />
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          <Box sx={{minWidth: '45%'}}>
-            <CustomInput sx={{ mt: 2 }} label="City" placeholder="City" value={city} onChange={handleCityChange} />
-          </Box>
-          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', minWidth:'45%'}}>
-            <CustomInput sx={{ mt: 2, minWidth: '20%' }} label="State" placeholder="State" value={state} onChange={handleStateChange} />
-            <CustomInput sx={{ mt: 2, minWidth: '25%' }} label="Post" placeholder="Post" value={postal_code} onChange={handlePostChange} />
-          </Box>
-        </Box>
         <Box>
-          <CustomInput sx={{ mt: 2, mr: 2, width: '100%' }} label="Phone" placeholder="Phone Number" value={phone_number} onChange={handlePhoneChange} />
+          <CustomBorderInput
+            containerstyle={{ width: '300px', mt:'20px', mr:'40px' }} 
+            label="Email" 
+            type="email" 
+            placeholder="example@email.com" 
+            value={ReservationMain.email} 
+            onChange={(event)=>setReservationValue('email', event.target.value)} 
+          />
+          <CustomBorderInput
+            containerstyle={{ width: '300px', mt:'20px' }}
+            label="Phone"
+            placeholder="Phone Number" 
+            value={ReservationMain.phone_number} 
+            onChange={(event)=>setReservationValue('phone_number', event.target.value)} 
+          />
         </Box>
+        <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
+        <ReservationTerm/>
+        <CustomBorderInput
+          containerstyle={{ width:'80%', mt:'20px' }}
+          label = {'Special Instructions'}
+          value={special_instructions} 
+          placeholder="Special Instructions" 
+          multiline
+          rows={6}
+          sx={{marginLeft:'-14px', marginTop:'-16px'}}
+          onChange={(e: any) => {
+            setReservationValue('special_instructions', e.target.value);
+          }} 
+        />
+        <DeliveryLocation
+          isShowAddress={true}
+          isShowSearchBox={false}
+        />
       </Box>
-      <Box sx={{ mt: 3 }}>
-        <Typography sx={{ fontWeight: '900', fontSize: "24px" }}>Account Details</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <CustomInput sx={{ mt: 2, minWidth: '45%' }} label="Email" placeholder="star@email.com" value={email} onChange={handleEmailChange} />
-          <CustomInput sx={{ mt: 2, minWidth: '45%' }} label="Pwd" placeholder="*********" type="password" value={password} onChange={handlePwdChange} />
-        </Box>
-      </Box>
+      
       <Box sx={{ mt: 3 }}>
         <FormControlLabel
-          label="I accept HHI Rentals LLC Terms and Conditions and agree to the use of my phone number and/or email address for updates about my order delivery, use and pickup."
+          label="I accept the HHI Rentals LLC Terms and Conditions and agree to the use of my phone number and/or email address for updates about my order delivery, use, and pickup. *"
           control={<Checkbox checked={is_accept} onChange={handleAccountCheck} />}
         />
       </Box>
     </Box>
-
   );
 }
 

@@ -16,10 +16,12 @@ const CustomDatePicker: React.FC<props> = ({ sx, name, value, onChange, minDate,
 
   return (
     <FormControl sx={sx}>
-      <Typography>{name}</Typography>
+      <Typography style={{fontSize:'15px'}}>{name}</Typography>
       <DatePicker
         sx={{ 
-          mt: '12px', 
+          mt: '2px', 
+          borderRadius: '3px',
+          boxShadow: '2px 2px 6px #b3b3b3', 
         }}
         value={value}
         onChange={onChange}
@@ -28,7 +30,7 @@ const CustomDatePicker: React.FC<props> = ({ sx, name, value, onChange, minDate,
         maxDate={maxDate}
         slotProps={{ 
           textField: { 
-            variant: 'standard',
+            // variant: 'standard',
           },
         }}
       />

@@ -52,39 +52,37 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
           </Box>
           <Collapse in={expand} timeout={400} easing={"ease-in-out"}>
             <List sx={{padding:'0px 14px'}}>
-              {/* <TransitionGroup> */}
-                {ReservationItems.length ?
-                  <>
-                    {ReservationItems.map((item: any, index: number) => {
-                      return (
-                        <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999'}}>
-                          <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                            <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
-                            <Box 
-                              style={{display:isRemovalItems?'block':'none', cursor:'pointer'}} 
-                              onClick={()=>{removeReservationItem(index)}} >
-                              <FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/>
-                            </Box>
+              {ReservationItems.length ?
+                <>
+                  {ReservationItems.map((item: any, index: number) => {
+                    return (
+                      <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999'}}>
+                        <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                          <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
+                          <Box 
+                            style={{display:isRemovalItems?'block':'none', cursor:'pointer'}} 
+                            onClick={()=>{removeReservationItem(index)}} >
+                            <FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/>
                           </Box>
-                          <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
-                            <Typography sx={{fontWeight:600, fontSize:'16px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
-                            <Typography sx={{fontWeight:700, fontSize:'16px', color:'#4599D6',}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
-                          </Box>
-                          {(item.extras && item.extras.length) ?
-                            <>
-                              {item.extras.map((extra: any, index: number) => {
-                                return (
-                                  <Typography key={index} sx={{fontWeight:400, ml:'20px'}}>{extra.name}</Typography>
-                                )
-                              })}
-                            </>
-                          : <Typography sx={{fontWeight:400, ml:'20px'}}>{"No extras"}</Typography>}
                         </Box>
-                      )
-                    })}
-                  </>
-                : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
-              {/* </TransitionGroup> */}
+                        <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
+                          <Typography sx={{fontWeight:600, fontSize:'16px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
+                          <Typography sx={{fontWeight:700, fontSize:'16px', color:'#4599D6',}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
+                        </Box>
+                        {(item.extras && item.extras.length) ?
+                          <>
+                            {item.extras.map((extra: any, index: number) => {
+                              return (
+                                <Typography key={index} sx={{fontWeight:400, ml:'20px'}}>{extra.name}</Typography>
+                              )
+                            })}
+                          </>
+                        : <Typography sx={{fontWeight:400, ml:'20px'}}>{"No extras"}</Typography>}
+                      </Box>
+                    )
+                  })}
+                </>
+              : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
             </List>
           </Collapse>
         </Box>
