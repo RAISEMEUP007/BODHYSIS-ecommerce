@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Link, Typography } from '@mui/material';
+import { Autocomplete, Box, Collapse, Link, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { getExtrasData, getHeaderData, getPriceLogicData, getProductFamiliesData } from '../api/Product';
@@ -12,6 +12,7 @@ import CustomBorderInput from '../common/CustomBorderInput';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
 import CategorySlot from './CategorySlots';
 import ProductList from './ProductList';
+import { searchAddress } from '../api/Store';
 
 interface props {
   sx?: object;
@@ -28,6 +29,10 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   const [extras, setExtras] = useState<Array<any>>([]);
   const [headerData, setHeaderData] = useState<Array<any>>([]);
   const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
+
+  const [address, setAddress] = useState<any>();
+  const [searchKey, setSearchKey] = useState<string>("");
+  const [searchedAddresses, setSearchedAddresses] = useState<Array<any>>([]);
 
   useEffect(() => {
     getExtrasData((jsonRes: any) => { setExtras(jsonRes) })
@@ -67,6 +72,26 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   useEffect(()=>{
     calcData(ReservationItems);
   }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length])
+
+  useEffect(() => {
+    if (searchKey) {
+      searchAddress(searchKey, (jsonRes:any, status) => {
+        if (status === 200 && Array.isArray(jsonRes)) {
+          setSearchedAddresses(
+            jsonRes.map((address) => ({
+              ...address,
+              label: `${address.street || ''} ${address.number || ''} ${address.plantation || ''} ${address.property_name || ''}`
+            }))
+          );
+        } else {
+          setSearchedAddresses([]);
+        }
+      });
+    } else {
+      setSearchedAddresses([]);
+    }
+  }, [searchKey]);
+  
 
   const calcData = async (ReservationItems:Array<any>) =>{
     const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
@@ -114,7 +139,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
       setReservationValue('dropoff', new Date());
     }
   }
-
+console.log(searchKey);
   return (
     <Box sx={sx}>
       <Box>
@@ -146,21 +171,58 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
           </Typography>
           <Typography sx={{margin:'10px 0', textDecoration:'underline', fontSize:'20px'}}>{`Delivery Location`}</Typography>
           <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>
-          <CustomBorderInput
+          {/* <CustomBorderInput
             containerstyle={{ width: '60%', mt:'30px' }}
             label="Search Address"
             placeholder="Start typing to search for your address..." 
-            value={""} 
+            value={searchKey} 
             required={true}
-            onChange={(event)=>{}} />
-          <Box sx={{mt:'20px', fontSize:'18px', cursor:'pointer'}}><Link>{`Address not listed? Manually enter address.`}</Link></Box>
-          <CustomBorderInput
-            containerstyle={{ width: '60%', mt:'20px' }}
-            label="Manual Address Entry"
-            placeholder="Resort, Street Address, Apt #/Suite/Etc." 
-            value={""} 
-            required={true}
-            onChange={(event)=>{}} />
+            onChange={(event)=>{setSearchKey(event.target.value)}} /> */}
+          <Typography style={{marginTop:'30px'}} variant={'subtitle1'}>{"Search Address"}</Typography>
+          <Autocomplete
+            freeSolo
+            sx={{ width: '60%', mt:'6px' }}
+            disableClearable
+            options={searchedAddresses}
+            value={address}
+            onChange={(event, value)=>{
+              setAddress(value);
+            }}
+            // inputValue={searchKey}
+            onInputChange={(event, value)=>{setSearchKey(value)}}
+            filterOptions={(x) => {
+              return x;
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  type: 'search',
+                }}
+              />
+            )}
+          />
+          
+          <Box 
+            sx={{mt:'20px', fontSize:'18px', }}
+          >
+            <Link 
+              onClick={()=>{setReservationValue('use_manual', !ReservationMain.use_manual)}}
+              sx={{cursor:'pointer'}}
+            >
+              {`Address not listed? Manually enter address.`}
+            </Link>
+          </Box>
+          <Collapse in={ReservationMain.use_manual}>
+            <CustomBorderInput
+              containerstyle={{ width: '60%', mt:'20px' }}
+              label="Manual Address Entry"
+              placeholder="Resort, Street Address, Apt #/Suite/Etc." 
+              value={ReservationMain.manual_address} 
+              required={true}
+              onChange={(event)=>{setReservationValue('manual_address', event.target.value)}} />
+          </Collapse>
         </Box>
         <Box>
           <Typography style={{fontFamily:'Roboto', fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>

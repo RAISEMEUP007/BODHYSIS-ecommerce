@@ -1857,12 +1857,31 @@
   resolved "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.15.13.tgz"
   integrity sha512-ERsk9EWpiitSiKnmUdFJGshtFk647l4p7r+mjRWe/F1l5kT1NTTKkaeDLcK3/lsy0udXjMgcG0bNwzbYBdDdhQ==
 
+"@mui/core-downloads-tracker@^5.15.14":
+  version "5.15.15"
+  resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.15.15.tgz#2bc2bda50db66c12f10aefec907c48c8f669ef59"
+  integrity sha512-aXnw29OWQ6I5A47iuWEI6qSSUfH6G/aCsW9KmW3LiFqr7uXZBK4Ks+z8G+qeIub8k0T5CMqlT2q0L+ZJTMrqpg==
+
 "@mui/icons-material@^5.15.13":
   version "5.15.13"
   resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.15.13.tgz"
   integrity sha512-I7CioMQKBPaKyGgcE9i8+1dgzAmox5a/0wZ0E9sIxm7PzG5KJZRRJkdK4oDT4HfYRGv61KjcHEeqH48pht1dvQ==
   dependencies:
     "@babel/runtime" "^7.23.9"
+
+"@mui/joy@^5.0.0-beta.32":
+  version "5.0.0-beta.32"
+  resolved "https://registry.yarnpkg.com/@mui/joy/-/joy-5.0.0-beta.32.tgz#a7cd6b35b18f812210fe5e089a0aedda8dddd286"
+  integrity sha512-QJW5Mu2GTJUX4sXjxt4nQBugpJAiSkUT49S/bwoKCCWx8bCfsEyplTzZPK+FraweiGhGgZWExWOTAPpxH83RUQ==
+  dependencies:
+    "@babel/runtime" "^7.23.9"
+    "@mui/base" "5.0.0-beta.40"
+    "@mui/core-downloads-tracker" "^5.15.14"
+    "@mui/system" "^5.15.14"
+    "@mui/types" "^7.2.14"
+    "@mui/utils" "^5.15.14"
+    clsx "^2.1.0"
+    prop-types "^15.8.1"
 
 "@mui/lab@^5.0.0-alpha.169":
   version "5.0.0-alpha.169"
