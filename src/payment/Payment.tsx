@@ -16,10 +16,10 @@ const Payment: React.FC = () => {
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
   const [ isLoading, setIsLoading ] = useState(false);
-
+  console.log(ReservationMain);
   useEffect(()=>{
     if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
-      navigate('/');
+      navigate('/reservation');
     }
   }, []);
 
@@ -36,6 +36,32 @@ const Payment: React.FC = () => {
     const payload:any = {
       ...ReservationMain,
       amount : Math.round(ReservationMain.prices.total * 100),
+    }
+
+    if (!ReservationMain.email) {
+      enqueueSnackbar("Please provide email", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return;
+    }else if(!ReservationMain.phone_number) {
+      enqueueSnackbar("Please provide phone number", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return;
+    }else if(!ReservationMain.is_accept) {
+      enqueueSnackbar("Please accept the terms and policy", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return;
     }
 
     setIsLoading(true);
@@ -71,7 +97,7 @@ const Payment: React.FC = () => {
           sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
           onComplete={onComplete}
           isLoading={isLoading}
-          isShowItems={true}
+          // isShowItems={true}
         />
       </Box>
     </BasicLayout>

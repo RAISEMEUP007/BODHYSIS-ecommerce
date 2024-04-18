@@ -10,9 +10,10 @@ import { useCustomerReservation } from '../common/Providers/CustomerReservationP
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
 interface props {
   sx?: object;
+  contentStyle?: object;
 }
 
-const ReservationTerm: React.FC<props> = ({sx}) => {
+const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   const { storeDetails } = useStoreDetails();
   const { ReservationItems, ReservationMain, setReservationItems, setReservationValue } = useCustomerReservation();
@@ -101,7 +102,7 @@ const ReservationTerm: React.FC<props> = ({sx}) => {
   return (
     <Box sx={sx}>
       <Typography sx={{margin:'20px 0', textDecoration:'underline', fontSize:'20px'}}>{`Reservation Term`}</Typography>
-      <Box sx={{ display: 'flex', paddingLeft:"20px" }}>
+      <Box sx={{ display: 'flex', ...contentStyle}}>
         <CustomDatePicker
           name="Start Date"
           sx={{ boxSizing: 'boder-box', width: '200px', pr: 5 }}

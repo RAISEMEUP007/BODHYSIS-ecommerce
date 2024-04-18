@@ -170,7 +170,9 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
                   ? `Invalid`
                   : ''
               }
-              onChange={(event)=>updateFormValue('quantity', event.target.value)} />
+              onChange={(event)=>updateFormValue('quantity', event.target.value)} 
+              onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
+            />
             <Button 
               variant="contained"
               sx={{

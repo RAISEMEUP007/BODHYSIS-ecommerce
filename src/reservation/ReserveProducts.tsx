@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { getExtrasData, getProductFamiliesData } from '../api/Product';
-import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import LogInAs from '../common/LogInAs';
 
 import CategorySlot from './CategorySlots';
 import ProductList from './ProductList';
-import { searchAddress } from '../api/Store';
 import ReservationTerm from './ReservationTerm';
 import DeliveryLocation from './DeliveryLocation';
 
@@ -38,10 +36,13 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
         <LogInAs/>
         <Box>
           <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
-          <ReservationTerm/>
+          <ReservationTerm
+            contentStyle={{paddingLeft:"16px"}}
+          />
           <DeliveryLocation
             isDescription={true}
             isShowSearchBox={true}
+            contentStyle={{paddingLeft:'16px'}}
           />
         </Box>
         <Box>

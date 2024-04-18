@@ -60,6 +60,12 @@ export default function CheckoutForm() {
       total_price: ReservationMain.prices.total,
       price_table_id: ReservationMain.price_table_id,
       stage : 2,
+      address_id : ReservationMain.address_id,
+      use_manual : ReservationMain.use_manual,
+      manual_address : ReservationMain.manual_address,
+      email : ReservationMain.email,
+      phone_number : ReservationMain.phone_number,
+      customer_id : localStorage.getItem('customerId'),
       items : ReservationItems,
     };
     await createReservation(forSavingOnDB);
