@@ -126,7 +126,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           <img 
             src={API_URL + product.img_url} 
             alt={product.display_name} 
-            style={{ width: '200px', display:imageLoadError?'none':'block' }}
+            style={{ height: '150px', width: 'auto', display:imageLoadError?'none':'block' }}
             onError={() =>{setImageLoadError(true)}}
             onLoad={()=>{setImageLoadError(false)}}
           />

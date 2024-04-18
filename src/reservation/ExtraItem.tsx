@@ -31,7 +31,7 @@ const ExtraItem: React.FC<ExtraItemDetailProps> = ({ sx, extra, selected, onClic
         }} 
         onClick={onClick}>
         <img 
-          style={{width:'100%', height:'100%', display:imageLoadError?'none':'block'}}
+          style={{width:'auto', height:'50px', display:imageLoadError?'none':'block'}}
           src={API_URL + (extra?.img_url || '')} 
           alt="extra_img" 
           onError={() =>{setImageLoadError(true)}}
