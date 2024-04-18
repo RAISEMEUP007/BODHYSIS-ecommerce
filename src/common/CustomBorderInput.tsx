@@ -25,7 +25,7 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
             padding: '14px 10px',
             backgroundColor: 'white', 
             // margin:0,
-            borderRadius: '3px',
+            borderRadius: '3px'
           },
           ...inputProps
         }}

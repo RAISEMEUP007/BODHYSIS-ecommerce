@@ -43,6 +43,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
           label="Phone"
           placeholder="Phone Number" 
           value={ReservationMain.phone_number} 
+          inputProps={{ maxLength: 12 }}
           onChange={(event)=>setReservationValue('phone_number', event.target.value)} 
         />
       </Box>

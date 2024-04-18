@@ -217,6 +217,7 @@ const Login: React.FC = () => {
                   label="Phone"
                   placeholder="Phone Number" 
                   value={signUpFormValues.phone_number} 
+                  inputProps={{ maxLength: 12 }}
                   required={true}
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
                   onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} />
