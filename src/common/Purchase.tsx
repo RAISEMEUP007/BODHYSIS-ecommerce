@@ -27,8 +27,6 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   const { menuValues } = useMenuValues();
-  console.log("------- ReservationItems -------------");
-  console.log(ReservationItems);
   
   const [ CartWidth, setCartWidth] = useState<any>('350px');
   const [ expand, setExpand ] = useState<boolean>(true);

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import Purchase from '../common/Purchase';
 import { Box } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 import BasicLayout from '../common/BasicLayout';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
-import { useSnackbar } from 'notistack';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 import ReserveProducts from './ReserveProducts';
 import { useNavigate } from 'react-router';
@@ -14,6 +15,7 @@ const Reservation: React.FC = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
+  const { matches600 } = useResponsiveValues();
 
   const onComplete = (event: any) => {
     if (!ReservationMain.pickup) {
