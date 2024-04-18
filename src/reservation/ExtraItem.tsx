@@ -37,7 +37,7 @@ const ExtraItem: React.FC<ExtraItemDetailProps> = ({ sx, extra, selected, onClic
           onError={() =>{setImageLoadError(true)}}
           onLoad={()=>{setImageLoadError(false)}}
         />
-        {imageLoadError && <FontAwesomeIcon icon={faImage} style={{width:'40px', height:'40px', color:"#333"}}/>}
+        {imageLoadError && <FontAwesomeIcon icon={faImage} style={{width:'50px', height:'50px', color:"#333"}}/>}
         <Box style={{flex:1, marginLeft:'12px'}}>
           <Typography style={{paddingRight:'6px', marginBottom:'3px'}}>{extra.name}</Typography>
           <Box style={{display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
