@@ -147,6 +147,7 @@ const Login: React.FC = () => {
             // onLoggedIn(jsonRes.refreshToken);
             localStorage.setItem('access-token', jsonRes.refreshToken);
             localStorage.setItem('full-name', jsonRes.fullName);
+            localStorage.setItem('customerId', jsonRes.customerId);
             navigate('/reservation');
             break;
           case 403:

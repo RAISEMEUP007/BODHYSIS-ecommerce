@@ -23,6 +23,10 @@ export interface ReservationMainProps {
   password: string;
   is_accept: boolean;
   img_url: string,
+  address_id: number | null,
+  selectedAddress: any,
+  use_manual: boolean;
+  manual_address: string,
 }
 
 interface ContextProps {
@@ -58,6 +62,10 @@ const initializedMain: ReservationMainProps = {
   password: "",
   is_accept: false,
   img_url: "",
+  address_id: null,
+  selectedAddress: null,
+  use_manual: false,
+  manual_address: "",
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({
@@ -75,7 +83,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   const [ReservationMain, setReservationMain] = useState<ReservationMainProps>(initializedMain);
   const [ReservationItems, setReservationItems] = useState<Array<any>>([]);
 
-  const setReservationValue = (key: keyof ReservationMainProps, value: string | number | null) => {
+  const setReservationValue = (key: keyof ReservationMainProps, value: any) => {
     setReservationMain((prev) => {
       if (prev) {
         return { ...prev, [key]: value };

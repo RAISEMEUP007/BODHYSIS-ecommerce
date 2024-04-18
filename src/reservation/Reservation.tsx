@@ -44,7 +44,7 @@ const Reservation: React.FC = () => {
         autoHideDuration: 3000,
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
-    }else navigate('/payment');
+    }else navigate('/review');
   }
 
   useEffect(()=>{

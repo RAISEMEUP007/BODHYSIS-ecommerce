@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import { Box, Typography, Button, Alert, Link, Collapse, List } from '@mui/material';
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 // import { TransitionGroup } from 'react-transition-group';
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
@@ -45,7 +45,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
     <Collapse in={menuValues.cartExpand} orientation={'horizontal'} sx={{ position:'relative', width: '350px', paddingLeft:'30px', ...sx }}>
       <Box sx={{ width: CartWidth}}>
         <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
-        <Box sx={{display:isShowItems?'block':'none', border:'1px solid #999', backgroundColor:'#F8F8F8', marginTop:'24px', borderRadius:'4px', padding:"0, 16px"}}>
+        <Box sx={{display:isShowItems?'block':'none', border:'1px solid #999', backgroundColor:'#F8F8F8', margin:'24px 0 60px', borderRadius:'4px', padding:"0, 16px"}}>
           <Box style={{display:'flex', alignItems:'center', padding:'14px', cursor:'pointer', borderBottom:'1px solid #999'}} onClick={()=>{setExpand(!expand)}}>
             <ExpandCircleDownIcon style={{color:"#999999"}}/>
             <Typography sx={{fontWeight:600, fontSize:'18px', paddingLeft:'10px'}}>{"Cart Items"}</Typography>
@@ -54,9 +54,9 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
             <List sx={{padding:'0px 14px'}}>
               {ReservationItems.length ?
                 <>
-                  {ReservationItems.map((item: any, index: number) => { 
+                  {ReservationItems.map((item: any, index: number) => {
                     return (
-                      <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999', marginBottom:'-1px'}}>
+                      <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999'}}>
                         <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                           <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
                           <Box 
@@ -86,7 +86,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
             </List>
           </Collapse>
         </Box>
-        <Typography sx={{fontSize:'18px', fontWeight:500, marginTop:'40px'}}><b>{"Reservation Timing"}</b></Typography>
+        <Typography sx={{fontSize:'18px', fontWeight:500}}><b>{"Reservation Timing"}</b></Typography>
         <Box sx={{m:"10px 0px 16px"}}>
           <Typography sx={{fontSize:'21px', fontWeight:700}}>
             <b>{ReservationMain.pickup ? dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') : 'n/a'} &nbsp;-&nbsp; {ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
