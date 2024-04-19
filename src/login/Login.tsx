@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Box, Typography, } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import { useSnackbar } from 'notistack';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faUserCircle, } from '@fortawesome/free-regular-svg-icons';
 
-import { logIn } from '../api/Auth';
+import { logIn, register } from '../api/Auth';
 import CustomBorderInput from '../common/CustomBorderInput';
 import BasicLayout from '../common/BasicLayout';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
@@ -19,6 +18,8 @@ type signUpFormValues = {
   last_name: string,
   email: string,
   phone_number: string,
+  password: string,
+  confirm_password: string,
   home_address: string,
   address2: string,
   city: string,
@@ -29,8 +30,10 @@ type signUpFormValues = {
 type signUpFormValidation = {
   first_name: boolean | null,
   last_name: boolean | null,
-  email: boolean | null,
+  email: boolean | null | 'format',
   phone_number: boolean | null,
+  password: boolean | null,
+  confirm_password: boolean | null | 'notmatch',
   home_address: boolean | null,
   address2: boolean | null,
   city: boolean | null,
@@ -59,6 +62,8 @@ const Login: React.FC = () => {
     last_name: "",
     email: "",
     phone_number: "",
+    password: "",
+    confirm_password: "",
     home_address: "",
     address2: "",
     city: "",
@@ -71,6 +76,8 @@ const Login: React.FC = () => {
     last_name: null,
     email: null,
     phone_number: null,
+    password: null,
+    confirm_password: null,
     home_address: null,
     address2: null,
     city: null,
@@ -87,6 +94,11 @@ const Login: React.FC = () => {
     email: null,
     password: null,
   });
+
+  const isEmailValid = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
   const updateSingUpFormValue = (key: string, value: string) => {
     setSignUpFormValues(prevState => ({
@@ -114,16 +126,44 @@ const Login: React.FC = () => {
     let flag = true;
     const updatedSignUpFormValidation = { ...signUpFormValidation };
     for (const key in signUpFormValues) {
-      if (!signUpFormValues[key as keyof typeof signUpFormValues]) {
-        updatedSignUpFormValidation[key as keyof typeof signUpFormValues] = false;
-        flag = false;
-      } else {
-        updatedSignUpFormValidation[key as keyof typeof signUpFormValues] = true;
+      switch(key){
+        case 'email':
+          if (!signUpFormValues.email) {
+            updatedSignUpFormValidation.email = false;
+            flag = false;
+          } else if(!isEmailValid(signUpFormValues.email)){
+            updatedSignUpFormValidation.email = 'format';
+            flag = false;
+          } else {
+            updatedSignUpFormValidation.email = true;
+          }
+          break;
+        case 'confirm_password':
+          if (!signUpFormValues.confirm_password) {
+            updatedSignUpFormValidation.confirm_password = false;
+            flag = false;
+          } else if(signUpFormValues.password !== signUpFormValues.confirm_password) {
+            updatedSignUpFormValidation.confirm_password = 'notmatch';
+            flag = false;
+          } else {
+            updatedSignUpFormValidation.confirm_password = true;
+          }
+          break;
+        default:
+          if (!signUpFormValues[key as keyof typeof signUpFormValues]) {
+            updatedSignUpFormValidation[key as keyof typeof signUpFormValues] = false;
+            flag = false;
+          } else {
+            updatedSignUpFormValidation[key as keyof typeof signUpFormValues] = true;
+          }
+          break;
       }
     }
     setSignUpFormValidation(updatedSignUpFormValidation);
 
     if(!flag) return;
+
+    signUp();
   }
 
   const handleSignIn = () => {
@@ -138,10 +178,10 @@ const Login: React.FC = () => {
       }
     }
     setSignInFormValidation(updatedSignInFormValidation);
-
-    signIn();
-
+    
     if(!flag) return;
+    
+    signIn();
   }
   
   const signIn = async () => {
@@ -194,6 +234,59 @@ const Login: React.FC = () => {
     });
   }
 
+  const signUp = async () => {
+    console.log('ddd');
+    await register(signUpFormValues, (jsonRes:any, status:any)=>{
+      switch (status) {
+        case 200:
+          localStorage.setItem('access-token', jsonRes.refreshToken);
+          localStorage.setItem('full-name', jsonRes.fullName);
+          localStorage.setItem('customerId', jsonRes.customerId);
+          navigate('/reservation');
+          break;
+        case 409:
+          enqueueSnackbar("Email already exists", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          break;
+        case 500:
+          enqueueSnackbar("Server Error", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          break;
+        default:
+          if (jsonRes && jsonRes.error){
+            enqueueSnackbar(jsonRes.error, {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
+          else{
+            enqueueSnackbar("unKnown Error", {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
+          break;
+      }
+    });
+  }
+
+  useEffect(()=>{
+    const accessToken = localStorage.getItem('access-token');
+    if(accessToken) navigate('/reservation');
+  }, [])
+
   const renderLoigin = () => (
     <BasicLayout>
         
@@ -227,14 +320,14 @@ const Login: React.FC = () => {
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
-                  error={signUpFormValidation.email === false?true:false}
+                  error={(signUpFormValidation.email === null || signUpFormValidation.email === true)?false:true}
                   label="Email Address"
                   containerstyle={styles.signUpInput}
                   placeholder="star@email.com"
                   type='email'
                   value={signUpFormValues.email} 
                   required={true}
-                  helperText={signUpFormValidation.email === false?'Please enter the email':''}
+                  helperText={signUpFormValidation.email === false?'Please enter the email':signUpFormValidation.email === 'format'? 'Not valid email format':''}
                   onChange={(event)=>updateSingUpFormValue('email', event.target.value)} />
                 {/* <CustomBorderInput
                   error={signUpFormValidation.phone_number === false?true:false}
@@ -282,6 +375,28 @@ const Login: React.FC = () => {
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
                   onChange={(value) => { updateSingUpFormValue('phone_number', value as string) }}
                 />
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                <CustomBorderInput 
+                  error={(signUpFormValidation.password === null || signUpFormValidation.password === true)?false:true}
+                  containerstyle={styles.signUpInput} 
+                  label="Password" 
+                  type="password" 
+                  placeholder="*********" 
+                  value={signUpFormValues.password} 
+                  required={true}
+                  helperText={signUpFormValidation.password === false?'Please enter the password':''}
+                  onChange={(event)=>updateSingUpFormValue('password', event.target.value)} />
+                <CustomBorderInput 
+                  error={(signUpFormValidation.confirm_password === null || signUpFormValidation.confirm_password === true)?false:true}
+                  containerstyle={styles.signUpInput} 
+                  label="Confirm Password" 
+                  type="Password" 
+                  placeholder="*********" 
+                  value={signUpFormValues.confirm_password} 
+                  required={true}
+                  helperText={signUpFormValidation.confirm_password === false?'Please enter the confirm password':signUpFormValidation.confirm_password === 'notmatch'? 'Password does not match' : ''}
+                  onChange={(event)=>updateSingUpFormValue('confirm_password', event.target.value)} />
               </Box>
               <Typography style={{marginTop: '20px', marginBottom:'20px', fontStyle: 'bold', fontWeight: 600, textDecoration:'unline'}}>{"Billing Address"}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
