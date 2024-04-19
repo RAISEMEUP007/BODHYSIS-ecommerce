@@ -8,6 +8,7 @@ import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseSto
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 interface props {
   sx?: object;
   contentStyle?: object;
@@ -17,6 +18,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   const { storeDetails } = useStoreDetails();
   const { ReservationItems, ReservationMain, setReservationItems, setReservationValue } = useCustomerReservation();
+  const { matches900 } = useResponsiveValues();
 
   const [headerData, setHeaderData] = useState<Array<any>>([]);
   const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
@@ -102,10 +104,10 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   return (
     <Box sx={sx}>
       <Typography sx={{margin:'20px 0', textDecoration:'underline', fontSize:'20px'}}>{`Reservation Term`}</Typography>
-      <Box sx={{ display: 'flex', ...contentStyle}}>
+      <Box sx={{ display: 'flex', ...contentStyle, flexDirection: matches900?'row':'column'}}>
         <CustomDatePicker
           name="Start Date"
-          sx={{ boxSizing: 'boder-box', width: '200px', pr: 5 }}
+          sx={{ boxSizing: 'boder-box', width: matches900?'250px':'100%', pr: '20px', mb:'20px' }}
           value={dayjs(ReservationMain.pickup)}
           onChange={handlePickupChange}
           maxDate={dayjs(ReservationMain.dropoff)}
@@ -113,7 +115,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
         />
         <CustomDatePicker
           name="End Date"
-          sx={{ boxSizing: 'boder-box', width: '200px', pr: 5 }}
+          sx={{ boxSizing: 'boder-box', width: matches900?'250px':'100%', pr: '20px', mb:'20px' }}
           value={dayjs(ReservationMain.dropoff)}
           onChange={handleDropoffChange}
           minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}

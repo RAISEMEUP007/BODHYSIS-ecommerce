@@ -11,37 +11,35 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
 import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
+import { useResponsiveValues } from './Providers/DimentionsProvider/UseResponsiveValues';
 
 interface Props {
   title: string;
   buttonTitle: string;
-  sx?: object;
-  onComplete?: (event: any) => void;
   isLoading?:boolean;
   isShowItems?:boolean;
   isRemovalItems?:boolean;
+  onComplete?: (event: any) => void;
 }
 
-const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoading, isShowItems, isRemovalItems }) => {
+const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, onComplete }) => {
 
   const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   const { menuValues } = useMenuValues();
+  const { matches900 } = useResponsiveValues();
   
-  const [ CartWidth, setCartWidth] = useState<any>('350px');
   const [ expand, setExpand ] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (sx && 'width' in sx) {
-      setCartWidth(sx.width);
-    } else {
-      setCartWidth('350px');
-    }
-  }, [sx]);
   
-  return (
-    <Collapse in={menuValues.cartExpand} orientation={'horizontal'} sx={{ position:'relative', width: '350px', paddingLeft:'30px', ...sx }}>
-      <Box sx={{ width: CartWidth}}>
+  const renderOrderDetails = () => {
+    return (
+      <Box sx={{
+        backgroundColor:'#F0F0F0',
+        padding:'40px',
+        width: matches900? '450px':'100%',
+        height: matches900? '100%':'auto',
+        boxSizing: 'border-box',
+      }}>
         <Typography variant='h4' sx={{fontSize:'32px', textAlign:'center', fontWeight:700}}>{title}</Typography>
         <Box sx={{display:isShowItems?'block':'none', border:'1px solid #999', backgroundColor:'#F8F8F8', marginTop:'24px', borderRadius:'4px', padding:"0, 16px"}}>
           <Box style={{display:'flex', alignItems:'center', padding:'14px', cursor:'pointer', borderBottom:'1px solid #999'}} onClick={()=>{setExpand(!expand)}}>
@@ -132,8 +130,26 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
           <Link>{`(843) 785-4321.`}</Link>
         </Typography>
       </Box>
-    </Collapse>
+    );
+  }
+  
+  return (
+    matches900 ? (
+      <Collapse
+        component="div"
+        in={menuValues.cartExpand} 
+        timeout={400} 
+        easing="ease-in-out"
+        orientation="horizontal"
+      >
+        {renderOrderDetails()}
+      </Collapse>
+    ) : (
+      renderOrderDetails()
+    )
   );
+  
+
 }
 
 const styles = {

@@ -94,7 +94,6 @@ const Payment: React.FC = () => {
         <Purchase 
           title='Order Summary'
           buttonTitle="Complete Purchase"
-          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
           onComplete={onComplete}
           isLoading={isLoading}
           // isShowItems={true}

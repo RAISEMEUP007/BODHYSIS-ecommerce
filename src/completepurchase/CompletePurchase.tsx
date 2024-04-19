@@ -67,7 +67,6 @@ const CompletePurchase: React.FC = () => {
         <Purchase 
           title='Reservation Details' 
           buttonTitle="Complete Purchase"
-          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 203px)'}}
         />
       </Box>
     </BasicLayout>

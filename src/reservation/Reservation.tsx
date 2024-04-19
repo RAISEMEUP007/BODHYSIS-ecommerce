@@ -15,7 +15,7 @@ const Reservation: React.FC = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
-  const { matches600 } = useResponsiveValues();
+  const { matches900 } = useResponsiveValues();
 
   const onComplete = (event: any) => {
     if (!ReservationMain.pickup) {
@@ -54,14 +54,15 @@ const Reservation: React.FC = () => {
     if(!accessToken) navigate('/');
   }, []);
 
-  return (
+  const renderReservation = () => (
     <BasicLayout>
-      <Box sx={{display:'flex', flexDirection:'row',}}>
-        <ReserveProducts sx={{flex:1, p:'60px 40px'}}/>
+      <Box
+        sx={styles.container}
+      >
+        <ReserveProducts sx={styles.ReserveProducts}/>
         <Purchase
           title='Order Details'
           buttonTitle="Review & Pay"
-          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
           onComplete={onComplete}
           isShowItems={true}
           isRemovalItems={true}
@@ -69,6 +70,20 @@ const Reservation: React.FC = () => {
       </Box>
     </BasicLayout>
   );
+
+  const styles ={
+    container: {
+      display:'flex', 
+      flexDirection: matches900?'row':'column',
+    },
+    ReserveProducts: {
+      flex:1, 
+      p:matches900?'60px 40px':'30px 20px',
+      overflow: 'auto',
+    },
+  }
+
+  return renderReservation();
 }
 
 export default Reservation;
