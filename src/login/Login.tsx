@@ -9,6 +9,7 @@ import {  faUserCircle, } from '@fortawesome/free-regular-svg-icons';
 import { LoadingButton } from '@mui/lab';
 import BasicLayout from '../common/BasicLayout';
 import { logIn } from '../api/Auth';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 type signUpFormValues = {
   first_name: string,
@@ -47,6 +48,8 @@ type signInFormValidation = {
 const Login: React.FC = () => {
 
   const navigate = useNavigate();
+  const { matches900 } = useResponsiveValues();
+
   const [signUpFormValues, setSignUpFormValues] = useState<signUpFormValues>({
     first_name: "",
     last_name: "",
@@ -171,20 +174,20 @@ const Login: React.FC = () => {
     });
   }
 
-  return (
+  const renderLoigin = () => (
     <BasicLayout>
       <Box sx={{display:'flex', justifyContent:'center'}}>
-        <Box sx={{m:5, mt:8, flex:1, backgroundColor:'#F0F0F0', p:4, border:'1px solid #A3A3A3', borderRadius:'5px', width:'100%', alignSelf:'flex-start'}}>
-          <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+        <Box sx={styles.containerStyle}>
+          <Box sx={styles.description}>
             <FontAwesomeIcon icon={faUserCircle} style={{width:'43px', height:'43px'}}/>
             <Typography sx={{ml:'16px', fontSize:'18px'}}>{"Reservations with us require that you create a user account first. Make sure you are logged in, or create an account to continue with your order."}</Typography>
           </Box>
-          <Box sx={{display:'flex', flexDirection:'row', mt:5}}>
-            <Box sx={{width:'65%', pr:4, borderRight:'1px solid #A3A3A3'}}>
+          <Box sx={styles.form}>
+            <Box sx={styles.signUpForm}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.first_name === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="First Name"
                   placeholder="First Name" 
                   value={signUpFormValues.first_name} 
@@ -193,7 +196,7 @@ const Login: React.FC = () => {
                   onChange={(event)=>updateSingUpFormValue('first_name', event.target.value)} />
                 <CustomBorderInput
                   error={signUpFormValidation.last_name === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="Last Name"
                   placeholder="Last Name" 
                   value={signUpFormValues.last_name} 
@@ -204,7 +207,7 @@ const Login: React.FC = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.email === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="Email"
                   placeholder="star@email.com" 
                   value={signUpFormValues.email} 
@@ -213,7 +216,7 @@ const Login: React.FC = () => {
                   onChange={(event)=>updateSingUpFormValue('email', event.target.value)} />
                 <CustomBorderInput
                   error={signUpFormValidation.phone_number === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="Phone"
                   placeholder="Phone Number" 
                   value={signUpFormValues.phone_number} 
@@ -221,11 +224,11 @@ const Login: React.FC = () => {
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
                   onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} />
               </Box>
-              <Typography style={{marginBottom:'20px', textDecoration:'unline'}}>{"Billing Address"}</Typography>
+              <Typography style={{marginBottom:'20px', textDecoration:'underline'}}>{"Billing Address"}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.home_address === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="Address"
                   placeholder="Address" 
                   value={signUpFormValues.home_address} 
@@ -234,7 +237,7 @@ const Login: React.FC = () => {
                   onChange={(event)=>updateSingUpFormValue('home_address', event.target.value)} />
                 <CustomBorderInput
                   error={signUpFormValidation.address2 === false?true:false}
-                  containerstyle={{ width: '48%', mb:'20px' }}
+                  containerstyle={styles.signUpInput}
                   label="Apt, Suite, etc."
                   placeholder="Apt, Suite, etc." 
                   value={signUpFormValues.address2} 
@@ -245,7 +248,7 @@ const Login: React.FC = () => {
               <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.city === false?true:false}
-                  containerstyle={{ width: '31%', mb:'20px' }}
+                  containerstyle={styles.signUpInput2}
                   label="City"
                   placeholder="City" 
                   value={signUpFormValues.city} 
@@ -254,7 +257,7 @@ const Login: React.FC = () => {
                   onChange={(event)=>updateSingUpFormValue('city', event.target.value)} />
                 <CustomBorderInput
                   error={signUpFormValidation.state === false?true:false}
-                  containerstyle={{ width: '31%', mb:'20px' }}
+                  containerstyle={styles.signUpInput2}
                   label="State"
                   placeholder="State" 
                   value={signUpFormValues.state} 
@@ -263,7 +266,7 @@ const Login: React.FC = () => {
                   onChange={(event)=>updateSingUpFormValue('state', event.target.value)} />
                 <CustomBorderInput
                   error={signUpFormValidation.zipcode === false?true:false}
-                  containerstyle={{ width: '31%', mb:'20px' }}
+                  containerstyle={styles.signUpInput2}
                   label="Zipcode" placeholder="Zipcode" 
                   value={signUpFormValues.zipcode} 
                   required={true}
@@ -282,11 +285,11 @@ const Login: React.FC = () => {
             </Box>
             <Box 
               component="form"
-              sx={{width:'35%', pl:4, diplay:'flex', flexDiredction:'column'}}
+              sx={styles.signInForm}
             >
               <CustomBorderInput 
                 error={signInFormValidation.email === false?true:false}
-                containerstyle={{ width: '100%', mb:'20px' }} 
+                containerstyle={styles.signInInput} 
                 label="Email" 
                 type="email" 
                 placeholder="example@email.com" 
@@ -296,7 +299,7 @@ const Login: React.FC = () => {
                 onChange={(event)=>updateSingInFormValue('email', event.target.value)} />
               <CustomBorderInput 
                 error={signInFormValidation.password === false?true:false}
-                containerstyle={{ width: '100%', mb:'20px' }} 
+                containerstyle={styles.signInInput} 
                 label="Password" 
                 type="password" 
                 placeholder="*********" 
@@ -304,25 +307,81 @@ const Login: React.FC = () => {
                 required={true}
                 helperText={signInFormValidation.password === false?'Please enter the password':''}
                 onChange={(event)=>updateSingInFormValue('password', event.target.value)} />
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '30px' }}>
                 <LoadingButton
                   variant="contained"
-                  sx={{ padding:'10px 50px', fontSize:'16px', textTransform: 'none' }}
+                  sx={styles.logInButton}
                   onClick={handleSignIn}
                 >
                   {"Log in"}
                 </LoadingButton>
-              </Box>
             </Box>
           </Box>
         </Box>
-        <Box sx={{width:'28%', maxWidth:'800px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 130px)'}}>
-          <Typography sx={{mt:6, mb:4, fontSize:'32px', textAlign:'center', fontWeight:700}}>{"Order Details"}</Typography>
-          <Typography sx={{textAlign:'center', fontSize:'18px', padding:"0% 6%"}}>{"You must be logged in to to add items to your cart."}</Typography>
-        </Box>
+        {matches900 && (
+          <Box sx={{width:'28%', maxWidth:'800px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 130px)'}}>
+            <Typography sx={{mt:6, mb:4, fontSize:'32px', textAlign:'center', fontWeight:700}}>{"Order Details"}</Typography>
+            <Typography sx={{textAlign:'center', fontSize:'18px', padding:"0% 6%"}}>{"You must be logged in to to add items to your cart."}</Typography>
+          </Box>)}
       </Box>
     </BasicLayout>
   );
+
+  const styles = {
+    containerStyle:{
+      m: matches900 ? 5 : 2, 
+      mt: matches900 ? 8 : 4, 
+      flex:1, 
+      backgroundColor:'#F0F0F0', 
+      p: matches900 ? 4 : 3, 
+      border:'1px solid #A3A3A3', 
+      borderRadius:'5px', 
+      width:'100%', 
+      alignSelf:'flex-start'
+    },
+    description:{
+      display:'flex', 
+      flexDirection:'row', 
+      alignItems: matches900?'center':'flex-start'
+    },
+    form: {
+      display:'flex', 
+      flexDirection: matches900?'row':'column-reverse', 
+      mt: matches900 ? 5 : 3,
+    },
+    signUpForm: {
+      width: matches900?'65%':'auto', 
+      p: matches900?"0 4% 0 0":"20px 0 0 0", 
+      m: matches900?0:'40px 0 0',  
+      borderColor:'#A3A3A3', 
+      borderStyle:'solid', 
+      borderWidth: matches900?'0px 1px 0px 0px':'1px 0px 0px 0px'
+    },
+    signUpInput: { 
+      width: matches900?'48%':'100%', 
+      mb:'20px' 
+    },
+    signUpInput2: { 
+      width: matches900? '31%' : '100%',
+      mb:'20px' 
+    },
+    signInForm: {
+      width: matches900?'35%':'auto', 
+      pl: matches900?4:0,
+    },
+    signInInput: { 
+      width: '100%', 
+      mb: matches900?'20px' :'10px'
+    },
+    logInButton: { 
+      float:'right',
+      padding:'10px 50px', 
+      fontSize:'16px', 
+      textTransform: 'none',
+      mt: matches900? '30px' : '10px',
+    },
+  }
+
+  return renderLoigin();
 }
 
 export default Login;
