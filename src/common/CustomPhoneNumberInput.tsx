@@ -25,7 +25,7 @@ const CustomPhoneNumberInput: React.FC<CustomPhoneNumberInputProps & MuiPhoneNum
           backgroundColor: 'white', 
           marginTop:'3px',
           borderRadius: '2px',
-          padding: '14px 10px',
+          padding: '14px 10px 14px 0px',
           width: '100%',
           ...style
         }}
