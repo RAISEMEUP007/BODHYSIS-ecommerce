@@ -54,7 +54,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
         </Box>
         <Box>
           <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>
-          <Box sx={{display:'flex', flexDirection:matches900?'row':'column'}}>
+          <Box sx={styles.selectItemsBox}>
             <CategorySlot 
               title={matches900?'Categories':'Pick a Cateogry'}
               sx={styles.CategorySlot} 
@@ -87,7 +87,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   const styles = {
     contentPadding:{
-      paddingLeft:matches900?"16px":'0px'
+      paddingLeft: matches900?"16px":'0px'
     },
     CategorySlot:{
       width: matches900?'300px':'100%', 
@@ -98,7 +98,11 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
     },
     ProductList:{
       flex:1,
-      marginLeft:matches900?'24px':'0px'
+      marginLeft: matches900?'24px':'0px'
+    },
+    selectItemsBox: {
+      display:'flex', 
+      flexDirection: matches900?'row':'column'
     }
   }
 

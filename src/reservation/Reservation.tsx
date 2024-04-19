@@ -56,9 +56,7 @@ const Reservation: React.FC = () => {
 
   const renderReservation = () => (
     <BasicLayout>
-      <Box
-        sx={styles.container}
-      >
+      <Box sx={styles.container}>
         <ReserveProducts sx={styles.ReserveProducts}/>
         <Purchase
           title='Order Details'
@@ -78,7 +76,7 @@ const Reservation: React.FC = () => {
     },
     ReserveProducts: {
       flex:1, 
-      p:matches900?'60px 40px':'30px 20px',
+      p:matches900?'60px 40px':'30px 24px',
       overflow: 'auto',
     },
   }

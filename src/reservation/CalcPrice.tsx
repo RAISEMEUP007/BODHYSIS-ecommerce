@@ -59,8 +59,8 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
       return { ...item, value, pricePH, pricePD };
     });
 
-    console.log("------updatedReversedHeaderData----------------");
-    console.log(updatedReversedHeaderData);
+    // console.log("------updatedReversedHeaderData----------------");
+    // console.log(updatedReversedHeaderData);
 
     const diff = new Date(endDate).getTime() - new Date(startDate).getTime();
 

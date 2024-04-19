@@ -30,8 +30,8 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   useEffect(() => {
     if(ReservationMain.pickup){
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
-      console.log("----------- priceTable -----------");
-      console.log(priceTable);
+      // console.log("----------- priceTable -----------");
+      // console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
     }
   }, [priceLogicData, storeDetails, ReservationMain.pickup])

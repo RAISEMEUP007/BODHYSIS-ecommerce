@@ -119,54 +119,52 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     }, 100);
   }
 
-  const renderAddToCartFC = ()=>{
-    return (
-      <Box sx={{width:matches900?'130px':'100%'}}>
-        {(product.lines && product.lines.length) ? 
-          <CustomSelect
-            error={formValidation.size === false?true:false}
-            label={"Size"}
-            value={formValues.size || ''} 
-            items={sizes}
-            containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
-            variant={"outlined"}
-            helperText={formValidation.size === false?'Not selected':''}
-            onChange={(event:any)=>updateFormValue('size', event.target.value)} />
-          : <></>
-        }
-        <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
-          <CustomBorderInput
-            error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
-            label="Quantity"
-            containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
-            type="number"
-            // min={1}
-            value={formValues.quantity || ''} 
-            required={true}
-            helperText={
-              formValidation.quantity === false
-                ? 'Invalid'
-                : formValidation.quantity === 'negative'
-                ? `Invalid`
-                : ''
-            }
-            onChange={(event)=>updateFormValue('quantity', event.target.value)} 
-            onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
-          />
-          <Button 
-            variant="contained"
-            sx={{
-              mt:matches900?'20px':'26px',
-              padding:'14px 0',
-              textTransform: 'none',
-              width:matches900?'100%':'47%',
-            }}
-            onClick={()=>{addToCart()}}
-          >{"Add to Cart"}</Button>
-        </Box>
+  const renderAddToCartFC = () => (
+    <Box sx={{width:matches900?'130px':'100%'}}>
+      {(product.lines && product.lines.length) ? 
+        <CustomSelect
+          error={formValidation.size === false?true:false}
+          label={"Size"}
+          value={formValues.size || ''} 
+          items={sizes}
+          containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
+          variant={"outlined"}
+          helperText={formValidation.size === false?'Not selected':''}
+          onChange={(event:any)=>updateFormValue('size', event.target.value)} />
+        : <></>
+      }
+      <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
+        <CustomBorderInput
+          error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
+          label="Quantity"
+          containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
+          type="number"
+          // min={1}
+          value={formValues.quantity || ''} 
+          required={true}
+          helperText={
+            formValidation.quantity === false
+              ? 'Invalid'
+              : formValidation.quantity === 'negative'
+              ? `Invalid`
+              : ''
+          }
+          onChange={(event)=>updateFormValue('quantity', event.target.value)} 
+          onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
+        />
+        <Button 
+          variant="contained"
+          sx={{
+            mt:matches900?'20px':'26px',
+            padding:'14px 0',
+            textTransform: 'none',
+            width:matches900?'100%':'47%',
+          }}
+          onClick={()=>{addToCart()}}
+        >{"Add to Cart"}</Button>
       </Box>
-    );
-  }
+    </Box>
+  );
 
   return (
     <Box
