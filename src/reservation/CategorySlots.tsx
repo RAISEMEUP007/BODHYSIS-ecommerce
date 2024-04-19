@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, BoxProps, Typography } from '@mui/material';
 import { getProductCategoriesData } from '../api/Product';
 import CategoryItem from './CategoryItem';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
-interface props {
+interface Props {
+  title: string;
   sx?: object;
   selectedCategory: any;
   setSelectedCategory: (category:any) => void;
 }
 
-const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
+const CategorySlot: React.FC<Props & BoxProps> = ({ title, sx, selectedCategory, setSelectedCategory, ...rest }) => {
+
+  const { matches900 } = useResponsiveValues();
 
   const [categories, setCategories] = useState<Array<any>>([]);
 
@@ -27,19 +31,27 @@ const CategorySlot = ({sx, selectedCategory, setSelectedCategory}:props) => {
   }, [categories]);
 
   return (
-    <Box sx={sx}>
-      <Typography sx={{fontWeight:'bold', fontSize:'24px', textAlign:'center', backgroundColor:'#F0F0F0', padding:'16px'}}>{'Categories'}</Typography>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-end', flexWrap:'wrap', justifyContent:'space-around', padding:"20px 6px 10px"}}>
+    <Box sx={sx} {...rest}>
+      <Typography sx={{fontWeight:'bold', fontSize:'24px', textAlign:'center', backgroundColor:'#F0F0F0', padding:'16px'}}>{title}</Typography>
+      <Box 
+        sx={{
+          display:'flex', 
+          flexDirection:'row', 
+          alignItems:'stretch', 
+          flexWrap:'wrap', 
+          justifyContent:'center', 
+          padding:"20px 6px 10px"}}>
         {categories && categories.map((category:any, index:number) => (
           <CategoryItem
             key={category.id}
             category={category}
             sx={{
-              width: '140px',
+              width: matches900?'140px':'33%',
+              // maxWidth: '140px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-around',
               borderWidth: '4px',
               borderStyle: 'solid',
               borderRadius: '4px',
