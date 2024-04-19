@@ -10,21 +10,15 @@ import { getStoreDetailDB } from './api/Store';
 import CompletePurchase from './completepurchase/CompletePurchase';
 import Thankyou from './thankyou/Thankyou';
 import Login from './login/Login';
+import UserNotFound from './error/UserNotFound';
+import PageNotFound from './error/PageNotFound';
 
 const InitializeApp = ({ children } : {children:any}) => {
-  const [accessToken, setAccessToken] = useState(null);
 
   const { getStoreDetails, setStoreDetails } = useStoreDetails();
 
   useEffect(() => {
     const fetchData = async () => {
-      // await getTestToken((jsonRes:any, status)=>{
-      //   if(status == 200){
-      //     setAccessToken(jsonRes.refreshToken);
-      //     localStorage.setItem('access-token', jsonRes.refreshToken);
-      //   }
-      // });
-  
       const currentURL = window.location.href;
       const host = new URL(currentURL).host;
       console.log(host);
@@ -35,10 +29,6 @@ const InitializeApp = ({ children } : {children:any}) => {
 
     fetchData();
   }, []);
-
-  // if (accessToken === null) {
-  //   return <div>Invalid token...</div>;
-  // }
 
   if (getStoreDetails() === null) {
     return <div>Not registered store...</div>;
@@ -54,10 +44,12 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/usernotfound" element={<UserNotFound />} />
             <Route path="/reservation" element={<Reservation />} />
             <Route path="/review" element={<Payment />} />
             <Route path="/completepurchase" element={<CompletePurchase />} />
             <Route path="/thankyou" element={<Thankyou/>} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
       </InitializeApp>

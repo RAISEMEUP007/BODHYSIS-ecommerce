@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import BasicLayout from '../common/BasicLayout';
 import { logIn } from '../api/Auth';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import { useSnackbar } from 'notistack';
 
 type signUpFormValues = {
   first_name: string,
@@ -49,6 +50,7 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const { matches900 } = useResponsiveValues();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [signUpFormValues, setSignUpFormValues] = useState<signUpFormValues>({
     first_name: "",
@@ -142,34 +144,51 @@ const Login: React.FC = () => {
   
   const signIn = async () => {
     await logIn(signInFormValues, (jsonRes:any, status:any)=>{
-      if(status == 200){
-        console.log(jsonRes);
-        // setAccessToken(jsonRes.refreshToken);
-        switch (status) {
-          case 200:
-            // onLoggedIn(jsonRes.refreshToken);
-            localStorage.setItem('access-token', jsonRes.refreshToken);
-            localStorage.setItem('full-name', jsonRes.fullName);
-            localStorage.setItem('customerId', jsonRes.customerId);
-            navigate('/reservation');
-            break;
-          case 403:
-            alert('Incorrect pasword');
-            // setPassValidMessage(msgStr('errorComparingPassword'));
-            break;
-          case 404:
-            alert('User not found');
-            // setEmailValidMessage(msgStr('userNotFound'));
-            break;
-          case 500:
-            alert('Server Error');
-            // showAlert('error', msgStr('serverError'));
-            break;
-          default:
-            // if (jsonRes && jsonRes.error) showAlert('error', jsonRes.error);
-            // else showAlert('error', msgStr('unknownError'));
-            break;
-        }
+      switch (status) {
+        case 200:
+          // onLoggedIn(jsonRes.refreshToken);
+          localStorage.setItem('access-token', jsonRes.refreshToken);
+          localStorage.setItem('full-name', jsonRes.fullName);
+          localStorage.setItem('customerId', jsonRes.customerId);
+          navigate('/reservation');
+          break;
+        case 403:
+          enqueueSnackbar("Incorrect pasword", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          break;
+        case 404:
+          navigate('/usernotfound');
+          break;
+        case 500:
+          enqueueSnackbar("Server Error", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          break;
+        default:
+          if (jsonRes && jsonRes.error){
+            enqueueSnackbar(jsonRes.error, {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
+          else{
+            enqueueSnackbar("unKnown Error", {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
+          break;
       }
     });
   }
