@@ -103,7 +103,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   return (
     <Box sx={sx}>
-      <Typography sx={{margin:'20px 0', textDecoration:'underline', fontSize:'20px'}}>{`Reservation Term`}</Typography>
+      <Typography sx={{textDecoration:'underline', fontSize:'20px'}}>{`Reservation Term`}</Typography>
       <Box sx={{ display: 'flex', ...contentStyle, flexDirection: matches900?'row':'column'}}>
         <CustomDatePicker
           name="Start Date"

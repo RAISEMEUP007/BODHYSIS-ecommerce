@@ -48,9 +48,9 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
 
   return (
     <Box sx={sx}>
-      <Typography sx={{margin:'20px 0', textDecoration:'underline', fontSize:'20px'}}>{`Delivery Location`}</Typography>
+      <Typography sx={{textDecoration:'underline', fontSize:'20px'}}>{`Delivery Location`}</Typography>
       <Box sx={contentStyle}>
-        {isDescription && <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not lsited, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>}
+        {isDescription && <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not listed, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>}
         {isShowAddress && 
           <Typography style={{marginTop:'20px', fontWeight:700, fontSize:'20px'}}>
             {ReservationMain.use_manual ? 
