@@ -7,6 +7,7 @@ import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseR
 
 import ReservationTerm from '../reservation/ReservationTerm';
 import DeliveryLocation from '../reservation/DeliveryLocation';
+import CustomPhoneNumberInput from '../common/CustomPhoneNumberInput';
 
 interface props {
   sx?: object;
@@ -40,13 +41,22 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
           value={ReservationMain.email} 
           onChange={(event)=>setReservationValue('email', event.target.value)} 
         />
-        <CustomBorderInput
+        {/* <CustomBorderInput
           containerstyle={{ width: matches900?'300px':'100%', mt:'20px' }}
           label="Phone"
           placeholder="Phone Number" 
           value={ReservationMain.phone_number} 
           inputProps={{ maxLength: 12 }}
           onChange={(event)=>setReservationValue('phone_number', event.target.value)} 
+        /> */}
+        <CustomPhoneNumberInput
+          label={"Phone Number"}
+          containerstyle={{ width: matches900?'300px':'100%', mt:'20px' }}
+          countryCodeEditable={false}
+          defaultCountry={'us'}
+          onlyCountries={['us']}
+          value={ReservationMain.phone_number} 
+          onChange={(value) => { setReservationValue('phone_number', value) }}
         />
       </Box>
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>

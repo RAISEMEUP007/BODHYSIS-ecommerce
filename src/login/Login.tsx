@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Typography, } from '@mui/material';
 import { useNavigate } from 'react-router';
+import { Box, Typography, } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import MuiPhoneNumber from 'material-ui-phone-number';
+import { useSnackbar } from 'notistack';
 
-import CustomBorderInput from '../common/CustomBorderInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faUserCircle, } from '@fortawesome/free-regular-svg-icons';
 
-import { LoadingButton } from '@mui/lab';
-import BasicLayout from '../common/BasicLayout';
 import { logIn } from '../api/Auth';
+import CustomBorderInput from '../common/CustomBorderInput';
+import BasicLayout from '../common/BasicLayout';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import CustomPhoneNumberInput from '../common/CustomPhoneNumberInput';
 
 type signUpFormValues = {
   first_name: string,
@@ -49,6 +52,7 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const { matches900 } = useResponsiveValues();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [signUpFormValues, setSignUpFormValues] = useState<signUpFormValues>({
     first_name: "",
@@ -142,35 +146,51 @@ const Login: React.FC = () => {
   
   const signIn = async () => {
     await logIn(signInFormValues, (jsonRes:any, status:any)=>{
- 
-      console.log(jsonRes);
-      // setAccessToken(jsonRes.refreshToken);
       switch (status) {
         case 200:
-          // onLoggedIn(jsonRes.refreshToken);
           localStorage.setItem('access-token', jsonRes.refreshToken);
           localStorage.setItem('full-name', jsonRes.fullName);
           localStorage.setItem('customerId', jsonRes.customerId);
           navigate('/reservation');
           break;
         case 403:
-          alert('Incorrect pasword');
-          // setPassValidMessage(msgStr('errorComparingPassword'));
+          enqueueSnackbar("Incorrect pasword", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
           break;
         case 404:
-          alert('User not found');
-          // setEmailValidMessage(msgStr('userNotFound'));
+          navigate('/usernotfound');
           break;
         case 500:
-          alert('Server Error');
-          // showAlert('error', msgStr('serverError'));
+          enqueueSnackbar("Server Error", {
+            variant: 'error',
+            style: { width: '300px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
           break;
         default:
-          // if (jsonRes && jsonRes.error) showAlert('error', jsonRes.error);
-          // else showAlert('error', msgStr('unknownError'));
+          if (jsonRes && jsonRes.error){
+            enqueueSnackbar(jsonRes.error, {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
+          else{
+            enqueueSnackbar("unKnown Error", {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+          }
           break;
       }
-      
     });
   }
 
@@ -210,12 +230,13 @@ const Login: React.FC = () => {
                   error={signUpFormValidation.email === false?true:false}
                   label="Email Address"
                   containerstyle={styles.signUpInput}
-                  placeholder="star@email.com" 
+                  placeholder="star@email.com"
+                  type='email'
                   value={signUpFormValues.email} 
                   required={true}
                   helperText={signUpFormValidation.email === false?'Please enter the email':''}
                   onChange={(event)=>updateSingUpFormValue('email', event.target.value)} />
-                <CustomBorderInput
+                {/* <CustomBorderInput
                   error={signUpFormValidation.phone_number === false?true:false}
                   containerstyle={styles.signUpInput}
                   label="Phone"
@@ -224,7 +245,43 @@ const Login: React.FC = () => {
                   inputProps={{ maxLength: 12 }}
                   required={true}
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
-                  onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} />
+                  onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} /> */}
+                {/* <Box sx={styles.signUpInput}>
+                  <Typography style={{fontSize:'16px', marginBottom: '5px'}}>{'phone number'}</Typography>
+                  <MuiPhoneNumber
+                    variant='outlined'
+                    countryCodeEditable={false}
+                    defaultCountry={'us'}
+                    onlyCountries={['us']}
+                    value={signUpFormValues.phone_number} 
+                    onChange={(value) => { updateSingUpFormValue('phone_number', value as string) }}
+                    style={{
+                      boxSizing:'border-box',
+                      boxShadow: '2px 2px 6px #b3b3b3', 
+                      backgroundColor: 'white', 
+                      marginTop:'3px',
+                      borderRadius: '2px',
+                      padding: '14px 10px',
+                      width: '100%', 
+                    }}
+                    inputProps={{
+                      style: { 
+                        padding: '0px',
+                      },
+                    }}
+                  />
+                </Box> */}
+                <CustomPhoneNumberInput
+                  label={"Phone Number"}
+                  containerstyle={styles.signUpInput}
+                  countryCodeEditable={false}
+                  defaultCountry={'us'}
+                  onlyCountries={['us']}
+                  value={signUpFormValues.phone_number} 
+                  error={signUpFormValidation.phone_number === false?true:false}
+                  helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
+                  onChange={(value) => { updateSingUpFormValue('phone_number', value as string) }}
+                />
               </Box>
               <Typography style={{marginTop: '20px', marginBottom:'20px', fontStyle: 'bold', fontWeight: 600, textDecoration:'unline'}}>{"Billing Address"}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>

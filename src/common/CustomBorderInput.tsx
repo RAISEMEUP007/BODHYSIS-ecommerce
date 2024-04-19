@@ -3,8 +3,8 @@ import { Typography, FormControl, TextField, TextFieldProps, FormHelperText } fr
 import { Variant } from '@mui/material/styles/createTypography';
 
 interface CustomBorderInputProps {
-  containerstyle?: any;
   label: string;
+  containerstyle?: any;
   labelVariant?: Variant;
 }
 
