@@ -34,7 +34,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           setSearchedAddresses(
             jsonRes.map((address) => ({
               ...address,
-              label: `${address.street || ''} ${address.number || ''} ${address.plantation || ''} ${address.property_name || ''}`
+              label: `${address.street || ''} ${address.number || ''}, ${address.plantation || ''} - ${address.property_name || ''}`
             }))
           );
         } else {
