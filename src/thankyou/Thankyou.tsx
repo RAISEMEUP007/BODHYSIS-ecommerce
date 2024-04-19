@@ -12,6 +12,8 @@ const Thankyou: React.FC = () => {
   const email = localStorage.getItem('_r_email');
   const pickup = localStorage.getItem('_r_pickup');
   const dropoff = localStorage.getItem('_r_dropoff');
+  const store_logo_path = localStorage.getItem('_r_logo_url');
+  const store_name = localStorage.getItem('_r_store_name');
 
   useEffect(()=>{
     if(!pickup || !dropoff){
@@ -19,7 +21,14 @@ const Thankyou: React.FC = () => {
     }
 
     const sendMail = setTimeout(()=>{
-      const mailParams = { name, email }
+      const mailParams = { 
+        name, 
+        email,
+        store_logo_path: store_logo_path,
+        store_name: store_name,
+        start_time: pickup,
+        end_time: dropoff,
+      }
       sendReservationConfirmationEmail(mailParams);
     }, 100);
     

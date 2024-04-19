@@ -24,7 +24,10 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   const [extras, setExtras] = useState<Array<any>>([]);
 
   useEffect(() => {
-    getExtrasData((jsonRes: any) => { setExtras(jsonRes) })
+    getExtrasData((jsonRes: any, status:any) => { 
+      if(status == 200) setExtras(jsonRes) 
+      else setExtras([]);
+    })
   }, []);
 
   useEffect(() => {
