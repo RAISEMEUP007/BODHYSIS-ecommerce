@@ -4,6 +4,7 @@ import { Autocomplete, Box, Collapse, Link, TextField, Typography } from '@mui/m
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { searchAddress } from '../api/Store';
 import CustomBorderInput from '../common/CustomBorderInput';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 interface props {
   sx?: object;
@@ -15,6 +16,7 @@ interface props {
 
 const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, isShowSearchBox, contentStyle}) => {
   const { ReservationMain, setReservationValue } = useCustomerReservation();
+  const { matches900 } = useResponsiveValues();
 
   const [expandSearchBox, setExpandSearchBox] = useState<boolean>(false);
   const [searchKey, setSearchKey] = useState<string>("");
@@ -82,7 +84,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           <Autocomplete
             freeSolo
             sx={{ 
-              width: '60%', 
+              width: matches900?'60%':'100%', 
               boxShadow: '2px 2px 6px #b3b3b3', 
             }}
             disableClearable
@@ -120,7 +122,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
         </Collapse>
         <Collapse in={expandSearchBox && ReservationMain.use_manual}>
           <CustomBorderInput
-            containerstyle={{ width: '60%', mt:'20px' }}
+            containerstyle={{ width: matches900?'60%':'100%', mt:'20px' }}
             label="Manual Address Entry"
             placeholder="Resort, Street Address, Apt #/Suite/Etc." 
             value={ReservationMain.manual_address} 

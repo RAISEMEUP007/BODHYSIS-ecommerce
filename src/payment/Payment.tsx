@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router';
 import { Box } from '@mui/material';
-import ReservationMainDetail from './ReservationMainDetail';
+
+import { getClientSecret } from '../api/Stripe';
 import Purchase from '../common/Purchase';
 import BasicLayout from '../common/BasicLayout';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router';
-import { getClientSecret } from '../api/Stripe';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+
+import ReservationMainDetail from './ReservationMainDetail';
 
 const Payment: React.FC = () => {
 
@@ -16,7 +19,8 @@ const Payment: React.FC = () => {
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
   const [ isLoading, setIsLoading ] = useState(false);
-  console.log(ReservationMain);
+  const { matches900 } = useResponsiveValues();
+
   useEffect(()=>{
     if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
       navigate('/reservation');
@@ -85,23 +89,36 @@ const Payment: React.FC = () => {
   useEffect(()=>{
     const accessToken = localStorage.getItem('access-token');
     if(!accessToken) navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  return (
+  const renderReview = () => (
     <BasicLayout>
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <ReservationMainDetail sx={{flex:1, p:'60px 40px'}}/>
+      <Box sx={styles.container}>
+        <ReservationMainDetail sx={styles.ReservationMainDetail}/>
         <Purchase 
           title='Order Summary'
           buttonTitle="Complete Purchase"
-          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 210px)'}}
           onComplete={onComplete}
           isLoading={isLoading}
-          // isShowItems={true}
         />
       </Box>
     </BasicLayout>
   );
+
+  const styles ={
+    container: {
+      display:'flex', 
+      flexDirection: matches900? 'row': 'column',
+    },
+    ReservationMainDetail: {
+      flex:1, 
+      p:matches900?'60px 40px':'30px 24px',
+      overflow: 'auto',
+    },
+  }
+
+  return renderReview();
 }
 
 export default Payment;

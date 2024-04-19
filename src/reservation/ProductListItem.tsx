@@ -7,6 +7,7 @@ import ExtraItem from './ExtraItem';
 import CustomBorderInput from '../common/CustomBorderInput';
 import CustomSelect from '../common/CustomSelect';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 interface props {
   product: any;
@@ -30,6 +31,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
   const [sizes, setSizes] = useState<Array<any>>([]);
+  const { matches900 } = useResponsiveValues();
 
   const [formValues, setFormValues] = useState<formValue>({
     size: null,
@@ -117,22 +119,70 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     }, 100);
   }
 
+  const renderAddToCartFC = () => (
+    <Box sx={{width:matches900?'130px':'100%'}}>
+      {(product.lines && product.lines.length) ? 
+        <CustomSelect
+          error={formValidation.size === false?true:false}
+          label={"Size"}
+          value={formValues.size || ''} 
+          items={sizes}
+          containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
+          variant={"outlined"}
+          helperText={formValidation.size === false?'Not selected':''}
+          onChange={(event:any)=>updateFormValue('size', event.target.value)} />
+        : <></>
+      }
+      <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
+        <CustomBorderInput
+          error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
+          label="Quantity"
+          containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
+          type="number"
+          // min={1}
+          value={formValues.quantity || ''} 
+          required={true}
+          helperText={
+            formValidation.quantity === false
+              ? 'Invalid'
+              : formValidation.quantity === 'negative'
+              ? `Invalid`
+              : ''
+          }
+          onChange={(event)=>updateFormValue('quantity', event.target.value)} 
+          onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
+        />
+        <Button 
+          variant="contained"
+          sx={{
+            mt:matches900?'20px':'26px',
+            padding:'14px 0',
+            textTransform: 'none',
+            width:matches900?'100%':'47%',
+          }}
+          onClick={()=>{addToCart()}}
+        >{"Add to Cart"}</Button>
+      </Box>
+    </Box>
+  );
+
   return (
     <Box
       sx={{marginBottom:'10px', ...sx}}
     >
-      <Box sx={{ border: '1px solid #ABABAB', padding: '30px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box sx={{ border: '1px solid #ABABAB', padding: matches900?'30px':'16px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
+        {!matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
+        <Box sx={{ display: 'flex', flexDirection: matches900?'row':'column' }}>
           <img 
             src={API_URL + product.img_url} 
             alt={product.display_name} 
-            style={{ height: '150px', width: 'auto', display:imageLoadError?'none':'block' }}
+            style={{ height: '150px', width: 'auto', alignSelf:matches900?'flex-start':'center', display:imageLoadError?'none':'block' }}
             onError={() =>{setImageLoadError(true)}}
             onLoad={()=>{setImageLoadError(false)}}
           />
           {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'130px', paddingRight:'60px', paddingLeft:'10px', color:"#333"}}/>}
           <Box sx={{ flex: 1, ml: '20px', textAlign:'left' }}>
-            <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>
+            {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
             <Typography>{product?.summary ?? ''}</Typography>
             <Typography>{product?.description ?? ''}</Typography>
               {/* <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.display_name ?? ''}</h2> */}
@@ -143,47 +193,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
               {/* <div>baskets needed</div>
               <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
           </Box>
-          <Box sx={{display:"flex", flexDirection:'column', width:'130px'}}>
-            {(product.lines && product.lines.length) ? 
-              <CustomSelect
-                error={formValidation.size === false?true:false}
-                label={"Size"}
-                value={formValues.size || ''} 
-                items={sizes}
-                containerstyle={{ marginBottom:'10px' }}
-                variant={"outlined"}
-                helperText={formValidation.size === false?'Not selected':''}
-                onChange={(event:any)=>updateFormValue('size', event.target.value)} />
-              : <></>
-            }
-            <CustomBorderInput
-              error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
-              label="Quantity"
-              type="number"
-              // min={1}
-              value={formValues.quantity || ''} 
-              required={true}
-              helperText={
-                formValidation.quantity === false
-                  ? 'Invalid'
-                  : formValidation.quantity === 'negative'
-                  ? `Invalid`
-                  : ''
-              }
-              onChange={(event)=>updateFormValue('quantity', event.target.value)} 
-              onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
-            />
-            <Button 
-              variant="contained"
-              sx={{
-                mt:'20px',
-                padding:'13px 0',
-                textTransform: 'none',
-                // fontSize: '16px',
-              }}
-              onClick={()=>{addToCart()}}
-            >{"Add to Cart"}</Button>
-          </Box>
+          {matches900 && renderAddToCartFC()}
         </Box>
         <Box style={{position:'relative', paddingBottom:'92px', paddingTop:'12px', marginTop:'20px', borderTop:'1px solid #bababa'}}>
           <Typography style={{textAlign:'left', fontWeight:'700'}}>{"Extras"}</Typography>
@@ -201,6 +211,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
             </Box>
           </Box>
         </Box>
+        {!matches900 && (<Box sx={{mt:'24px', pt:'16px', borderTop:'1px solid #ccc'}}>{renderAddToCartFC()}</Box>)}
       </Box>
     </Box>
   )

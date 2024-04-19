@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Typography, TextField, Grid, Checkbox, FormControlLabel, List, Link } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Typography, Checkbox, FormControlLabel, List, Link } from '@mui/material';
 
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import CustomBorderInput from '../common/CustomBorderInput';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 import ReservationTerm from '../reservation/ReservationTerm';
 import DeliveryLocation from '../reservation/DeliveryLocation';
@@ -15,15 +15,17 @@ interface props {
 const ReservationMainDetail: React.FC<props> = ({ sx }) => {
 
   const { ReservationItems, ReservationMain, setReservationValue } = useCustomerReservation();
+  const { matches900 } = useResponsiveValues();
 
   const handleAccountCheck = (e: any) => {
     setReservationValue('is_accept', e.target.checked)
   }
 
   const fullName = localStorage.getItem('full-name');
+
   return (
     <Box sx={{ ...sx }}>
-      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'3 0px', marginBottom:'14px'}}>{`Accoount Details`}</Typography>
+      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'10px', marginBottom:'14px'}}>{`Accoount Details`}</Typography>
       <Typography>
         {`You are currently logged in as `}
         <b>{fullName}</b>
@@ -31,7 +33,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       </Typography>
       <Box>
         <CustomBorderInput
-          containerstyle={{ width: '300px', mt:'20px', mr:'40px' }} 
+          containerstyle={{ width: matches900?'300px':'100%', mt:'20px', mr:matches900?'40px':'0px' }} 
           label="Email" 
           type="email" 
           placeholder="example@email.com" 
@@ -39,7 +41,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
           onChange={(event)=>setReservationValue('email', event.target.value)} 
         />
         <CustomBorderInput
-          containerstyle={{ width: '300px', mt:'20px' }}
+          containerstyle={{ width: matches900?'300px':'100%', mt:'20px' }}
           label="Phone"
           placeholder="Phone Number" 
           value={ReservationMain.phone_number} 
@@ -48,10 +50,10 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       </Box>
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
       <ReservationTerm
-        contentStyle={{paddingLeft:'16px'}}
+        contentStyle={{paddingLeft: matches900?'16px':'0px'}}
       />
       <CustomBorderInput
-        containerstyle={{ width:'80%', mt:'20px' }}
+        containerstyle={{ width: matches900?'80%':'100%', mt:'20px' }}
         label = {'Special Instructions'}
         value={ReservationMain.special_instructions} 
         placeholder="Special Instructions" 
@@ -65,7 +67,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       <DeliveryLocation
         isShowAddress={true}
         isShowSearchBox={false}
-        contentStyle={{paddingLeft:'16px'}}
+        contentStyle={{paddingLeft:matches900?'16px':'0px'}}
       />
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
       <List sx={{padding:'0px 14px', width:'80%', backgroundColor:'#F8F8F8', borderRadius:'4px', border:'1px solid #999'}}>

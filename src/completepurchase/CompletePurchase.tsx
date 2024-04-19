@@ -7,11 +7,13 @@ import Purchase from '../common/Purchase';
 import BasicLayout from '../common/BasicLayout';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
 import CheckoutForm from './CheckoutForm';
+import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
 const CompletePurchase: React.FC = () => {
   
   const navigate = useNavigate();
   const { amount, clientSecret, stripePromise } = useCustomStripe();
+  const { matches900 } = useResponsiveValues();
 
   useEffect(()=>{
     if(!amount || !clientSecret){
@@ -43,9 +45,9 @@ const CompletePurchase: React.FC = () => {
 
   console.log(amount);
   console.log(clientSecret);
-  return (
+  const renderCompletePurchase = () => (
     <BasicLayout>
-      <Box sx={{ display: 'flex', flexDirection: 'row', }}>
+      <Box sx={styles.container}>
         {amount > 0 && clientSecret &&(
           <Elements stripe={stripePromise} options={options}>
             <Box 
@@ -67,11 +69,24 @@ const CompletePurchase: React.FC = () => {
         <Purchase 
           title='Reservation Details' 
           buttonTitle="Complete Purchase"
-          sx={{p:'40px', backgroundColor:'#F0F0F0', minHeight:'calc(100vh - 203px)'}}
         />
       </Box>
     </BasicLayout>
   );
+
+  const styles ={
+    container: {
+      display:'flex', 
+      flexDirection: matches900? 'row': 'column',
+    },
+    ReservationMainDetail: {
+      flex:1, 
+      p:matches900?'60px 40px':'30px 24px',
+      overflow: 'auto',
+    },
+  }
+
+  return renderCompletePurchase();
 }
 
 export default CompletePurchase;
