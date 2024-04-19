@@ -11,7 +11,7 @@ interface CustomPhoneNumberInputProps {
 
 const CustomPhoneNumberInput: React.FC<CustomPhoneNumberInputProps & MuiPhoneNumberProps> = ({ containerstyle, label, labelVariant, ...rest }) => {
 
-  const { style, inputProps, FormHelperTextProps, defaultValue, helperText, ...otherRest } = rest;
+  const { style, inputProps, FormHelperTextProps, defaultValue, helperText, error, ...otherRest } = rest;
 
   return (
     <FormControl sx={containerstyle}>
@@ -20,6 +20,7 @@ const CustomPhoneNumberInput: React.FC<CustomPhoneNumberInputProps & MuiPhoneNum
         {...rest}
         variant='outlined'
         style={{
+          border: error ? '1px solid #f7776e' : '1px solid transparent',
           boxSizing:'border-box',
           boxShadow: '2px 2px 6px #b3b3b3', 
           backgroundColor: 'white', 
