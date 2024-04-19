@@ -173,12 +173,15 @@ const Login: React.FC = () => {
 
   return (
     <BasicLayout>
+        
       <Box sx={{display:'flex', justifyContent:'center'}}>
         <Box sx={{m:5, mt:8, flex:1, backgroundColor:'#F0F0F0', p:4, border:'1px solid #A3A3A3', borderRadius:'5px', width:'100%', alignSelf:'flex-start'}}>
+        
           <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
             <FontAwesomeIcon icon={faUserCircle} style={{width:'43px', height:'43px'}}/>
             <Typography sx={{ml:'16px', fontSize:'18px'}}>{"Reservations with us require that you create a user account first. Make sure you are logged in, or create an account to continue with your order."}</Typography>
           </Box>
+
           <Box sx={{display:'flex', flexDirection:'row', mt:5}}>
             <Box sx={{width:'65%', pr:4, borderRight:'1px solid #A3A3A3'}}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -205,7 +208,7 @@ const Login: React.FC = () => {
                 <CustomBorderInput
                   error={signUpFormValidation.email === false?true:false}
                   containerstyle={{ width: '48%', mb:'20px' }}
-                  label="Email"
+                  label="Email Address"
                   placeholder="star@email.com" 
                   value={signUpFormValues.email} 
                   required={true}
@@ -222,7 +225,8 @@ const Login: React.FC = () => {
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
                   onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} />
               </Box>
-              <Typography style={{marginBottom:'20px', textDecoration:'unline'}}>{"Billing Address"}</Typography>
+
+              <Typography style={{marginTop: '20px', marginBottom:'20px', fontStyle: 'bold', fontWeight: 600, textDecoration:'unline'}}>{"Billing Address"}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.home_address === false?true:false}
@@ -288,7 +292,7 @@ const Login: React.FC = () => {
               <CustomBorderInput 
                 error={signInFormValidation.email === false?true:false}
                 containerstyle={{ width: '100%', mb:'20px' }} 
-                label="Email" 
+                label="Email Address" 
                 type="email" 
                 placeholder="example@email.com" 
                 value={signInFormValues.email} 

@@ -14,7 +14,7 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
 
   return (
     <FormControl sx={containerstyle}>
-      <Typography style={{fontSize:'15px'}} variant={labelVariant}>{label}</Typography>
+      <Typography style={{fontSize:'16px', marginBottom: '5px'}} variant={labelVariant}>{label}</Typography>
       <TextField  
         {...rest}
         inputProps={{
