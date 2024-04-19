@@ -146,7 +146,6 @@ const Login: React.FC = () => {
     await logIn(signInFormValues, (jsonRes:any, status:any)=>{
       switch (status) {
         case 200:
-          // onLoggedIn(jsonRes.refreshToken);
           localStorage.setItem('access-token', jsonRes.refreshToken);
           localStorage.setItem('full-name', jsonRes.fullName);
           localStorage.setItem('customerId', jsonRes.customerId);
@@ -195,6 +194,7 @@ const Login: React.FC = () => {
 
   const renderLoigin = () => (
     <BasicLayout>
+        
       <Box sx={{display:'flex', justifyContent:'center'}}>
         <Box sx={styles.containerStyle}>
           <Box sx={styles.description}>
@@ -226,8 +226,8 @@ const Login: React.FC = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.email === false?true:false}
+                  label="Email Address"
                   containerstyle={styles.signUpInput}
-                  label="Email"
                   placeholder="star@email.com" 
                   value={signUpFormValues.email} 
                   required={true}
@@ -239,11 +239,12 @@ const Login: React.FC = () => {
                   label="Phone"
                   placeholder="Phone Number" 
                   value={signUpFormValues.phone_number} 
+                  inputProps={{ maxLength: 12 }}
                   required={true}
                   helperText={signUpFormValidation.phone_number === false?'Please enter the phone number':''}
                   onChange={(event)=>updateSingUpFormValue('phone_number', event.target.value)} />
               </Box>
-              <Typography style={{marginBottom:'20px', textDecoration:'underline'}}>{"Billing Address"}</Typography>
+              <Typography style={{marginTop: '20px', marginBottom:'20px', fontStyle: 'bold', fontWeight: 600, textDecoration:'unline'}}>{"Billing Address"}</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <CustomBorderInput
                   error={signUpFormValidation.home_address === false?true:false}
@@ -308,8 +309,8 @@ const Login: React.FC = () => {
             >
               <CustomBorderInput 
                 error={signInFormValidation.email === false?true:false}
+                label="Email Address" 
                 containerstyle={styles.signInInput} 
-                label="Email" 
                 type="email" 
                 placeholder="example@email.com" 
                 value={signInFormValues.email} 
