@@ -55,7 +55,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           <Typography style={{marginTop:'20px', fontWeight:700, fontSize:'20px'}}>
             {ReservationMain.use_manual ? 
               (ReservationMain.manual_address || ' ')
-              :  `${ReservationMain.selectedAddress?.street || ''} ${ReservationMain.selectedAddress?.number || ''} ${ReservationMain.selectedAddress?.plantation || ''} ${ReservationMain.selectedAddress?.property_name || ''}`
+              :  `${ReservationMain.selectedAddress?.number || ''} ${ReservationMain.selectedAddress?.street || ''} ${ReservationMain.selectedAddress?.plantation || ''} ${ReservationMain.selectedAddress?.property_name || ''}`
             }
           </Typography>
         }
