@@ -8,10 +8,12 @@ const Thankyou: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const name = localStorage.getItem('_r_name');
+  const name = localStorage.getItem('full-name');
   const email = localStorage.getItem('_r_email');
   const pickup = localStorage.getItem('_r_pickup');
   const dropoff = localStorage.getItem('_r_dropoff');
+  const store_logo_path = localStorage.getItem('_r_logo_url');
+  const store_name = localStorage.getItem('_r_store_name');
 
   useEffect(()=>{
     if(!pickup || !dropoff){
@@ -19,7 +21,15 @@ const Thankyou: React.FC = () => {
     }
 
     const sendMail = setTimeout(()=>{
-      const mailParams = { name, email }
+      const mailParams = { 
+        name, 
+        email,
+        // store_logo_path: "https://api.bodhisys.io/uploads/img_1711075052760_Bikes To Go Logo.jpg",
+        store_logo_path: store_logo_path,
+        store_name: store_name,
+        start_time: pickup,
+        end_time: dropoff,
+      }
       sendReservationConfirmationEmail(mailParams);
     }, 100);
     
@@ -33,6 +43,8 @@ const Thankyou: React.FC = () => {
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_pickup');
     localStorage.removeItem('_r_dropoff');
+    localStorage.removeItem('_r_logo_url');
+    localStorage.removeItem('_r_store_name');
   }, 1000);
 
   useEffect(()=>{

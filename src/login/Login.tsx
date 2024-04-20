@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faUserCircle, } from '@fortawesome/free-regular-svg-icons';
 
-import { logIn, register } from '../api/Auth';
+import { logIn, register, testTokenVaild } from '../api/Auth';
 import CustomBorderInput from '../common/CustomBorderInput';
 import BasicLayout from '../common/BasicLayout';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
@@ -284,7 +284,11 @@ const Login: React.FC = () => {
 
   useEffect(()=>{
     const accessToken = localStorage.getItem('access-token');
-    if(accessToken) navigate('/reservation');
+    if(accessToken){
+      testTokenVaild((jsonRes:any, status:any)=>{
+        if(status == 200) navigate('/reservation');
+      });
+    }
   }, [])
 
   const renderLoigin = () => (

@@ -12,6 +12,7 @@ import { createReservation } from "../api/Product";
 import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCustomStripe";
 import { useCustomerReservation } from "../common/Providers/CustomerReservationProvider/UseCustomerReservation";
 import { useStoreDetails } from "../common/Providers/StoreDetailsProvider/UseStoreDetails";
+import { API_URL } from "../common/AppConstants";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -111,6 +112,8 @@ export default function CheckoutForm() {
     localStorage.setItem('_r_email', ReservationMain.email);
     localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY'));
     localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY'));
+    localStorage.setItem('_r_logo_url', API_URL + storeDetails.logo_url);
+    localStorage.setItem('_r_store_name', storeDetails.store_name);
   }
 
   const removeStorageValues = () =>{
@@ -118,6 +121,8 @@ export default function CheckoutForm() {
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_pickup');
     localStorage.removeItem('_r_dropoff');
+    localStorage.removeItem('_r_logo_url');
+    localStorage.removeItem('_r_store_name');
   }
 
   return (

@@ -44,7 +44,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   });
 
   useEffect(()=>{
-    setExtraItems(extras.map(item => ({ ...item, selected: false })));
+    if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
   }, [extras])
 
   useEffect(()=>{

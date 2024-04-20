@@ -52,12 +52,14 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
       <Box sx={contentStyle}>
         {isDescription && <Typography>{`We have a robust database of locations on the island we deliver to. Search for a location and select the appropriate address from the dropdown. If your address is not listed, click below to enter your address manually. Please search for your address first, as selecting from our lsit will make delivery smoother and easier.`}</Typography>}
         {isShowAddress && 
-          <Typography style={{marginTop:'20px', fontWeight:700, fontSize:'20px'}}>
-            {ReservationMain.use_manual ? 
-              (ReservationMain.manual_address || ' ')
-              :  `${ReservationMain.selectedAddress?.number || ''} ${ReservationMain.selectedAddress?.street || ''}, ${ReservationMain.selectedAddress?.plantation || ''} - ${ReservationMain.selectedAddress?.property_name || ''}`
-            }
-          </Typography>
+          <Typography style={{marginTop: '20px', fontWeight: 700, fontSize: '20px'}}>
+          {ReservationMain.use_manual ? 
+            (ReservationMain.manual_address || ' ') :
+            (ReservationMain.selectedAddress && 
+              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''} - ${ReservationMain.selectedAddress.property_name ?? ''}`
+            )
+          }
+        </Typography>
         }
         {/* <CustomBorderInput
           containerstyle={{ width: '60%', mt:'30px' }}
