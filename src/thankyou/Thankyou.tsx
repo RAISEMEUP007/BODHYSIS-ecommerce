@@ -8,7 +8,7 @@ const Thankyou: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const name = localStorage.getItem('_r_name');
+  const name = localStorage.getItem('full-name');
   const email = localStorage.getItem('_r_email');
   const pickup = localStorage.getItem('_r_pickup');
   const dropoff = localStorage.getItem('_r_dropoff');
@@ -42,6 +42,8 @@ const Thankyou: React.FC = () => {
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_pickup');
     localStorage.removeItem('_r_dropoff');
+    localStorage.removeItem('_r_logo_url');
+    localStorage.removeItem('_r_store_name');
   }, 1000);
 
   useEffect(()=>{
