@@ -24,8 +24,8 @@ const Thankyou: React.FC = () => {
       const mailParams = { 
         name, 
         email,
-        store_logo_path: "https://api.bodhisys.io/uploads/img_1711075052760_Bikes To Go Logo.jpg",
-        // store_logo_path: store_logo_path,
+        // store_logo_path: "https://api.bodhisys.io/uploads/img_1711075052760_Bikes To Go Logo.jpg",
+        store_logo_path: store_logo_path,
         store_name: store_name,
         start_time: pickup,
         end_time: dropoff,
