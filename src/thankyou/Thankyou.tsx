@@ -10,6 +10,7 @@ const Thankyou: React.FC = () => {
 
   const name = localStorage.getItem('full-name');
   const email = localStorage.getItem('_r_email');
+  const phone_number = localStorage.getItem('_r_phone');
   const pickup = localStorage.getItem('_r_pickup');
   const dropoff = localStorage.getItem('_r_dropoff');
   const store_logo_path = localStorage.getItem('_r_logo_url');
@@ -24,6 +25,7 @@ const Thankyou: React.FC = () => {
       const mailParams = { 
         name, 
         email,
+        phone_number: phone_number,
         // store_logo_path: "https://api.bodhisys.io/uploads/img_1711075052760_Bikes To Go Logo.jpg",
         store_logo_path: store_logo_path,
         store_name: store_name,

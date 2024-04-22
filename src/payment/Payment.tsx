@@ -89,7 +89,13 @@ const Payment: React.FC = () => {
   useEffect(()=>{
     const accessToken = localStorage.getItem('access-token');
     if(!accessToken) navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   }, []);
 
   const renderReview = () => (

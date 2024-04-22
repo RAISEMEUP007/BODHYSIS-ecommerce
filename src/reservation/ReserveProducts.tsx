@@ -37,7 +37,14 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   }, [selectedCategory]);
 
   const scrollUpBeforeCategory = () => {
-    window.scrollTo({ top: 1150, behavior: 'smooth' });
+    // window.scrollTo({ top: 0, behavior: 'smooth' });
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.scrollTo({
+        top: 1150,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const renderReserveProducts = () => (

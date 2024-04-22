@@ -110,6 +110,7 @@ export default function CheckoutForm() {
   const setStorageValues = () =>{
     localStorage.setItem('_r_name', ReservationMain.name);
     localStorage.setItem('_r_email', ReservationMain.email);
+    localStorage.setItem('_r_phone', ReservationMain.phone_number);
     localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY'));
     localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY'));
     localStorage.setItem('_r_logo_url', API_URL + storeDetails.logo_url);
@@ -119,6 +120,7 @@ export default function CheckoutForm() {
   const removeStorageValues = () =>{
     localStorage.removeItem('_r_name');
     localStorage.removeItem('_r_email');
+    localStorage.removeItem('_r_phone');
     localStorage.removeItem('_r_pickup');
     localStorage.removeItem('_r_dropoff');
     localStorage.removeItem('_r_logo_url');
