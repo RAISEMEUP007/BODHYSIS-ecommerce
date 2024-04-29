@@ -142,13 +142,16 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
           type="number"
           // min={1}
+          inputProps={{
+            min:1
+          }}
           value={formValues.quantity || ''} 
           required={true}
           helperText={
             formValidation.quantity === false
               ? 'Invalid'
               : formValidation.quantity === 'negative'
-              ? `Invalid`
+              ? `Not positive`
               : ''
           }
           onChange={(event)=>updateFormValue('quantity', event.target.value)} 
