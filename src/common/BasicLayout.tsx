@@ -22,6 +22,12 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
 
   const { ReservationItems } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
+  const [Quantity, setQuantity] = useState<number>();
+
+  useEffect(()=>{
+    const quantity = ReservationItems.reduce((total, item) => total + item.quantity*1, 0); 
+    setQuantity(quantity);
+  }, [ReservationItems]);
 
   return (
     <Box sx={{boxSizing:'border-box', ...sx}}>
@@ -43,7 +49,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
             <AccountCircleOutlinedIcon style={{height:'36px', width:'36px'}}/>
           </Badge>
           <Badge 
-            badgeContent={ReservationItems.length} 
+            badgeContent={Quantity} 
             color="primary" 
             onClick={()=>{
               setMenuValue('cartExpand', !menuValues.cartExpand);
