@@ -188,8 +188,8 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'130px', paddingRight:'60px', paddingLeft:'10px', color:"#333"}}/>}
           <Box sx={{ flex: 1, ml: '20px', textAlign:'left' }}>
             {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
-            <Typography>{product?.summary ?? ''}</Typography>
-            <Typography>{product?.description ?? ''}</Typography>
+            <Typography dangerouslySetInnerHTML={{ __html: product?.summary ?? '' }} />
+            <Typography dangerouslySetInnerHTML={{ __html: product?.description }} />
               {/* <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.display_name ?? ''}</h2> */}
               {/* <div>{product?.summary ?? ''}</div> */}
               {/* <div>{product?.size ?? ''}</div> */}
