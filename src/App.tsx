@@ -23,7 +23,10 @@ const InitializeApp = ({ children } : {children:any}) => {
       const host = new URL(currentURL).host;
       console.log(host);
       await getStoreDetailDB({store_url:host}, (jsonRes:any, status)=>{
-        if(status == 200) setStoreDetails(jsonRes);
+        if(status == 200){
+          setStoreDetails(jsonRes);
+          document.title = jsonRes.store_name;
+        }
       });
     };
 
