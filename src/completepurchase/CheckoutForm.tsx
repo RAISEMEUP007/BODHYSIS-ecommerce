@@ -66,6 +66,7 @@ export default function CheckoutForm() {
       manual_address : ReservationMain.manual_address,
       email : ReservationMain.email,
       phone_number : ReservationMain.phone_number,
+      driver_tip: ReservationMain.driver_tip,
       customer_id : localStorage.getItem('customerId'),
       items : ReservationItems,
     };
@@ -115,7 +116,7 @@ export default function CheckoutForm() {
     localStorage.setItem('_r_phone', ReservationMain.phone_number);
     localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY'));
     localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY'));
-    localStorage.setItem('_r_logo_url', API_URL + storeDetails.logo_url);
+    localStorage.setItem('_r_logo_url', encodeURIComponent(API_URL + storeDetails.logo_url));
     localStorage.setItem('_r_store_name', storeDetails.store_name);
   }
 

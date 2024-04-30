@@ -3,7 +3,7 @@ import { Typography, FormControl, TextField, TextFieldProps, FormHelperText } fr
 import { Variant } from '@mui/material/styles/createTypography';
 
 interface CustomBorderInputProps {
-  label: string;
+  label?: string;
   containerstyle?: any;
   labelVariant?: Variant;
 }
@@ -14,7 +14,7 @@ const CustomBorderInput: React.FC<CustomBorderInputProps & TextFieldProps> = ({ 
 
   return (
     <FormControl sx={containerstyle}>
-      <Typography style={{fontSize:'16px', marginBottom: '5px'}} variant={labelVariant}>{label}</Typography>
+      {label && <Typography style={{fontSize:'16px', marginBottom: '5px'}} variant={labelVariant}>{label}</Typography>}
       <TextField  
         {...rest}
         inputProps={{

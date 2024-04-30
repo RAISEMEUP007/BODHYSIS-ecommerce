@@ -250,6 +250,9 @@ const Login: React.FC = () => {
           localStorage.setItem('access-token', jsonRes.refreshToken);
           localStorage.setItem('full-name', jsonRes.fullName);
           localStorage.setItem('customerId', jsonRes.customerId);
+          localStorage.setItem('customer_email', jsonRes.email);
+          localStorage.setItem('customer_phone_number', jsonRes.phone_number);
+          initReservation();
           navigate('/reservation');
           break;
         case 409:

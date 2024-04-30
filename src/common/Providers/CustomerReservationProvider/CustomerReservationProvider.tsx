@@ -27,6 +27,7 @@ export interface ReservationMainProps {
   selectedAddress: any,
   use_manual: boolean;
   manual_address: string,
+  driver_tip: number | null,
 }
 
 interface ContextProps {
@@ -67,6 +68,7 @@ const initializedMain: ReservationMainProps = {
   selectedAddress: null,
   use_manual: false,
   manual_address: "",
+  driver_tip: null,
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({
@@ -118,6 +120,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     },
     initReservation: () => {
       setReservationMain(initializedMain);
+      setReservationItems([]);
     },
   };
 
