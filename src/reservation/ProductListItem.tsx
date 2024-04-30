@@ -48,10 +48,18 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   }, [extras])
 
   useEffect(()=>{
-    if(product.lines && product.lines.length){
-      var size = product.lines[0].linesSizes.split(',')[0];
-      setSizes(product.lines[0].linesSizes.split(','));
-      setFormValues({size: product.lines[0].linesSizes.split(',')[0], quantity:1});
+    let formValues = {
+      size: null,
+      quantity: 1,
+    }
+    if(product.lines){
+      if(product.lines.length){
+        var size = product.lines[0].linesSizes.split(',')[0];
+        setSizes(product.lines[0].linesSizes.split(','));
+        formValues.size = product.lines[0].linesSizes.split(',')[0];
+      }
+      setFormValues(formValues);
+      // setFormValues({size: product.lines[0].linesSizes.split(',')[0], quantity:1});
     }else setSizes([]);
   }, [product]);
 
