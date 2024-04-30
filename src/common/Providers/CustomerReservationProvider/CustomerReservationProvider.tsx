@@ -118,6 +118,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     },
     initReservation: () => {
       setReservationMain(initializedMain);
+      setReservationItems([]);
     },
   };
 
