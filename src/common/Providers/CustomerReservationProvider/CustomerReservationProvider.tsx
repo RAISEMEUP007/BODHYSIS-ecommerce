@@ -27,7 +27,7 @@ export interface ReservationMainProps {
   selectedAddress: any,
   use_manual: boolean;
   manual_address: string,
-  driver_tip: number | null,
+  driver_tip: number,
 }
 
 interface ContextProps {
@@ -68,7 +68,7 @@ const initializedMain: ReservationMainProps = {
   selectedAddress: null,
   use_manual: false,
   manual_address: "",
-  driver_tip: null,
+  driver_tip: 0.00,
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({

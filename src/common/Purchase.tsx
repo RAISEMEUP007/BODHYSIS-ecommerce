@@ -37,9 +37,8 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
   const [inputValidation, setInputValidation] = useState<inputValidation>({
     driver_tip: null,
   });
-  
   const [ expand, setExpand ] = useState<boolean>(true);
-
+  
   const renderOrderDetails = () => (
     <Box sx={{
       backgroundColor:'#F0F0F0',
@@ -114,30 +113,33 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           <CustomBorderInput 
             error={(inputValidation.driver_tip === false || inputValidation.driver_tip == 'negative')?true:false}
             type="number"
-            defaultValue={ReservationMain.driver_tip}
+            value={ReservationMain.driver_tip.toFixed(2)}
             inputProps={{
-              min: 1
+              min: 0,
+              type: 'number',
+              step: '0.01',
+              pattern: '\\d*\\.\\d{2}',
             }}
             onChange={(event)=>{
-              const value = event.target.value;
-              if(parseFloat(value) < 1){
+              const value = isNaN(parseFloat(event.target.value)) ? '' : parseFloat(event.target.value).toFixed(2);
+              if(parseFloat(value) < 0){
                 setInputValidation({driver_tip: 'negative'});
-                setReservationValue('driver_tip', null);
+                setReservationValue('driver_tip', 0);
               }else {
                 setInputValidation({driver_tip:null});
-                setReservationValue('driver_tip', value);
+                setReservationValue('driver_tip', parseFloat(value));
               }
             }}
             helperText={
               inputValidation.driver_tip === false
                 ? 'Invalid'
                 : inputValidation.driver_tip === 'negative'
-                ? `Should be greater than $1`
+                ? `Should not be negative`
                 : ''
             }
           />
         </Box>
-        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction. If you prefer, you can also tip in cash!"}</Typography>
+        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction."}</Typography>
       </Box>
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>

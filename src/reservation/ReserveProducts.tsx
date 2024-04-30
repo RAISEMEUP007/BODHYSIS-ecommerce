@@ -59,6 +59,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
           <DeliveryLocation
             isDescription={true}
             isShowSearchBox={true}
+            sx={{marginTop:'20px'}}
             contentStyle={styles.contentPadding}
           />
         </Box>
@@ -97,7 +98,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   const styles = {
     contentPadding:{
-      paddingLeft: matches900?"16px":'0px'
+      paddingLeft: matches900?"0px":'0px'
     },
     CategorySlot:{
       width: matches900?'300px':'100%', 
