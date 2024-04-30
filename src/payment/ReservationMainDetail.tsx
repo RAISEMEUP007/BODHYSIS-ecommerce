@@ -61,7 +61,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       </Box>
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
       <ReservationTerm
-        contentStyle={{paddingLeft: matches900?'16px':'0px'}}
+        contentStyle={{paddingLeft: matches900?'0px':'0px'}}
       />
       <CustomBorderInput
         containerstyle={{ width: matches900?'80%':'100%', mt:'20px' }}
@@ -78,7 +78,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       <DeliveryLocation
         isShowAddress={true}
         isShowSearchBox={false}
-        contentStyle={{paddingLeft:matches900?'16px':'0px'}}
+        contentStyle={{paddingLeft:matches900?'0px':'0px'}}
       />
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
       <List sx={{padding:'0px 14px', width:'80%', backgroundColor:'#F8F8F8', borderRadius:'4px', border:'1px solid #999'}}>
