@@ -113,7 +113,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           <CustomBorderInput 
             error={(inputValidation.driver_tip === false || inputValidation.driver_tip == 'negative')?true:false}
             type="number"
-            value={ReservationMain.driver_tip.toFixed(2)}
+            defaultValue={ReservationMain.driver_tip.toFixed(2)}
             inputProps={{
               min: 0,
               type: 'number',
@@ -121,6 +121,16 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
               pattern: '\\d*\\.\\d{2}',
             }}
             onChange={(event)=>{
+              const value = isNaN(parseFloat(event.target.value)) ? '' : parseFloat(event.target.value).toFixed(2);
+              if(parseFloat(value) < 0){
+                setInputValidation({driver_tip: 'negative'});
+                // setReservationValue('driver_tip', 0);
+              }else {
+                setInputValidation({driver_tip:null});
+                setReservationValue('driver_tip', parseFloat(value));
+              }
+            }}
+            onBlur={(event)=>{
               const value = isNaN(parseFloat(event.target.value)) ? '' : parseFloat(event.target.value).toFixed(2);
               if(parseFloat(value) < 0){
                 setInputValidation({driver_tip: 'negative'});
