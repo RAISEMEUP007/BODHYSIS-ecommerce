@@ -139,7 +139,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
             }
           />
         </Box>
-        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction. If you prefer, you can also tip in cash!"}</Typography>
+        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction."}</Typography>
       </Box>
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
