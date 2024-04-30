@@ -12,6 +12,7 @@ import CustomBorderInput from '../common/CustomBorderInput';
 import BasicLayout from '../common/BasicLayout';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 import CustomPhoneNumberInput from '../common/CustomPhoneNumberInput';
+import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
 type signUpFormValues = {
   first_name: string,
@@ -56,6 +57,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { matches900 } = useResponsiveValues();
   const { enqueueSnackbar } = useSnackbar();
+  const { initReservation } = useCustomerReservation();
 
   const [signUpFormValues, setSignUpFormValues] = useState<signUpFormValues>({
     first_name: "",
@@ -196,6 +198,7 @@ const Login: React.FC = () => {
           localStorage.setItem('customerId', jsonRes.customerId);
           localStorage.setItem('customer_email', jsonRes.email);
           localStorage.setItem('customer_phone_number', jsonRes.phone_number);
+          initReservation();
           navigate('/reservation');
           break;
         case 403:
