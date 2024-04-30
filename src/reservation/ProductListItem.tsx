@@ -48,10 +48,18 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   }, [extras])
 
   useEffect(()=>{
-    if(product.lines && product.lines.length){
-      var size = product.lines[0].linesSizes.split(',')[0];
-      setSizes(product.lines[0].linesSizes.split(','));
-      setFormValues({size: product.lines[0].linesSizes.split(',')[0], quantity:1});
+    let formValues = {
+      size: null,
+      quantity: 1,
+    }
+    if(product.lines){
+      if(product.lines.length){
+        var size = product.lines[0].linesSizes.split(',')[0];
+        setSizes(product.lines[0].linesSizes.split(','));
+        formValues.size = product.lines[0].linesSizes.split(',')[0];
+      }
+      setFormValues(formValues);
+      // setFormValues({size: product.lines[0].linesSizes.split(',')[0], quantity:1});
     }else setSizes([]);
   }, [product]);
 
@@ -142,13 +150,16 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
           type="number"
           // min={1}
+          inputProps={{
+            min:1
+          }}
           value={formValues.quantity || ''} 
           required={true}
           helperText={
             formValidation.quantity === false
               ? 'Invalid'
               : formValidation.quantity === 'negative'
-              ? `Invalid`
+              ? `Not positive`
               : ''
           }
           onChange={(event)=>updateFormValue('quantity', event.target.value)} 
@@ -185,8 +196,8 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'130px', paddingRight:'60px', paddingLeft:'10px', color:"#333"}}/>}
           <Box sx={{ flex: 1, ml: '20px', textAlign:'left' }}>
             {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
-            <Typography>{product?.summary ?? ''}</Typography>
-            <Typography>{product?.description ?? ''}</Typography>
+            <Typography dangerouslySetInnerHTML={{ __html: product?.summary ?? '' }} />
+            <Typography dangerouslySetInnerHTML={{ __html: product?.description }} />
               {/* <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.display_name ?? ''}</h2> */}
               {/* <div>{product?.summary ?? ''}</div> */}
               {/* <div>{product?.size ?? ''}</div> */}

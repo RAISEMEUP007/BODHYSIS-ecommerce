@@ -127,6 +127,9 @@ const Login: React.FC = () => {
     const updatedSignUpFormValidation = { ...signUpFormValidation };
     for (const key in signUpFormValues) {
       switch(key){
+        case 'address2':
+          updatedSignUpFormValidation.address2 = null;
+          break;
         case 'email':
           if (!signUpFormValues.email) {
             updatedSignUpFormValidation.email = false;
@@ -191,6 +194,8 @@ const Login: React.FC = () => {
           localStorage.setItem('access-token', jsonRes.refreshToken);
           localStorage.setItem('full-name', jsonRes.fullName);
           localStorage.setItem('customerId', jsonRes.customerId);
+          localStorage.setItem('customer_email', jsonRes.email);
+          localStorage.setItem('customer_phone_number', jsonRes.phone_number);
           navigate('/reservation');
           break;
         case 403:
@@ -235,7 +240,7 @@ const Login: React.FC = () => {
   }
 
   const signUp = async () => {
-    console.log('ddd');
+    // console.log('ddd');
     await register(signUpFormValues, (jsonRes:any, status:any)=>{
       switch (status) {
         case 200:
@@ -414,13 +419,13 @@ const Login: React.FC = () => {
                   helperText={signUpFormValidation.home_address === false?'Please enter the home address':''}
                   onChange={(event)=>updateSingUpFormValue('home_address', event.target.value)} />
                 <CustomBorderInput
-                  error={signUpFormValidation.address2 === false?true:false}
+                  // error={signUpFormValidation.address2 === false?true:false}
                   containerstyle={styles.signUpInput}
                   label="Apt, Suite, etc."
                   placeholder="Apt, Suite, etc." 
                   value={signUpFormValues.address2} 
                   required={true}
-                  helperText={signUpFormValidation.address2 === false?'Please enter the address2':''}
+                  // helperText={signUpFormValidation.address2 === false?'Please enter the address2':''}
                   onChange={(event)=>updateSingUpFormValue('address2', event.target.value)} />
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>

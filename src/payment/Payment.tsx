@@ -16,7 +16,7 @@ const Payment: React.FC = () => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { ReservationItems, ReservationMain } = useCustomerReservation();
+  const { ReservationItems, ReservationMain, setReservationValue } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
   const [ isLoading, setIsLoading ] = useState(false);
   const { matches900 } = useResponsiveValues();
@@ -25,6 +25,8 @@ const Payment: React.FC = () => {
     if(!ReservationMain.pickup || !ReservationMain.dropoff || !ReservationItems.length || !ReservationMain.prices.total){
       navigate('/reservation');
     }
+    if(!ReservationMain.email && localStorage.getItem('customer_email')) setReservationValue('email', localStorage.getItem('customer_email'));
+    if(!ReservationMain.phone_number && localStorage.getItem('customer_phone_number')) setReservationValue('phone_number', localStorage.getItem('customer_phone_number'));
   }, []);
 
   const onComplete = (event: any) => {

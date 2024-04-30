@@ -32,9 +32,9 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
       searchAddress(searchKey, (jsonRes:any, status) => {
         if (status === 200 && Array.isArray(jsonRes)) {
           setSearchedAddresses(
-            jsonRes.map((address) => ({
+            jsonRes.map((address, index) => ({
               ...address,
-              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''} - ${address.property_name || ''}`
+              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''} - ${address.property_name || ''} <span style="display:none;">${index}</span>`
             }))
           );
         } else {
@@ -84,6 +84,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
         <Collapse in={expandSearchBox}>
           <Typography style={{marginTop:'10px', fontSize:'15px'}}>{"Search Address"}</Typography>
           <Autocomplete
+            // Multiple={true}
             freeSolo
             sx={{ 
               width: matches900?'60%':'100%', 
@@ -101,15 +102,29 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
             filterOptions={(x) => {
               return x;
             }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'search',
-                }}
-              />
-            )}
+            renderInput={(params) => {
+              const text = String(params?.inputProps?.value ?? ' ');
+              const spanIndex = text.indexOf('<span');
+              const inputVal = spanIndex !== -1 ? text.substring(0, spanIndex) : text;
+              return (
+                <TextField
+                  {...params}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: 'search',
+                    value: inputVal,
+                  }}
+                />
+              )
+            }}
+            renderOption={(props, option) => {
+              const htmlLabel = { __html: option.label };
+              return (
+                <li {...props}>
+                  <span dangerouslySetInnerHTML={htmlLabel} />
+                </li>
+              );
+            }}
           />
           <Box 
             sx={{mt:'10px', fontSize:'18px', }}
