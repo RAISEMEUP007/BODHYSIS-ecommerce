@@ -59,7 +59,6 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
         formValues.size = product.lines[0].linesSizes.split(',')[0];
       }
       setFormValues(formValues);
-      // setFormValues({size: product.lines[0].linesSizes.split(',')[0], quantity:1});
     }else setSizes([]);
   }, [product]);
 
@@ -118,12 +117,26 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       price_group_id: product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
       special_instructions: "", 
-      img_url: product?.img_url ?? ''
+      img_url: product?.img_url ?? '',
+      size: formValues.size,
     }
     addReservationItem(newItem);
 
     setTimeout(()=>{
-      setFormValues({size:null, quantity:null});
+      // setFormValues({size:null, quantity:null});
+      let formValues = {
+        size: null,
+        quantity: 1,
+      }
+      if(product.lines){
+        if(product.lines.length){
+          var size = product.lines[0].linesSizes.split(',')[0];
+          setSizes(product.lines[0].linesSizes.split(','));
+          formValues.size = product.lines[0].linesSizes.split(',')[0];
+        }
+        setFormValues(formValues);
+      }else setSizes([]);
+
       setFormValidation({size:null, quantity:null});
       setExtraItems(extras.map(item => ({ ...item, selected: false })));
     }, 100);

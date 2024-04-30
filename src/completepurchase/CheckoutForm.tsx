@@ -69,6 +69,8 @@ export default function CheckoutForm() {
       customer_id : localStorage.getItem('customerId'),
       items : ReservationItems,
     };
+
+    console.log(forSavingOnDB);
     await createReservation(forSavingOnDB);
 
     const currentURL = window.location.href;
