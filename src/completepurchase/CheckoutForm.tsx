@@ -66,6 +66,7 @@ export default function CheckoutForm() {
       manual_address : ReservationMain.manual_address,
       email : ReservationMain.email,
       phone_number : ReservationMain.phone_number,
+      driver_tip: ReservationMain.driver_tip,
       customer_id : localStorage.getItem('customerId'),
       items : ReservationItems,
     };

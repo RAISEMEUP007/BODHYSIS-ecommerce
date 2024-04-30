@@ -12,6 +12,7 @@ import { useCustomerReservation } from './Providers/CustomerReservationProvider/
 import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetails';
 import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
 import { useResponsiveValues } from './Providers/DimentionsProvider/UseResponsiveValues';
+import CustomBorderInput from './CustomBorderInput';
 
 interface Props {
   title: string;
@@ -22,15 +23,23 @@ interface Props {
   onComplete?: (event: any) => void;
 }
 
+type inputValidation = {
+  driver_tip: boolean | null | 'negative',
+}
+
 const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, onComplete }) => {
 
-  const { ReservationItems, ReservationMain, removeReservationItem } = useCustomerReservation();
+  const { ReservationItems, ReservationMain, setReservationValue, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   const { menuValues } = useMenuValues();
   const { matches900 } = useResponsiveValues();
+
+  const [inputValidation, setInputValidation] = useState<inputValidation>({
+    driver_tip: null,
+  });
   
   const [ expand, setExpand ] = useState<boolean>(true);
-  
+
   const renderOrderDetails = () => (
     <Box sx={{
       backgroundColor:'#F0F0F0',
@@ -98,6 +107,38 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Alert>
       </Collapse>
+      <Box>
+        <Typography sx={{fontSize:'20px', fontWeight:500, marginTop:'30px'}}><b>{"Driver Tip"}</b></Typography>
+        <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', justifyContent:'space-between'}}>
+          <Typography sx={{fontWeight:400, marginTop:'18px'}}>{"Tip"}</Typography>
+          <CustomBorderInput 
+            error={(inputValidation.driver_tip === false || inputValidation.driver_tip == 'negative')?true:false}
+            type="number"
+            defaultValue={ReservationMain.driver_tip}
+            inputProps={{
+              min: 1
+            }}
+            onChange={(event)=>{
+              const value = event.target.value;
+              if(parseFloat(value) < 1){
+                setInputValidation({driver_tip: 'negative'});
+                setReservationValue('driver_tip', null);
+              }else {
+                setInputValidation({driver_tip:null});
+                setReservationValue('driver_tip', value);
+              }
+            }}
+            helperText={
+              inputValidation.driver_tip === false
+                ? 'Invalid'
+                : inputValidation.driver_tip === 'negative'
+                ? `Should be greater than $1`
+                : ''
+            }
+          />
+        </Box>
+        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction. If you prefer, you can also tip in cash!"}</Typography>
+      </Box>
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
           <div>{"Subtotal"}</div>
