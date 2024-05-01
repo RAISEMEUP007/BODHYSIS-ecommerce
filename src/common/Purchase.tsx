@@ -62,16 +62,19 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
                     <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999', marginBottom:'-1px'}}>
                       <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                         <Typography sx={{fontWeight:700, fontSize:'18px'}}>{item.display_name}</Typography>
-                        <Box 
-                          style={{display:isRemovalItems?'block':'none', cursor:'pointer'}} 
-                          onClick={()=>{removeReservationItem(index)}} >
-                          <FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/>
+                        <Box display={'flex'}>
+                          <Typography sx={{fontWeight:700, fontSize:'16px', color:'#4599D6', marginRight:'15px', marginLeft:'4px'}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
+                          <Box 
+                            style={{display:isRemovalItems?'block':'none', cursor:'pointer'}} 
+                            onClick={()=>{removeReservationItem(index)}} >
+                            <FontAwesomeIcon icon={faCircleXmark} style={{height:'20px', width:'20px', marginTop:'2px', color:"#4599D6"}}/>
+                          </Box>
                         </Box>
                       </Box>
-                      <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
+                      {/* <Box sx={{display:'flex', flexDirection:'row', mt:'6px', mb:'4px'}}>
                         <Typography sx={{fontWeight:600, fontSize:'16px', marginRight:'60px'}}>{`Quantity: ${item.quantity}`}</Typography>
                         <Typography sx={{fontWeight:700, fontSize:'16px', color:'#4599D6',}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
-                      </Box>
+                      </Box> */}
                       {(item.extras && item.extras.length) ?
                         <>
                           {item.extras.map((extra: any, index: number) => {

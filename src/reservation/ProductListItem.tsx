@@ -27,7 +27,7 @@ type formValidation = {
 
 const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
 
-  const { addReservationItem } = useCustomerReservation();
+  const { ReservationItems, setReservationItems, addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
   const [sizes, setSizes] = useState<Array<any>>([]);
@@ -113,14 +113,25 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       family_id: product.id,
       family: product.family,
       display_name: product.display_name,
-      quantity: formValues.quantity, 
+      quantity: 1, 
       price_group_id: product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
       special_instructions: "", 
       img_url: product?.img_url ?? '',
       size: formValues.size,
     }
-    addReservationItem(newItem);
+
+    let updatedReservationItems = [...ReservationItems];
+    
+    if(formValues.quantity){
+      for(let i=0; i<formValues.quantity; i++){
+        updatedReservationItems.push(newItem);
+      }
+    }
+
+    setReservationItems(updatedReservationItems);
+
+    // addReservationItem(newItem);
 
     setTimeout(()=>{
       // setFormValues({size:null, quantity:null});
