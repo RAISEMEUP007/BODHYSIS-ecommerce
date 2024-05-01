@@ -31,3 +31,7 @@ export const getHeaderData = (tableId:string|number, callback=defaultCallback) =
 export const createReservation = async (payload:any, callback=defaultCallback) => {
   return await postAPICall({ route : 'reservations/createreservation', payload, callback});
 };
+
+export const getExtrasDataByDisplayName = async (payload:any,callback=defaultCallback) => {
+  return await postAPICall({ route: 'settings/getextrasdatabydisplayname', payload, callback });
+}

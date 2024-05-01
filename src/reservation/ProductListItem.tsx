@@ -8,6 +8,7 @@ import CustomBorderInput from '../common/CustomBorderInput';
 import CustomSelect from '../common/CustomSelect';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import { getExtrasDataByDisplayName } from '../api/Product';
 
 interface props {
   product: any;
@@ -27,7 +28,7 @@ type formValidation = {
 
 const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
 
-  const { addReservationItem } = useCustomerReservation();
+  const { ReservationItems, setReservationItems, addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
   const [sizes, setSizes] = useState<Array<any>>([]);
@@ -44,8 +45,16 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   });
 
   useEffect(()=>{
-    if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
-  }, [extras])
+    // if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
+    const payload = {
+      display_name: product.display_name
+    }
+    getExtrasDataByDisplayName(payload, (jsonRes, status)=>{
+      if(status == 200 && Array.isArray(jsonRes)){
+        setExtraItems(jsonRes.map(item=>({ ...item, selected: false })));
+      }else setExtraItems([]);
+    })
+  }, [product.display_name])
 
   useEffect(()=>{
     let formValues = {
@@ -108,19 +117,30 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     }
     setFormValidation(updatedFormValidation);
     if(flag == false) return false;
-
+    
     const newItem = {
       family_id: product.id,
       family: product.family,
       display_name: product.display_name,
-      quantity: formValues.quantity, 
+      quantity: 1, 
       price_group_id: product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
       special_instructions: "", 
       img_url: product?.img_url ?? '',
       size: formValues.size,
     }
-    addReservationItem(newItem);
+
+    let updatedReservationItems = [...ReservationItems];
+    
+    if(formValues.quantity){
+      for(let i=0; i<formValues.quantity; i++){
+        updatedReservationItems.push(newItem);
+      }
+    }
+
+    setReservationItems(updatedReservationItems);
+
+    // addReservationItem(newItem);
 
     setTimeout(()=>{
       // setFormValues({size:null, quantity:null});
@@ -143,8 +163,8 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   }
 
   const renderAddToCartFC = () => (
-    <Box sx={{width:matches900?'130px':'100%'}}>
-      {(product.lines && product.lines.length) ? 
+    <Box sx={{width:matches900?'86%':'100%'}}>
+      {/* {(product.lines && product.lines.length) ? 
         <CustomSelect
           error={formValidation.size === false?true:false}
           label={"Size"}
@@ -155,7 +175,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           helperText={formValidation.size === false?'Not selected':''}
           onChange={(event:any)=>updateFormValue('size', event.target.value)} />
         : <></>
-      }
+      } */}
       <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
         <CustomBorderInput
           error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
@@ -196,36 +216,31 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     <Box
       sx={{marginBottom:'10px', ...sx}}
     >
-      <Box sx={{ border: '1px solid #ABABAB', padding: matches900?'30px':'16px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
+      <Box sx={{ border: '1px solid #ABABAB', padding: matches900?'34px 30px 30px':'16px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
         {!matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
-        <Box sx={{ display: 'flex', flexDirection: matches900?'row':'column' }}>
-          <img 
-            src={API_URL + product.img_url} 
-            alt={product.display_name} 
-            style={{ height: '150px', width: 'auto', alignSelf:matches900?'flex-start':'center', display:imageLoadError?'none':'block' }}
-            onError={() =>{setImageLoadError(true)}}
-            onLoad={()=>{setImageLoadError(false)}}
-          />
-          {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'130px', paddingRight:'60px', paddingLeft:'10px', color:"#333"}}/>}
-          <Box sx={{ flex: 1, ml: '20px', textAlign:'left' }}>
+        <Box sx={{ display: 'flex', flexDirection: matches900?'row':'column-reverse' }}>
+          <Box sx={{ flex: 1, textAlign:'left' }}>
             {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
             <Typography dangerouslySetInnerHTML={{ __html: product?.summary ?? '' }} />
             <Typography dangerouslySetInnerHTML={{ __html: product?.description }} />
-              {/* <h2 style={{ marginTop: 0, marginBottom: '20px' }}>{product?.display_name ?? ''}</h2> */}
-              {/* <div>{product?.summary ?? ''}</div> */}
-              {/* <div>{product?.size ?? ''}</div> */}
-              {/* <div>25 fit rides 53 to 52</div> */}
-              {/* <div>{product?.description ?? ''}</div> */}
-              {/* <div>baskets needed</div>
-              <div style={{ marginTop: '20px' }}>Medium rider weight 250lb</div> */}
           </Box>
-          {matches900 && renderAddToCartFC()}
+          <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+            <img 
+              src={API_URL + product.img_url} 
+              alt={product.display_name} 
+              style={{ height: '150px', width: 'auto', display:imageLoadError?'none':'block', marginBottom:'16px' }}
+              onError={() =>{setImageLoadError(true)}}
+              onLoad={()=>{setImageLoadError(false)}}
+            />
+            {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'130px', color:"#333", marginBottom:'16px'}}/>}
+            {matches900 && renderAddToCartFC()}
+          </Box>
         </Box>
         <Box style={{position:'relative', paddingBottom:'92px', paddingTop:'12px', marginTop:'20px', borderTop:'1px solid #bababa'}}>
           <Typography style={{textAlign:'left', fontWeight:'700'}}>{"Extras"}</Typography>
           <Box style={{width:'100%', position:'absolute', overflow:'auto'}}>
             <Box style={{whiteSpace:'nowrap', textAlign:'left', padding:"12px 0 6px"}}>
-              {extraItems.length && extraItems.map((extra, index)=>(
+              {extraItems.length > 0 && extraItems.map((extra, index)=>(
                 <ExtraItem
                   key={index}
                   sx={{display:'inline-block', marginRight:'16px', minWidth:'240px'}}
