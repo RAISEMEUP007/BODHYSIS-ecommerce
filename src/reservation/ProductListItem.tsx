@@ -8,6 +8,7 @@ import CustomBorderInput from '../common/CustomBorderInput';
 import CustomSelect from '../common/CustomSelect';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import { getExtrasDataByDisplayName } from '../api/Product';
 
 interface props {
   product: any;
@@ -44,8 +45,16 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
   });
 
   useEffect(()=>{
-    if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
-  }, [extras])
+    // if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
+    const payload = {
+      display_name: product.display_name
+    }
+    getExtrasDataByDisplayName(payload, (jsonRes, status)=>{
+      if(status == 200 && Array.isArray(jsonRes)){
+        setExtraItems(jsonRes.map(item=>({ ...item, selected: false })));
+      }else setExtraItems([]);
+    })
+  }, [product.display_name])
 
   useEffect(()=>{
     let formValues = {
@@ -108,7 +117,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
     }
     setFormValidation(updatedFormValidation);
     if(flag == false) return false;
-
+    
     const newItem = {
       family_id: product.id,
       family: product.family,
@@ -231,7 +240,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
           <Typography style={{textAlign:'left', fontWeight:'700'}}>{"Extras"}</Typography>
           <Box style={{width:'100%', position:'absolute', overflow:'auto'}}>
             <Box style={{whiteSpace:'nowrap', textAlign:'left', padding:"12px 0 6px"}}>
-              {extraItems.length && extraItems.map((extra, index)=>(
+              {extraItems.length > 0 && extraItems.map((extra, index)=>(
                 <ExtraItem
                   key={index}
                   sx={{display:'inline-block', marginRight:'16px', minWidth:'240px'}}
