@@ -53,7 +53,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   useEffect(()=>{
     calcData(ReservationItems);
-  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length])
+  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length, ReservationMain.driver_tip])
 
   const calcData = async (ReservationItems:Array<any>) =>{
     const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
@@ -64,14 +64,16 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
       tax: 0,
       total: 0,
     }
+    
     calculatedReservedItems.map((item:any)=>{
       let subtotal = item.price || 0;
-      let tax = (item.price || 0) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-      let total = subtotal + tax;
       prices.subtotal += subtotal;
-      prices.tax += tax;
-      prices.total += total;
     });
+
+    if(ReservationMain.driver_tip) prices.subtotal += ReservationMain.driver_tip;
+    prices.tax = prices.subtotal * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
+    prices.total += prices.subtotal + prices.tax;
+
     setReservationValue('prices', prices);
   }
 
