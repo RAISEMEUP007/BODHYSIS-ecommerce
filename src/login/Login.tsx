@@ -129,6 +129,16 @@ const Login: React.FC = () => {
     const updatedSignUpFormValidation = { ...signUpFormValidation };
     for (const key in signUpFormValues) {
       switch(key){
+
+        /* --- BOH-295 --- */
+        case 'home_address':
+        case 'address2':
+        case 'city':
+        case 'state':
+        case 'zipcode':
+          break;
+        /* --- BOH-295 --- */
+
         case 'address2':
           updatedSignUpFormValidation.address2 = null;
           break;
@@ -411,10 +421,30 @@ const Login: React.FC = () => {
                   value={signUpFormValues.confirm_password} 
                   required={true}
                   helperText={signUpFormValidation.confirm_password === false?'Please enter the confirm password':signUpFormValidation.confirm_password === 'notmatch'? 'Password does not match' : ''}
-                  onChange={(event)=>updateSingUpFormValue('confirm_password', event.target.value)} />
+                  onChange={(event)=>updateSingUpFormValue('confirm_password', event.target.value)} 
+                  onKeyUp={(event) => {
+                    if (event.key === 'Enter') {
+                      handleSignUp();
+                    }
+                  }}
+                />
               </Box>
-              <Typography style={{marginTop: '20px', marginBottom:'20px', fontStyle: 'bold', fontWeight: 600, textDecoration:'unline'}}>{"Billing Address"}</Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              <Typography 
+                style={{
+                  display:'none', /* BOH-295 */
+                  marginTop: '20px', 
+                  marginBottom:'20px', 
+                  fontStyle: 'bold', 
+                  fontWeight: 600, 
+                  textDecoration:'unline'
+                }}>{"Billing Address"}</Typography>
+              <Box 
+                sx={{ 
+                  // display: 'flex', 
+                  display:'none', /* BOH-295 */
+                  justifyContent: 'space-between', 
+                  flexWrap: 'wrap' 
+                }}>
                 <CustomBorderInput
                   error={signUpFormValidation.home_address === false?true:false}
                   containerstyle={styles.signUpInput}
@@ -434,7 +464,14 @@ const Login: React.FC = () => {
                   // helperText={signUpFormValidation.address2 === false?'Please enter the address2':''}
                   onChange={(event)=>updateSingUpFormValue('address2', event.target.value)} />
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+              <Box 
+                sx={{ 
+                  // display: 'flex', 
+                  display:'none', /* BOH-295 */
+                  flexDirection: 'row', 
+                  flexWrap: 'wrap', 
+                  justifyContent: 'space-between' 
+                }}>
                 <CustomBorderInput
                   error={signUpFormValidation.city === false?true:false}
                   containerstyle={styles.signUpInput2}
@@ -495,7 +532,13 @@ const Login: React.FC = () => {
                 value={signInFormValues.password} 
                 required={true}
                 helperText={signInFormValidation.password === false?'Please enter the password':''}
-                onChange={(event)=>updateSingInFormValue('password', event.target.value)} />
+                onChange={(event)=>updateSingInFormValue('password', event.target.value)} 
+                onKeyUp={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSignIn();
+                  }
+                }}
+              />
                 <LoadingButton
                   variant="contained"
                   sx={styles.logInButton}
