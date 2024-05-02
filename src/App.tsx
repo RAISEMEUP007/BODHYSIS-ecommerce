@@ -12,6 +12,7 @@ import Thankyou from './thankyou/Thankyou';
 import Login from './login/Login';
 import UserNotFound from './error/UserNotFound';
 import PageNotFound from './error/PageNotFound';
+import Temp from './thankyou/Temp';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="/review" element={<Payment />} />
             <Route path="/completepurchase" element={<CompletePurchase />} />
             <Route path="/thankyou" element={<Thankyou/>} />
+            <Route path="/test" element={<Temp/>} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
