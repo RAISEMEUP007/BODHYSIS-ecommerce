@@ -12,7 +12,7 @@ import { getExtrasDataByDisplayName } from '../api/Product';
 
 interface props {
   product: any;
-  extras: Array<any>;
+  extras?: Array<any>;
   sx?: object;
 }
 
@@ -26,7 +26,7 @@ type formValidation = {
   quantity: boolean | null | 'negative',
 }
 
-const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
+const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const { ReservationItems, setReservationItems, addReservationItem } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
@@ -90,6 +90,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
 
   const addToCart = () => {
     let flag = true;
+    console.log(formValues);
     const updatedFormValidation = { ...formValidation };
     for (const key in formValues) {
       switch(key){
@@ -103,16 +104,16 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
             flag = false;
           }else updatedFormValidation.quantity = true;
           break;
-        case 'size':
-          if(product.lines && product.lines.length){
-            if (!formValues[key as keyof typeof formValues]) {
-              updatedFormValidation[key as keyof typeof formValues] = false;
-              flag = false;
-            } else {
-              updatedFormValidation[key as keyof typeof formValues] = true;
-            }
-          }
-          break;
+        // case 'size':
+        //   if(product.lines && product.lines.length){
+        //     if (!formValues[key as keyof typeof formValues]) {
+        //       updatedFormValidation[key as keyof typeof formValues] = false;
+        //       flag = false;
+        //     } else {
+        //       updatedFormValidation[key as keyof typeof formValues] = true;
+        //     }
+        //   }
+        //   break;
       }
     }
     setFormValidation(updatedFormValidation);
@@ -158,7 +159,7 @@ const ProductListItem: React.FC<props> = ({ sx, product, extras }) => {
       }else setSizes([]);
 
       setFormValidation({size:null, quantity:null});
-      setExtraItems(extras.map(item => ({ ...item, selected: false })));
+      setExtraItems(extraItems.map(item => ({ ...item, selected: false })));
     }, 100);
   }
 
