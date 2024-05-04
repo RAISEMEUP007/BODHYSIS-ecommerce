@@ -56,6 +56,10 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length, ReservationMain.driver_tip])
 
   const calcData = async (ReservationItems:Array<any>) =>{
+    console.log("---------------- headerData -----------------");
+    console.log(headerData);
+    console.log("--------------- ReservationItems ----------------------");
+    console.log(ReservationItems);
     const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
     setReservationItems(calculatedReservedItems);
 
