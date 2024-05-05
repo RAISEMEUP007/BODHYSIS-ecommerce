@@ -66,6 +66,9 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
     // console.log(updatedReversedHeaderData);
 
     const diff = new Date(endDate).getTime() - new Date(startDate).getTime();
+    console.log(endDate);
+    console.log(startDate);
+    console.log(diff);
 
     const basedonPoint  = updatedReversedHeaderData.find((item:any) => {
       if(item.value>0 && item.milliseconds >= diff){
@@ -77,10 +80,10 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
 
     let price = 0;
     if(basedonPoint){
-      if(Math.floor(diff/(1000 * 60 * 60 *24)) == 0) price = basedonPoint.pricePH * Math.floor(diff/(1000 * 60 * 60));
-      else price = basedonPoint.pricePD * Math.floor(diff/(1000 * 60 * 60 * 24));
+      // if(Math.floor(diff/(1000 * 60 * 60 *24)) == 0) price = basedonPoint.pricePH * Math.floor(diff/(1000 * 60 * 60));
+      // else price = basedonPoint.pricePD * Math.floor(diff/(1000 * 60 * 60 * 24));
 
-      price = Math.round(price*100)/100 * item.quantity;
+      price = Math.round(basedonPoint.value*100)/100 * item.quantity;
     }
 
     //calcualte extras price
