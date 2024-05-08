@@ -16,7 +16,7 @@ import Temp from './thankyou/Temp';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
-  const { getStoreDetails, setStoreDetails } = useStoreDetails();
+  const { storeDetails, getStoreDetails, setStoreDetails } = useStoreDetails();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ const InitializeApp = ({ children } : {children:any}) => {
     fetchData();
   }, []);
 
-  if (getStoreDetails() === null) {
+  if (!storeDetails.brand_id) {
     return <div>Not registered store...</div>;
   }
 
@@ -42,6 +42,7 @@ const InitializeApp = ({ children } : {children:any}) => {
 };
 
 const App = () => {
+
   return (
     <Providers>
       <InitializeApp>

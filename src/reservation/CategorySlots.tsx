@@ -4,6 +4,7 @@ import { Box, BoxProps, Typography } from '@mui/material';
 import { getProductCategoriesData } from '../api/Product';
 import CategoryItem from './CategoryItem';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 
 interface Props {
   title: string;
@@ -15,14 +16,27 @@ interface Props {
 const CategorySlot: React.FC<Props & BoxProps> = ({ title, sx, selectedCategory, setSelectedCategory, ...rest }) => {
 
   const { matches900 } = useResponsiveValues();
+  const { storeDetails } = useStoreDetails();
 
   const [categories, setCategories] = useState<Array<any>>([]);
 
-  useEffect(()=>{
-    getProductCategoriesData((jsonRes:any)=>{
-      setCategories(jsonRes);
+  useEffect(() => {
+    getProductCategoriesData((jsonRes: any, status: any) => {
+      if (status == 200 && Array.isArray(jsonRes) && jsonRes.length) {
+        console.log(storeDetails.brand_id);
+        const filteredCategories = jsonRes.filter((item: any) => {
+          console.log(item.brand_ids);
+          if(!item.brand_ids) return false;
+          const brandsIds = JSON.parse(item.brand_ids);
+          return brandsIds.includes(storeDetails.brand_id);
+        });
+        setCategories(filteredCategories);
+      } else {
+        setCategories([]);
+      }
     });
   }, []);
+  
 
   useEffect(()=>{
     if(categories.length){
