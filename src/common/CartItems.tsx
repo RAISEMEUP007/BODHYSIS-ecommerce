@@ -98,7 +98,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
             {`Your reservation `}
             <b style={{fontSize:'1.1em', fontWeight:700}}>ends</b>
             {` at `}
-            <b style={{fontSize:'1.1em', fontWeight:700}}>8:30 am</b>
+            <b style={{fontSize:'1.1em', fontWeight:700}}>8:00 am</b>
             {` on `}
             <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
           </Alert>
