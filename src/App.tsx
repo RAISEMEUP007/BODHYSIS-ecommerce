@@ -35,7 +35,7 @@ const InitializeApp = ({ children } : {children:any}) => {
   }, []);
 
   if (!storeDetails.brand_id) {
-    return <div>Not registered store...</div>;
+    return <div>Loading Store Details...</div>;
   }
 
   return children;
