@@ -10,6 +10,7 @@ import CategorySlot from './CategorySlots';
 import ProductList from './ProductList';
 import ReservationTerm from './ReservationTerm';
 import DeliveryLocation from './DeliveryLocation';
+import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 
 interface props {
   sx?: object;
@@ -20,6 +21,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const [productFamilies, setProductFamilies] = useState<Array<any>>([]);
   const { matches900 } = useResponsiveValues();
+  const { storeDetails } = useStoreDetails();
 
   const [extras, setExtras] = useState<Array<any>>([]);
 
@@ -32,7 +34,18 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
 
   useEffect(() => {
     if (selectedCategory) {
-      getProductFamiliesData(selectedCategory.id, (jsonRes: any) => { setProductFamilies(jsonRes) })
+      getProductFamiliesData(selectedCategory.id, (jsonRes: any, status: any) => { 
+        if (status === 200 && Array.isArray(jsonRes) && jsonRes.length) {
+          const filteredCategories = jsonRes.filter((item: any) => {
+            if(!item.brand_ids) return false;
+            const brandsIds = JSON.parse(item.brand_ids);
+            return brandsIds.includes(storeDetails.brand_id);
+          });
+          setProductFamilies(filteredCategories);
+        } else {
+          setProductFamilies([]);
+        }
+      })
     } else setProductFamilies([]);
   }, [selectedCategory]);
 
