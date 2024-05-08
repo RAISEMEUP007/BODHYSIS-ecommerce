@@ -52,6 +52,10 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   }, [ReservationMain.price_table_id]);
 
   useEffect(()=>{
+    setReservationValue('headerData', headerData);
+  }, [headerData])
+
+  useEffect(()=>{
     calcData(ReservationItems);
   }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length, ReservationMain.driver_tip])
 

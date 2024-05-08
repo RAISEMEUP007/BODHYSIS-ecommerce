@@ -8,7 +8,9 @@ import CustomBorderInput from '../common/CustomBorderInput';
 import CustomSelect from '../common/CustomSelect';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
-import { getExtrasDataByDisplayName } from '../api/Product';
+import { getExtrasDataByDisplayName, getPriceDataByGroup } from '../api/Product';
+import { calculatePricedEquipmentData } from './CalcPrice';
+import { setPriority } from 'os';
 
 interface props {
   product: any;
@@ -28,7 +30,8 @@ type formValidation = {
 
 const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
-  const { ReservationItems, setReservationItems, addReservationItem } = useCustomerReservation();
+  const [Product, SetProduct] = useState(product);
+  const { ReservationItems, setReservationItems, ReservationMain } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
   const [sizes, setSizes] = useState<Array<any>>([]);
@@ -47,30 +50,41 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   useEffect(()=>{
     // if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
     const payload = {
-      display_name: product.display_name
+      display_name: Product.display_name
     }
     getExtrasDataByDisplayName(payload, (jsonRes, status)=>{
       if(status == 200 && Array.isArray(jsonRes)){
         setExtraItems(jsonRes.map(item=>({ ...item, selected: false })));
       }else setExtraItems([]);
     })
-  }, [product.display_name])
+  }, [Product.display_name])
 
   useEffect(()=>{
     let formValues = {
       size: null,
       quantity: 1,
     }
-    if(product.lines){
-      if(product.lines.length){
-        var size = product.lines[0].linesSizes.split(',')[0];
-        setSizes(product.lines[0].linesSizes.split(','));
-        formValues.size = product.lines[0].linesSizes.split(',')[0];
+    if(Product.lines){
+      if(Product.lines.length){
+        var size = Product.lines[0].linesSizes.split(',')[0];
+        setSizes(Product.lines[0].linesSizes.split(','));
+        formValues.size = Product.lines[0].linesSizes.split(',')[0];
       }
       setFormValues(formValues);
     }else setSizes([]);
-  }, [product]);
+  }, [Product]);
 
+  useEffect(()=>{
+    if(Product?.lines[0]?.price_group_id && ReservationMain.price_table_id){
+      const calc = async ()=>{
+        const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
+        const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, lines, ReservationMain.pickup, ReservationMain.dropoff);
+        SetProduct({ ...Product, lines: calculatedLines });
+      }
+      calc();
+    }
+  }, [ReservationMain.headerData, product, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff]);
+  // console.log(Product);
   const setSelected = (index:number, selected:boolean) => {
     const updatedExtras = [...extraItems];
     updatedExtras[index] = { ...updatedExtras[index], selected };
@@ -105,7 +119,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           }else updatedFormValidation.quantity = true;
           break;
         // case 'size':
-        //   if(product.lines && product.lines.length){
+        //   if(Product.lines && Product.lines.length){
         //     if (!formValues[key as keyof typeof formValues]) {
         //       updatedFormValidation[key as keyof typeof formValues] = false;
         //       flag = false;
@@ -120,14 +134,14 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     if(flag == false) return false;
     
     const newItem = {
-      family_id: product.id,
-      family: product.family,
-      display_name: product.display_name,
+      family_id: Product.id,
+      family: Product.family,
+      display_name: Product.display_name,
       quantity: 1, 
-      price_group_id: product?.lines[0]?.price_group_id ?? 0, 
+      price_group_id: Product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
       special_instructions: "", 
-      img_url: product?.img_url ?? '',
+      img_url: Product?.img_url ?? '',
       size: formValues.size,
     }
 
@@ -149,11 +163,11 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         size: null,
         quantity: 1,
       }
-      if(product.lines){
-        if(product.lines.length){
-          var size = product.lines[0].linesSizes.split(',')[0];
-          setSizes(product.lines[0].linesSizes.split(','));
-          formValues.size = product.lines[0].linesSizes.split(',')[0];
+      if(Product.lines){
+        if(Product.lines.length){
+          var size = Product.lines[0].linesSizes.split(',')[0];
+          setSizes(Product.lines[0].linesSizes.split(','));
+          formValues.size = Product.lines[0].linesSizes.split(',')[0];
         }
         setFormValues(formValues);
       }else setSizes([]);
@@ -165,7 +179,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const renderAddToCartFC = () => (
     <Box sx={{width:matches900?'86%':'100%'}}>
-      {/* {(product.lines && product.lines.length) ? 
+      {/* {(Product.lines && Product.lines.length) ? 
         <CustomSelect
           error={formValidation.size === false?true:false}
           label={"Size"}
@@ -218,17 +232,22 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       sx={{marginBottom:'10px', ...sx}}
     >
       <Box sx={{ border: '1px solid #ABABAB', padding: matches900?'34px 30px 30px':'16px', borderRadius: '10px', boxSizing:'border-box', width: '100%' }}>
-        {!matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
+        {!matches900 && 
+          <Box display={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+            <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{Product?.display_name ?? ''}</Typography>
+            <Typography style={{fontSize:'24px', fontWeight:'700', color:'#4599D6', font:'Roboto'}}>{Product?.lines[0]?.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) ?? ''}</Typography>
+          </Box>}
         <Box sx={{ display: 'flex', flexDirection: matches900?'row':'column-reverse' }}>
           <Box sx={{ flex: 1, textAlign:'left' }}>
-            {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{product?.display_name ?? ''}</Typography>}
-            <Typography dangerouslySetInnerHTML={{ __html: product?.summary ?? '' }} />
-            <Typography dangerouslySetInnerHTML={{ __html: product?.description }} />
+            {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', font:'Roboto'}}>{Product?.display_name ?? ''}</Typography>}
+            <Typography dangerouslySetInnerHTML={{ __html: Product?.summary ?? '' }} />
+            <Typography dangerouslySetInnerHTML={{ __html: Product?.description }} />
           </Box>
           <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+            {matches900 && <Typography style={{fontSize:'24px', fontWeight:'700', alignSelf:'flex-end', color:'#4599D6', font:'Roboto', marginRight:'16px', marginBottom:'10px'}}>{Product?.lines[0]?.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) ?? ''}</Typography>}
             <img 
-              src={API_URL + product.img_url} 
-              alt={product.display_name} 
+              src={API_URL + Product.img_url} 
+              alt={Product.display_name} 
               style={{ height: '150px', width: 'auto', display:imageLoadError?'none':'block', marginBottom:'16px' }}
               onError={() =>{setImageLoadError(true)}}
               onLoad={()=>{setImageLoadError(false)}}

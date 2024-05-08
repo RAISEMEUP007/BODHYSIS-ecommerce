@@ -10,6 +10,7 @@ export interface ReservationMainProps {
     total: number;
   },
   price_table_id: number | null;
+  headerData: Array<any>;
   name: string;
   special_instructions: string;
   address: string;
@@ -51,6 +52,7 @@ const initializedMain: ReservationMainProps = {
     total: 0,
   },
   price_table_id: null,
+  headerData: [],
   name: "",
   special_instructions: "",
   address: "",
