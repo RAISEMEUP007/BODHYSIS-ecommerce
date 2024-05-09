@@ -53,6 +53,7 @@ export default function CheckoutForm() {
     });
 
     const forSavingOnDB = {
+      brand_id : storeDetails.brand_id,
       start_date : ReservationMain.pickup,
       end_date : ReservationMain.dropoff,
       subtotal : ReservationMain.prices.subtotal,
