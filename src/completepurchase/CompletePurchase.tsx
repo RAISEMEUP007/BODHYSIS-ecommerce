@@ -69,6 +69,7 @@ const CompletePurchase: React.FC = () => {
         <Purchase 
           title='Reservation Details' 
           buttonTitle="Complete Purchase"
+          isDisableDriverTip={true}
         />
       </Box>
     </BasicLayout>

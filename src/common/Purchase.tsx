@@ -20,6 +20,7 @@ interface Props {
   isLoading?:boolean;
   isShowItems?:boolean;
   isRemovalItems?:boolean;
+  isDisableDriverTip?:boolean;
   onComplete?: (event: any) => void;
 }
 
@@ -27,7 +28,7 @@ type inputValidation = {
   driver_tip: boolean | null | 'negative',
 }
 
-const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, onComplete }) => {
+const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, isDisableDriverTip, onComplete }) => {
 
   const { ReservationItems, ReservationMain, setReservationValue, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
@@ -117,6 +118,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
             error={(inputValidation.driver_tip === false || inputValidation.driver_tip == 'negative')?true:false}
             type="number"
             defaultValue={ReservationMain.driver_tip.toFixed(2)}
+            disabled={isDisableDriverTip}
             inputProps={{
               min: 0,
               type: 'number',
