@@ -116,8 +116,9 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
         sx={{alignItems:'flex-start', ml:'0px', mt: '30px' }}
         label={(
           <span>
-            {'I accept the HHI Rentals LLC'}
-            <Link onClick={(e)=>{e.preventDefault()}}>{` Terms and agree to the use of my phone number and/or email address for updates about my order delivery, use, and pickup.*`}</Link>
+            {'I accept the HHI Rentals LLC '}
+            <Link onClick={(e)=>{e.preventDefault()}}>{`Terms and agree`}</Link>
+            {'  to the use of my phone number and/or email address for updates about my order delivery, use, and pickup.*'}
           </span>
         )}
         control={<Checkbox checked={ReservationMain.is_accept} sx={{padding:'0px', mr:'10px'}} onChange={handleAccountCheck} />}

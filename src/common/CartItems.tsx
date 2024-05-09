@@ -109,7 +109,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, sx, onComplete, isLoadi
             <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
           </Box>
           <Box sx={styles.purchase}>
-            <div>{`Tax(${(storeDetails.sales_tax ? (storeDetails.sales_tax / 100).toLocaleString(undefined, {style: 'percent'}) : 'n/a')})`}</div>
+            <div>{`Tax (${(storeDetails.sales_tax ? (storeDetails.sales_tax / 100).toLocaleString(undefined, {style: 'percent'}) : 'n/a')})`}</div>
             <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
           </Box>
           <Box sx={[styles.purchase, {borderTop:'1px solid black', marginTop:'12px', paddingTop:'12px'}]}>
