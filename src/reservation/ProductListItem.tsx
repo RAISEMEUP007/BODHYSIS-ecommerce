@@ -3,14 +3,15 @@ import { Box, Button, Typography } from '@mui/material';
 import { API_URL } from '../common/AppConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
-import ExtraItem from './ExtraItem';
+
+import { getExtrasDataByDisplayName } from '../api/Product';
 import CustomBorderInput from '../common/CustomBorderInput';
-import CustomSelect from '../common/CustomSelect';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
-import { getExtrasDataByDisplayName, getPriceDataByGroup } from '../api/Product';
+import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
+
+import ExtraItem from './ExtraItem';
 import { calculatePricedEquipmentData } from './CalcPrice';
-import { setPriority } from 'os';
 
 interface props {
   product: any;
@@ -30,6 +31,7 @@ type formValidation = {
 
 const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
+  const { storeDetails } = useStoreDetails();
   const [Product, SetProduct] = useState(product);
   const { ReservationItems, setReservationItems, ReservationMain } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
@@ -48,9 +50,9 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   });
 
   useEffect(()=>{
-    // if(extras.length) setExtraItems(extras.map(item => ({ ...item, selected: false })));
     const payload = {
-      display_name: Product.display_name
+      display_name: Product.display_name,
+      brand_id: storeDetails.brand_id,
     }
     getExtrasDataByDisplayName(payload, (jsonRes, status)=>{
       if(status == 200 && Array.isArray(jsonRes)){

@@ -16,27 +16,28 @@ import Temp from './thankyou/Temp';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
-  const { storeDetails, getStoreDetails, setStoreDetails } = useStoreDetails();
+  const { storeDetails, setStoreDetails } = useStoreDetails();
+
+  const [ loadingFailed, setLoadingFailed ] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const currentURL = window.location.href;
       const host = new URL(currentURL).host;
-      console.log(host);
       await getStoreDetailDB({store_url:host}, (jsonRes:any, status)=>{
         if(status == 200){
           setStoreDetails(jsonRes);
           document.title = jsonRes.store_name;
-        }
+        }else setLoadingFailed(true);
       });
     };
 
     fetchData();
   }, []);
 
-  if (!storeDetails.brand_id) {
-    return <div>Loading Store Details...</div>;
-  }
+  if (!storeDetails.brand_id) return <div>{"Loading Store Details..."}</div>;
+
+  if(loadingFailed) return <div>{"Not registered store..."}</div>;
 
   return children;
 };

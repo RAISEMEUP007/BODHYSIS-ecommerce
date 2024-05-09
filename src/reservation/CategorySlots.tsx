@@ -23,9 +23,7 @@ const CategorySlot: React.FC<Props & BoxProps> = ({ title, sx, selectedCategory,
   useEffect(() => {
     getProductCategoriesData((jsonRes: any, status: any) => {
       if (status == 200 && Array.isArray(jsonRes) && jsonRes.length) {
-        console.log(storeDetails.brand_id);
         const filteredCategories = jsonRes.filter((item: any) => {
-          console.log(item.brand_ids);
           if(!item.brand_ids) return false;
           const brandsIds = JSON.parse(item.brand_ids);
           return brandsIds.includes(storeDetails.brand_id);
