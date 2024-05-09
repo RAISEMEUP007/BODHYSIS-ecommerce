@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { Box, Typography, } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faUserCircle, } from '@fortawesome/free-regular-svg-icons';
 
-import { logIn, register, testTokenVaild } from '../api/Auth';
+import { adminTry, logIn, register, testTokenVaild } from '../api/Auth';
 import CustomBorderInput from '../common/CustomBorderInput';
 import BasicLayout from '../common/BasicLayout';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
@@ -54,7 +54,9 @@ type signInFormValidation = {
 
 const Login: React.FC = () => {
 
+  const location = useLocation();
   const navigate = useNavigate();
+  
   const { matches900 } = useResponsiveValues();
   const { enqueueSnackbar } = useSnackbar();
   const { initReservation } = useCustomerReservation();
@@ -304,11 +306,80 @@ const Login: React.FC = () => {
   }
 
   useEffect(()=>{
-    const accessToken = localStorage.getItem('access-token');
-    if(accessToken){
-      testTokenVaild((jsonRes:any, status:any)=>{
-        if(status == 200) navigate('/reservation');
+    const queryParams = new URLSearchParams(location.search);
+    const id = queryParams.get('id');
+    const mode = queryParams.get('mode');
+    const t = queryParams.get('t');
+
+    if(id && mode && t){
+      localStorage.setItem('access-token', t);
+      localStorage.removeItem('full-name');
+      localStorage.removeItem('customerId');
+      localStorage.removeItem('customer_email');
+      localStorage.removeItem('customer_phone_number');
+      const payload:any = {
+        customer_id:id,
+        mode,
+        t,
+      }
+      adminTry(payload, (jsonRes:any, status:any)=>{
+        // console.log(jsonRes); return;
+        switch (status) {
+          case 200:
+            localStorage.setItem('access-token', jsonRes.refreshToken);
+            localStorage.setItem('full-name', jsonRes.fullName);
+            localStorage.setItem('customerId', jsonRes.customerId);
+            localStorage.setItem('customer_email', jsonRes.email);
+            localStorage.setItem('customer_phone_number', jsonRes.phone_number);
+            initReservation();
+            navigate('/reservation');
+            break;
+          case 403:
+            enqueueSnackbar("Incorrect pasword", {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+            break;
+          case 404:
+            // navigate('/usernotfound');
+            break;
+          case 500:
+            enqueueSnackbar("Server Error", {
+              variant: 'error',
+              style: { width: '300px' },
+              autoHideDuration: 3000,
+              anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            })
+            break;
+          default:
+            if (jsonRes && jsonRes.error){
+              enqueueSnackbar(jsonRes.error, {
+                variant: 'error',
+                style: { width: '300px' },
+                autoHideDuration: 3000,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+              })
+            }
+            else{
+              enqueueSnackbar("unKnown Error", {
+                variant: 'error',
+                style: { width: '300px' },
+                autoHideDuration: 3000,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+              })
+            }
+            break;
+        }
       });
+    }else {
+      const accessToken = localStorage.getItem('access-token');
+      if(accessToken){
+        testTokenVaild((jsonRes:any, status:any)=>{
+          if(status == 200) navigate('/reservation');
+        });
+      }
     }
   }, [])
 
