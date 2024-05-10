@@ -109,6 +109,11 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   }
 
   const updateQuantity = async (value:any) => {
+    const result = await verifyQuantity(value);
+    if(result) updateFormValue('quantity', parseInt(value));
+  }
+
+  const verifyQuantity = async (value:any) => {
     if(!isNaN(parseInt(value)) && parseInt(value) && value > 0 && ReservationMain.pickup && ReservationMain.dropoff) {
       const payload = {
         start_date: formatDateString(ReservationMain.pickup),
@@ -120,7 +125,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       }
       const respose:any = await verifyQuantityByDisplayName(payload);
       if(respose.status == 200){
-        updateFormValue('quantity', parseInt(value));
+        return true;
       }else if(respose.status == 400){
         setFormValidation(prevState => ({
           ...prevState,
@@ -134,12 +139,14 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
         })
       }
+      return false;
     }
-  }
+    return false;
+  };
 
   useEffect(()=>{
-    setTimeout(()=>{updateQuantity(formValues.quantity)}, 100)
-  }, [formValues.quantity, ReservationItems.length])
+    verifyQuantity(formValues.quantity)
+  }, [ReservationItems.length])
 
   const addToCart = () => {
     let flag = true;
@@ -171,6 +178,9 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     }
     setFormValidation(updatedFormValidation);
     if(flag == false) return false;
+
+    const quantityVerify = verifyQuantity(formValues.quantity);
+    if(!quantityVerify) return false;
     
     const newItem = {
       family_id: Product.id,
