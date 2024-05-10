@@ -4,14 +4,16 @@ import { API_URL } from '../common/AppConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 
-import { getExtrasDataByDisplayName } from '../api/Product';
+import { getExtrasDataByDisplayName, verifyQuantityByDisplayName } from '../api/Product';
 import CustomBorderInput from '../common/CustomBorderInput';
+import { useSnackbar } from 'notistack';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 
 import ExtraItem from './ExtraItem';
 import { calculatePricedEquipmentData } from './CalcPrice';
+import { formatDateString } from '../common/Utils';
 
 interface props {
   product: any;
@@ -21,19 +23,21 @@ interface props {
 
 type formValue = {
   size: any,
-  quantity: number | null,
+  quantity: number,
 }
 
 type formValidation = {
   size: boolean | null,
-  quantity: boolean | null | 'negative',
+  quantity: boolean | null | 'negative' | 'quantity',
 }
 
 const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
+  const { enqueueSnackbar } = useSnackbar();
   const { storeDetails } = useStoreDetails();
-  const [Product, SetProduct] = useState(product);
   const { ReservationItems, setReservationItems, ReservationMain } = useCustomerReservation();
+
+  const [Product, SetProduct] = useState(product);
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
   const [sizes, setSizes] = useState<Array<any>>([]);
@@ -41,7 +45,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const [formValues, setFormValues] = useState<formValue>({
     size: null,
-    quantity: null,
+    quantity: 1,
   });
 
   const [formValidation, setFormValidation] = useState<formValidation>({
@@ -104,9 +108,42 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     }));
   }
 
+  const updateQuantity = async (value:any) => {
+    if(!isNaN(parseInt(value)) && parseInt(value) && value > 0 && ReservationMain.pickup && ReservationMain.dropoff) {
+      const payload = {
+        start_date: formatDateString(ReservationMain.pickup),
+        end_date: formatDateString(ReservationMain.dropoff),
+        display_name: product.display_name,
+        category_id: product.category_id,
+        quantity: parseInt(value),
+        pre_quantity: ReservationItems.filter(item => item.display_name === product.display_name).length,
+      }
+      const respose:any = await verifyQuantityByDisplayName(payload);
+      if(respose.status == 200){
+        updateFormValue('quantity', parseInt(value));
+      }else if(respose.status == 400){
+        setFormValidation(prevState => ({
+          ...prevState,
+          quantity: 'quantity'
+        }));
+      }else {
+        enqueueSnackbar("Server Error", {
+          variant: 'error',
+          style: { width: '300px' },
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        })
+      }
+    }
+  }
+
+  useEffect(()=>{
+    setTimeout(()=>{updateQuantity(formValues.quantity)}, 100)
+  }, [formValues.quantity, ReservationItems.length])
+
   const addToCart = () => {
     let flag = true;
-    console.log(formValues);
+    // console.log(formValues);
     const updatedFormValidation = { ...formValidation };
     for (const key in formValues) {
       switch(key){
@@ -178,7 +215,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       setExtraItems(extraItems.map(item => ({ ...item, selected: false })));
     }, 100);
   }
-
+  // console.log(formValues);
   const renderAddToCartFC = () => (
     <Box sx={{width:matches900?'86%':'100%'}}>
       {/* {(Product.lines && Product.lines.length) ? 
@@ -203,20 +240,25 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           inputProps={{
             min:1
           }}
-          value={formValues.quantity || ''} 
+          // value={formValues.quantity} 
+          defaultValue={formValues.quantity}
           required={true}
           helperText={
             formValidation.quantity === false
               ? 'Invalid'
               : formValidation.quantity === 'negative'
               ? `Not positive`
+              : formValidation.quantity === 'quantity'
+              ? `Out of Stock`
               : ''
           }
-          onChange={(event)=>updateFormValue('quantity', event.target.value)} 
+          onChange={(event)=>updateQuantity(event.target.value)} 
           onScroll={(e)=>{e.preventDefault(); e.stopPropagation();}}
         />
+        {/* <CustomNumberInput min={1}/> */}
         <Button 
           variant="contained"
+          disabled={formValidation.quantity === 'quantity'}
           sx={{
             mt:matches900?'20px':'26px',
             padding:'14px 0',
