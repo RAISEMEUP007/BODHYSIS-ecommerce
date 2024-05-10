@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
 
 export interface ReservationMainProps {
-  pickup: Date | null;
-  dropoff: Date | null;
+  pickup: Date;
+  dropoff: Date;
   prices: {
     subtotal: number;
     tax: number;
@@ -44,8 +44,8 @@ interface ContextProps {
 }
 
 const initializedMain: ReservationMainProps = {
-  pickup: null,
-  dropoff: null,
+  pickup: new Date(),
+  dropoff: new Date(new Date().getTime() + 86400000),
   prices: {
     subtotal: 0,
     tax: 0,
@@ -103,17 +103,17 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     return ReservationMain ? ReservationMain[key] : null;
   };
 
-  useEffect(() => {
-    setReservationMain((prev) => {
-      const today = new Date();
-      const defaultPickup = prev.pickup === null ? today : prev.pickup;
-      return {
-        ...prev,
-        pickup: defaultPickup,
-        dropoff: prev.dropoff === null ? new Date(today.getTime() + 86400000) : prev.dropoff, // 86400000 milliseconds = 1 day
-      };
-    });
-  }, []);
+  // useEffect(() => {
+  //   setReservationMain((prev) => {
+  //     const today = new Date();
+  //     const defaultPickup = prev.pickup === null ? today : prev.pickup;
+  //     return {
+  //       ...prev,
+  //       pickup: defaultPickup,
+  //       dropoff: prev.dropoff === null ? new Date(today.getTime() + 86400000) : prev.dropoff, // 86400000 milliseconds = 1 day
+  //     };
+  //   });
+  // }, []);
 
   const values: ContextProps = {
     ReservationMain,

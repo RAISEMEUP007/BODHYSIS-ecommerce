@@ -13,6 +13,7 @@ import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCus
 import { useCustomerReservation } from "../common/Providers/CustomerReservationProvider/UseCustomerReservation";
 import { useStoreDetails } from "../common/Providers/StoreDetailsProvider/UseStoreDetails";
 import { API_URL } from "../common/AppConstants";
+import { formatDateString } from "../common/Utils";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -35,11 +36,11 @@ export default function CheckoutForm() {
       
       const forSavingOnDB = {
         brand_id : storeDetails.brand_id,
-        start_date : ReservationMain.pickup,
-        end_date : ReservationMain.dropoff,
+        start_date : formatDateString(ReservationMain.pickup),
+        end_date : formatDateString(ReservationMain.dropoff),
         subtotal : ReservationMain.prices.subtotal,
         tax_rate : storeDetails.sales_tax,
-        tax_amount : ReservationMain.prices,
+        tax_amount : ReservationMain.prices.tax,
         total_price: paymentIntent.amount/100,
         price_table_id: ReservationMain.price_table_id,
         stage : 2,
@@ -52,7 +53,7 @@ export default function CheckoutForm() {
         customer_id : localStorage.getItem('customerId'),
         items : ReservationItems,
       };
-      
+      // console.log(forSavingOnDB);
       const createdReservation:any = await createReservation(forSavingOnDB);
       const newReservationData = await createdReservation.clone().json();
       if(!newReservationData) {

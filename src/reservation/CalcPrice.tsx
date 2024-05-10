@@ -50,7 +50,7 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
     const response:any = await getPriceDataByGroup(payload);
     const rows = await response.json();
     
-    const reversedHeaderData = headerData.slice().reverse();
+    // const reversedHeaderData = headerData.slice().reverse();
     // console.log(reversedHeaderData);
     // console.log(rows);
     const updatedReversedHeaderData = headerData.map((item) => {
@@ -66,9 +66,9 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
     // console.log(updatedReversedHeaderData);
 
     const diff = new Date(endDate).getTime() - new Date(startDate).getTime();
-    console.log(endDate);
-    console.log(startDate);
-    console.log(diff);
+    // console.log(endDate);
+    // console.log(startDate);
+    // console.log(diff);
 
     const basedonPoint  = updatedReversedHeaderData.find((item:any) => {
       if(item.value>0 && item.milliseconds >= diff){
@@ -76,7 +76,7 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
       }
     });
 
-    console.log(basedonPoint);
+    // console.log(basedonPoint);
 
     let price = 0;
     if(basedonPoint){

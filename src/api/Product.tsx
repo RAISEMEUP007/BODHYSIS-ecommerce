@@ -39,3 +39,7 @@ export const createTransaction = async (payload:any, callback=defaultCallback) =
 export const getExtrasDataByDisplayName = async (payload:any,callback=defaultCallback) => {
   return await postAPICall({ route: 'settings/getextrasdatabydisplayname', payload, callback });
 }
+
+export const verifyQuantityByDisplayName = async (payload:any,callback=defaultCallback) => {
+  return await postAPICall({ route: 'reservation/verifyquantitybydisplayname', payload, callback });
+}
