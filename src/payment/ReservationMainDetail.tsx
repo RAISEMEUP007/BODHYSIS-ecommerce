@@ -26,7 +26,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
 
   return (
     <Box sx={{ ...sx }}>
-      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'10px', marginBottom:'14px'}}>{`Accoount Details`}</Typography>
+      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'10px', marginBottom:'14px'}}>{`Account Details`}</Typography>
       <Typography>
         {`You are currently logged in as `}
         <b>{fullName}</b>
