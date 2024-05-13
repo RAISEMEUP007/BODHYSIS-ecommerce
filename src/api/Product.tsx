@@ -28,6 +28,10 @@ export const getHeaderData = (tableId:string|number, callback=defaultCallback) =
   getAPICall({route:'price/getheaderdata/' + tableId, callback});
 }
 
+export const getTableData = async (tableId:string|number, callback=defaultCallback) => {
+  return await getAPICall({route:'price/gettabledata/' + tableId, callback});
+}
+
 export const createReservation = async (payload:any, callback=defaultCallback) => {
   return await postAPICall({ route : 'reservations/createreservation', payload, callback});
 };
