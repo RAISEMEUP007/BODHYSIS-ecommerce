@@ -16,6 +16,9 @@ export interface StoreDetailProps {
   longitude : number | null;
   phone_number : string;
   sales_tax : number | null;
+  store_wavier: any;
+  document_id: number | null;
+  is_document: boolean | null;
 }
 
 interface ContextProps {
@@ -41,6 +44,9 @@ const initializedDetail: StoreDetailProps = {
   longitude: null,
   phone_number: "",
   sales_tax: null,
+  store_wavier: '',
+  document_id: null,
+  is_document: null,
 }
 
 export const StoreDetailsContext = createContext<ContextProps>({

@@ -13,12 +13,14 @@ import Login from './login/Login';
 import UserNotFound from './error/UserNotFound';
 import PageNotFound from './error/PageNotFound';
 import Temp from './thankyou/Temp';
+import TermsAndconditions from './payment/TermsAndConditions';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
   const { storeDetails, setStoreDetails } = useStoreDetails();
 
   const [ loadingFailed, setLoadingFailed ] = useState(false);
+  console.log(storeDetails);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +58,7 @@ const App = () => {
             <Route path="/completepurchase" element={<CompletePurchase />} />
             <Route path="/thankyou" element={<Thankyou/>} />
             <Route path="/test" element={<Temp/>} />
+            <Route path="/termsandconditions" element={<TermsAndconditions/>} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>

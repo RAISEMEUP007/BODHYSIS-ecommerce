@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Checkbox, FormControlLabel, List, Link } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import CustomBorderInput from '../common/CustomBorderInput';
@@ -15,6 +16,7 @@ interface props {
 
 const ReservationMainDetail: React.FC<props> = ({ sx }) => {
 
+  const navigate = useNavigate();
   const { ReservationItems, ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
 
@@ -114,7 +116,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
         label={(
           <span>
             {'I accept the HHI Rentals LLC '}
-            <Link onClick={(e)=>{e.preventDefault()}}>{`Terms and agree`}</Link>
+            <Link href="/termsandconditions" target="_blank">{`Terms and agree`}</Link>
             {'  to the use of my phone number and/or email address for updates about my order delivery, use, and pickup.*'}
           </span>
         )}
