@@ -68,6 +68,14 @@ const Payment: React.FC = () => {
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
       return;
+    }else if(!ReservationMain.address_id) {
+      enqueueSnackbar("The reservation should have a delivery address", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return;
     }
 
     setIsLoading(true);
