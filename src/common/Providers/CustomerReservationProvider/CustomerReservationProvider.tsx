@@ -3,7 +3,7 @@ import { createContext } from 'react';
 
 export interface ReservationMainProps {
   pickup: Date;
-  dropoff: Date;
+  dropoff: Date | null;
   prices: {
     subtotal: number;
     tax: number;
@@ -46,7 +46,7 @@ interface ContextProps {
 
 const initializedMain: ReservationMainProps = {
   pickup: new Date(),
-  dropoff: new Date(new Date().getTime() + 86400000),
+  dropoff: null,
   prices: {
     subtotal: 0,
     tax: 0,

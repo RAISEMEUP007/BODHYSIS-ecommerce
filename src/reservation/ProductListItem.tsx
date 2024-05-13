@@ -222,7 +222,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       }else setSizes([]);
 
       setFormValidation({size:null, quantity:null});
-      setExtraItems(extraItems.map(item => ({ ...item, selected: false })));
+      // setExtraItems(extraItems.map(item => ({ ...item, selected: false })));
     }, 100);
   }
   // console.log(formValues);
