@@ -41,6 +41,7 @@ export default function CheckoutForm() {
         subtotal : ReservationMain.prices.subtotal,
         tax_rate : storeDetails.sales_tax,
         tax_amount : ReservationMain.prices.tax,
+        discount_amount : ReservationMain.prices.discount,
         total_price: paymentIntent.amount/100,
         price_table_id: ReservationMain.price_table_id,
         stage : 2,

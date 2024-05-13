@@ -7,6 +7,7 @@ export interface ReservationMainProps {
   prices: {
     subtotal: number;
     tax: number;
+    discount: number;
     total: number;
   },
   price_table_id: number | null;
@@ -49,6 +50,7 @@ const initializedMain: ReservationMainProps = {
   prices: {
     subtotal: 0,
     tax: 0,
+    discount: 0,
     total: 0,
   },
   price_table_id: null,

@@ -70,6 +70,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
     let prices = {
       subtotal: 0,
       tax: 0,
+      discount: 0,
       total: 0,
     }
     
