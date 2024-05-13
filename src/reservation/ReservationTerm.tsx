@@ -133,10 +133,10 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
         />
       </Box>
       <Typography sx={{marginTop:"30px", fontSize:'18px'}}>
-        {`Your rental starts on when delivered on `}
+        {`Your rental starts on when picked up on `}
         {ReservationMain.pickup ? <b>{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
         {` and ends at `}
-        {ReservationMain.dropoff ? <b>{`8:00AM `}{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
+        {ReservationMain.dropoff ? <b>{`10:00AM `}{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
       </Typography>
     </Box>
   );

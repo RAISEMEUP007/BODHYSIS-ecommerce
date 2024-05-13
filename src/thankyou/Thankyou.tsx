@@ -9,6 +9,7 @@ const Thankyou: React.FC = () => {
   const navigate = useNavigate();
 
   const name = localStorage.getItem('full-name');
+  const id = localStorage.getItem('_r_id');
   const email = localStorage.getItem('_r_email');
   const phone_number = localStorage.getItem('_r_phone');
   const pickup = localStorage.getItem('_r_pickup');
@@ -23,6 +24,7 @@ const Thankyou: React.FC = () => {
 
     const sendMail = setTimeout(()=>{
       const mailParams = { 
+        id,
         name, 
         email,
         phone_number: phone_number,
@@ -41,6 +43,7 @@ const Thankyou: React.FC = () => {
   }, [])
   
   setTimeout(()=>{
+    localStorage.removeItem('_r_id');
     localStorage.removeItem('_r_name');
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_pickup');
@@ -61,7 +64,7 @@ const Thankyou: React.FC = () => {
         <Box sx={{ mt:'30px', mb:'30px'}}>
           <Typography >{"Your reservation has been confirmed for"}</Typography>
           <Typography variant="subtitle2">
-            {`${pickup} - ${dropoff}`}
+            {`${pickup} 8:00 AM - ${dropoff} 10:00 AM`}
           </Typography>
         </Box>
         <Typography>{"You will receive an email and text message with informatio on your sheduled delivery and lock information."}</Typography>

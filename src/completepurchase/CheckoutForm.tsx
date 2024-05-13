@@ -37,7 +37,7 @@ export default function CheckoutForm() {
       const forSavingOnDB = {
         brand_id : storeDetails.brand_id,
         start_date : formatDateString(ReservationMain.pickup),
-        end_date : formatDateString(ReservationMain.dropoff),
+        end_date : ReservationMain.dropoff? formatDateString(ReservationMain.dropoff): '',
         subtotal : ReservationMain.prices.subtotal,
         tax_rate : storeDetails.sales_tax,
         tax_amount : ReservationMain.prices.tax,
@@ -84,7 +84,7 @@ export default function CheckoutForm() {
       const host = url.host;
       const fullHost = protocol + "//" + host; 
   
-      setStorageValues();
+      setStorageValues(reservationId);
   
       const { error } = await stripe.confirmPayment({
         elements,
@@ -115,7 +115,8 @@ export default function CheckoutForm() {
     }
   };
 
-  const setStorageValues = () =>{
+  const setStorageValues = (reservationId:number) =>{
+    localStorage.setItem('_r_id', reservationId.toString());
     localStorage.setItem('_r_name', ReservationMain.name);
     localStorage.setItem('_r_email', ReservationMain.email);
     localStorage.setItem('_r_phone', ReservationMain.phone_number);
@@ -126,6 +127,7 @@ export default function CheckoutForm() {
   }
 
   const removeStorageValues = () =>{
+    localStorage.removeItem('_r_id');
     localStorage.removeItem('_r_name');
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_phone');

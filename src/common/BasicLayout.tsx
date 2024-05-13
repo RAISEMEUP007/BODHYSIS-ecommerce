@@ -8,6 +8,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useCustomerReservation } from './Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
+import { useResponsiveValues } from './Providers/DimentionsProvider/UseResponsiveValues';
 
 interface Props {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
 
   const { storeDetails }:{storeDetails:any} = useStoreDetails();
   const { menuValues, setMenuValue } = useMenuValues();
+  const { matches900 } = useResponsiveValues();
 
   const { ReservationItems } = useCustomerReservation();
   const [imageLoadError, setImageLoadError] = useState(false);
@@ -42,7 +44,7 @@ const BasicLayout: React.FC<Props> = ({ children, sx, containerStyle }) => {
             onLoad={()=>{setImageLoadError(false)}}
           />
           {imageLoadError && <FontAwesomeIcon icon={faImage} style={{height:'75px', color:"#333"}}/>}
-          <p style={{ textTransform: 'uppercase', fontWeight: 'bold', margin: '0px 0px 5px 10px', }}>{storeDetails?.store_name}</p>
+          {matches900 && <p style={{ textTransform: 'uppercase', fontWeight: 'bold', margin: '0px 0px 5px 10px', }}>{storeDetails?.store_name}</p>}
         </Box>
         <Box>
           <Badge badgeContent={0} color="primary" style={{marginRight:'10px', cursor:'pointer'}}>
