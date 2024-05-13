@@ -162,6 +162,10 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           <div>{ReservationMain.prices.subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>
         <Box sx={styles.purchase}>
+          <div>{"Discount"}</div>
+          <div>{ReservationMain.prices.discount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+        </Box>
+        <Box sx={styles.purchase}>
           <div>{`Tax (${(storeDetails.sales_tax ? (storeDetails.sales_tax / 100).toLocaleString(undefined, {style: 'percent'}) : 'n/a')})`}</div>
           <div>{ReservationMain.prices.tax.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
         </Box>

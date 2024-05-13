@@ -3,21 +3,20 @@ import { Typography, FormControl, Select, MenuItem, SelectChangeEvent, SelectPro
 import { Variant } from '@mui/material/styles/createTypography';
 
 type props = {
-  containerstyle?: any;
   label: string;
-  labelVariant?: Variant;
-  value?: any;
   items: Array<any>;
+  containerstyle?: any;
+  labelVariant?: Variant;
   helperText?: string;
 }
 
-const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, labelVariant, value, items, helperText, ...rest }) => {
+const CustomSelect: React.FC<props & SelectProps> = ({ label, items, containerstyle, labelVariant, helperText, style, ...rest }) => {
+
   return (
     <FormControl sx={containerstyle}>
       <Typography variant={labelVariant || 'subtitle2'}>{label}</Typography>
       <Select
         labelId="select-placeholder-label"
-        value={value}
         inputProps={{ 
           'aria-label': 'select',
           style: { 
@@ -28,16 +27,16 @@ const CustomSelect: React.FC<props & SelectProps> = ({ label, containerstyle, la
             borderRadius: '3px',
           }
         }}
-        style={{boxShadow: '2px 2px 2px #ccc', border:'none', padding: '0px',}}
+        style={{boxShadow: '2px 2px 2px #ccc', border:'none', padding: '0px', ...style}}
         {...rest}
       >
-        {items.map((item: any) => {
+        {items.length>0 && items.map((item: any, index) => {
           return (
             <MenuItem
-              key={item}
-              value={item}
+              key={index}
+              value={item.value}
             >
-              {item}
+              {item.label}
             </MenuItem>
           )
         })}

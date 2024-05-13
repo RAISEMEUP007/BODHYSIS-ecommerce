@@ -8,6 +8,7 @@ import BasicLayout from '../common/BasicLayout';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
 import CheckoutForm from './CheckoutForm';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
+import DiscountCodes from './DiscountCodes';
 
 const CompletePurchase: React.FC = () => {
   
@@ -55,12 +56,13 @@ const CompletePurchase: React.FC = () => {
                 display: 'flex',
                 flex:1, 
                 padding:'50px', 
-                paddingTop: '100px', 
+                paddingTop: '50px', 
                 borderLeft:'1px solid #ccc',
                 // alignItems:'center',
                 justifyContent:'center',
               }}>
               <Box sx={{width:'100%', maxWidth:'900px'}}>
+                <DiscountCodes/>
                 <CheckoutForm/>
               </Box>
             </Box>
