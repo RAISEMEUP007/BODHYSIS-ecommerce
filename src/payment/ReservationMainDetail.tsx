@@ -80,21 +80,18 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
         isShowSearchBox={false}
         contentStyle={{paddingLeft:matches900?'0px':'0px'}}
       />
-      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
+      <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Order Items`}</Typography>
       <List sx={{padding:'0px 14px', width:'80%', backgroundColor:'#F8F8F8', borderRadius:'4px', border:'1px solid #999'}}>
         {ReservationItems.length ?
           <>
             {ReservationItems.map((item: any, index: number) => { 
               return (
                 <Box key={index} sx={{padding:'12px 2px', borderBottom:'1px solid #999', marginBottom:'-1px'}}>
-                  <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+                  <Box sx={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap'}}>
                     <Typography sx={{fontWeight:700, fontSize:'20px'}}>{item.display_name}</Typography>
-                    <Box sx={{flex:1, display:'flex', flexDirection:'row', marginLeft:'40px', justifyContent:'space-between',}}>
-                      <Typography sx={{fontWeight:600, fontSize:'16px',}}>{`Quantity: ${item.quantity}`}</Typography>
-                      <Box sx={{display:'flex'}}>
-                        <Typography style={{fontWeight:600, fontSize:'16px',}}>{`Subtotal:`}</Typography>
-                        <Typography style={{fontWeight:800, fontSize:'16px', color:'#4599D6', marginLeft:'20px'}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
-                      </Box>
+                    <Box sx={{display:'flex'}}>
+                      <Typography style={{fontWeight:600, fontSize:'16px',}}>{`Subtotal:`}</Typography>
+                      <Typography style={{fontWeight:800, fontSize:'16px', color:'#4599D6', marginLeft:'20px'}}>{item.price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Typography>
                     </Box>
                   </Box>
                   {(item.extras && item.extras.length) ?
