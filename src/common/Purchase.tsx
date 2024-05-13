@@ -105,13 +105,13 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           {`Your reservation `}
           <b style={{fontSize:'1.1em', fontWeight:700}}>ends</b>
           {` at `}
-          <b style={{fontSize:'1.1em', fontWeight:700}}>8:00 am</b>
+          <b style={{fontSize:'1.1em', fontWeight:700}}>10:00 am</b>
           {` on `}
           <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Alert>
       </Collapse>
       <Box>
-        <Typography sx={{fontSize:'20px', fontWeight:500, marginTop:'30px'}}><b>{"Driver Tip"}</b></Typography>
+        <Typography sx={{fontSize:'20px', fontWeight:500, marginTop:'30px'}}><b>{"Stand Attendant"}</b></Typography>
         <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', justifyContent:'space-between'}}>
           <Typography sx={{fontWeight:400, marginTop:'18px'}}>{"Tip"}</Typography>
           <CustomBorderInput 
@@ -154,7 +154,7 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
             }
           />
         </Box>
-        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to your driver for their satisfaction."}</Typography>
+        <Typography sx={{textAlign:'center', fontSize:'14px', padding:'16px 16px 10px'}}>{"100% of your tip will go to the stand attendants on duty."}</Typography>
       </Box>
       <Box sx={{ mt:'30px', mb: '20px' }}>
         <Box sx={styles.purchase}>
