@@ -73,7 +73,6 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
     // console.log(endDate);
     // console.log(startDate);
     // console.log(diff);
-    console.log((diff)/(1000 * 60 * 60 * 24));
 
     const basedonPoint  = updatedHeaderData.find((item:any) => {
       if(item.value>0 && item.milliseconds >= diff){
@@ -89,15 +88,17 @@ export const calculatePricedEquipmentData = async (headerData:Array<any>, tableI
       price = Math.round(basedonPoint.value*100)/100 * item.quantity;
     }else{
       const lastPoint = updatedHeaderData[updatedHeaderData.length-1];
-      let extra_day = 0;
-      for (const key in priceTableData) {
-        if (priceTableData[key].group_id === item.price_group_id) {
-          extra_day = priceTableData[key].extra_day;
+      if(lastPoint){
+        let extra_day = 0;
+        for (const key in priceTableData) {
+          if (priceTableData[key].group_id === item.price_group_id) {
+            extra_day = priceTableData[key].extra_day;
+          }
         }
+        console.log(lastPoint);
+        console.log(extra_day);
+        price = Math.round(lastPoint.value*100)/100 * item.quantity + Math.round((diff - lastPoint.milliseconds)/(1000 * 60 * 60 * 24)) * extra_day;
       }
-      console.log(lastPoint);
-      console.log(extra_day);
-      price = Math.round(lastPoint.value*100)/100 * item.quantity + Math.round((diff - lastPoint.milliseconds)/(1000 * 60 * 60 * 24)) * extra_day;
     }
 
     //calcualte extras price

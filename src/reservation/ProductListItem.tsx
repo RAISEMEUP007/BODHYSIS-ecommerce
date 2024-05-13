@@ -60,7 +60,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     }
     getExtrasDataByDisplayName(payload, (jsonRes, status)=>{
       if(status == 200 && Array.isArray(jsonRes)){
-        setExtraItems(jsonRes.map(item=>({ ...item, selected: false })));
+        setExtraItems(jsonRes.map(item=>({ ...item, selected: item?.is_default_selected?true:false })));
       }else setExtraItems([]);
     })
   }, [Product.display_name])

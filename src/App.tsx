@@ -20,7 +20,6 @@ const InitializeApp = ({ children } : {children:any}) => {
   const { storeDetails, setStoreDetails } = useStoreDetails();
 
   const [ loadingFailed, setLoadingFailed ] = useState(false);
-  console.log(storeDetails);
 
   useEffect(() => {
     const fetchData = async () => {
