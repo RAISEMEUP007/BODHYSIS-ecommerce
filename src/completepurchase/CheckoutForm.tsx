@@ -86,30 +86,30 @@ export default function CheckoutForm() {
   
       setStorageValues(reservationId);
   
-      // const { error } = await stripe.confirmPayment({
-      //   elements,
-      //   confirmParams: {
-      //     return_url: fullHost + "/thankyou",
-      //   },
-      // });
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: fullHost + "/thankyou",
+        },
+      });
   
-      // if (error.type === "card_error" || error.type === "validation_error") {
-      //   enqueueSnackbar(error.message as string, {
-      //     variant: 'error',
-      //     style: { width: '350px' },
-      //     autoHideDuration: 3000,
-      //     anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      //   })
-      //   removeStorageValues();
-      // } else {
-      //   enqueueSnackbar("An unexpected error occurred.", {
-      //     variant: 'error',
-      //     style: { width: '350px' },
-      //     autoHideDuration: 3000,
-      //     anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      //   })
-      //   removeStorageValues();
-      // }
+      if (error.type === "card_error" || error.type === "validation_error") {
+        enqueueSnackbar(error.message as string, {
+          variant: 'error',
+          style: { width: '350px' },
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        })
+        removeStorageValues();
+      } else {
+        enqueueSnackbar("An unexpected error occurred.", {
+          variant: 'error',
+          style: { width: '350px' },
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        })
+        removeStorageValues();
+      }
   
       setIsLoading(false);
     }
