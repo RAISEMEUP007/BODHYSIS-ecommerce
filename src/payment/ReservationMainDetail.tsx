@@ -24,6 +24,7 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
     setReservationValue('is_accept', e.target.checked)
   }
 
+  console.log(ReservationItems);
   const fullName = localStorage.getItem('full-name');
 
   return (

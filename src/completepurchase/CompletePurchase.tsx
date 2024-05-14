@@ -44,8 +44,6 @@ const CompletePurchase: React.FC = () => {
     appearance: appearanceOptions,
   };
 
-  console.log(amount);
-  console.log(clientSecret);
   const renderCompletePurchase = () => (
     <BasicLayout>
       <Box sx={styles.container}>
