@@ -19,6 +19,8 @@ export interface StoreDetailProps {
   store_wavier: any;
   document_id: number | null;
   is_document: boolean | null;
+  pickup_time: string;
+  dropoff_time: string;
 }
 
 interface ContextProps {
@@ -47,6 +49,8 @@ const initializedDetail: StoreDetailProps = {
   store_wavier: '',
   document_id: null,
   is_document: null,
+  pickup_time: '8:00 AM',
+  dropoff_time: '10:00 AM',
 }
 
 export const StoreDetailsContext = createContext<ContextProps>({

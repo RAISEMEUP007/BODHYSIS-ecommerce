@@ -34,7 +34,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           setSearchedAddresses(
             jsonRes.map((address, index) => ({
               ...address,
-              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''} - ${address.property_name || ''} <span style="display:none;">${index}</span>`
+              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''} ${address.property_name? `- ${address.property_name}` :''} <span style="display:none;">${index}</span>`
             }))
           );
         } else {
@@ -56,7 +56,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           {ReservationMain.use_manual ? 
             (ReservationMain.manual_address || ' ') :
             (ReservationMain.selectedAddress && 
-              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''} - ${ReservationMain.selectedAddress.property_name ?? ''}`
+              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''} ${ReservationMain.selectedAddress.property_name ? `- ${ReservationMain.selectedAddress.property_name}` :  ''}`
             )
           }
         </Typography>
@@ -68,7 +68,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           value={searchKey} 
           required={true}
           onChange={(event)=>{setSearchKey(event.target.value)}} /> */}
-        {isShowSearchBox == false && (
+        {isShowSearchBox === false && (
           <Box 
             sx={{mt:'10px', fontSize:'18px', }}
           >

@@ -64,7 +64,7 @@ const Thankyou: React.FC = () => {
         <Box sx={{ mt:'30px', mb:'30px'}}>
           <Typography >{"Your reservation has been confirmed for"}</Typography>
           <Typography variant="subtitle2">
-            {`${pickup} 8:00 AM - ${dropoff} 10:00 AM`}
+            {`${pickup} - ${dropoff} `}
           </Typography>
         </Box>
         <Typography>{"You will receive an email and text message with informatio on your sheduled delivery and lock information."}</Typography>

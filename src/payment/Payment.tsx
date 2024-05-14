@@ -44,8 +44,6 @@ const Payment: React.FC = () => {
       amount : Math.round(ReservationMain.prices.total * 100),
     }
 
-    console.log(ReservationMain);
-
     if (!ReservationMain.email) {
       enqueueSnackbar("Please provide email", {
         variant: 'error',

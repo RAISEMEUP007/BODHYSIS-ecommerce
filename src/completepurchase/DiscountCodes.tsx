@@ -4,17 +4,19 @@ import CustomSelect from '../common/CustomSelect';
 import { getDiscountCodes } from '../api/Product';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
+import CustomBorderInput from '../common/CustomBorderInput';
 
 const DiscountCodes: React.FC = () => {
 
   const { ReservationMain, setReservationValue } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
   const [discounts, SetDiscounts] = useState([]);
-  const [selectedDiscount, selectDiscount] = useState(null);
+  const [selectedDiscount, selectDiscount] = useState(0);
+  const [validation, setValidation] = useState<boolean | null>(null);
   
   useEffect(()=>{
     getDiscountCodes((jsonRes:any, status:any)=>{
-      if(status === 200) SetDiscounts(jsonRes.map((item:any) => ({label: item.code, value: item.amount })));
+      if(status === 200) SetDiscounts(jsonRes);
       else SetDiscounts([]);
     });
   }, []);
@@ -41,9 +43,25 @@ const DiscountCodes: React.FC = () => {
     setReservationValue('prices', newPrices);
   }, [selectedDiscount]);
 
+  const updateDiscount = (discountCode:string) => {
+    if(discountCode){
+      const selectedDiscount:any = discounts.find((item:any) => {
+        if (typeof item.code === 'string') {
+          return item.code.toLowerCase() === discountCode.toLowerCase();
+        }
+        return false;
+      });
+      if(!selectedDiscount) setValidation(false);
+      selectDiscount(selectedDiscount?.amount??0);
+    }else {
+      selectDiscount(0);
+      setValidation(null);
+    }
+  }
+
   const renderDiscountCodes = () => (
     <Box sx={{marginBottom:'30px'}}>
-      <CustomSelect
+      {/* <CustomSelect
         label={"Discount codes"}
         labelVariant={'subtitle1'}
         items={[{label:'None', value:null}, ...discounts]}
@@ -53,6 +71,21 @@ const DiscountCodes: React.FC = () => {
           // console.log(event.target.value);
           selectDiscount(event.target.value);
         }}
+      /> */}
+      <CustomBorderInput
+        error={(validation === false )?true:false}
+        label={"Discount codes"}
+        onBlur={(event=>{
+          updateDiscount(event.target.value);
+        })}
+        onChange={(event)=>{
+          setValidation(null);
+        }}
+        helperText={
+          validation === false
+            ? 'Invalid Code'
+            : ''
+        }
       />
     </Box>
   );

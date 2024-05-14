@@ -88,28 +88,25 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   const handlePickupChange = (value: any) => {
     const pickupDateTime = new Date(value);
-    const dropoffDateTime = new Date(ReservationMain.dropoff || new Date());
+    pickupDateTime.setHours(0, 0, 0, 0);
+    console.log(pickupDateTime);
+    console.log(ReservationMain.dropoff);
     if(ReservationMain.dropoff === null)
       setReservationValue('pickup', pickupDateTime);
     else {
-      if(pickupDateTime.getTime() <= dropoffDateTime.getTime()) {
-        setReservationValue('pickup', pickupDateTime);
-      } else {
-        console.log("Warning: You can't select later datetime than dropoff!");
-        setReservationValue('pickup', new Date())
+      if(pickupDateTime.getTime() + (24 * 60 * 60 * 1000) > ReservationMain.dropoff.getTime()) {
+        const timeDifference = ReservationMain.dropoff.getTime() - pickupDateTime.getTime();
+        const newDropoffDateTime = new Date(pickupDateTime.getTime() + timeDifference + (24 * 60 * 60 * 1000));
+        setReservationValue('dropoff', newDropoffDateTime);
       } 
+      setReservationValue('pickup', pickupDateTime);
     }
   }
 
   const handleDropoffChange = (value: any) => {
-    const pickupDateTime = new Date(ReservationMain.pickup || new Date());
     const dropoffDateTime = new Date(value);
-    if(pickupDateTime.getTime() <= dropoffDateTime.getTime()) {
-      setReservationValue('dropoff', dropoffDateTime)
-    } else {
-      console.log("Warning: You can't select earlier datetime than pickup!");
-      setReservationValue('dropoff', new Date());
-    }
+    dropoffDateTime.setHours(0, 0, 0, 0);
+    setReservationValue('dropoff', dropoffDateTime)
   }
 
   return (
@@ -121,7 +118,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
           sx={{ boxSizing: 'boder-box', width: matches900?'250px':'100%', pr: '20px', mb:'20px' }}
           value={dayjs(ReservationMain.pickup)}
           onChange={handlePickupChange}
-          maxDate={dayjs(ReservationMain.dropoff)}
+          // maxDate={dayjs(ReservationMain.dropoff)}
           minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
         />
         <CustomDatePicker
@@ -129,14 +126,14 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
           sx={{ boxSizing: 'boder-box', width: matches900?'250px':'100%', pr: '20px', mb:'20px' }}
           value={dayjs(ReservationMain.dropoff)}
           onChange={handleDropoffChange}
-          minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).set('hour', 0).set('minute', 0).set('second', 0) : dayjs().set('hour', 0).set('minute', 0).set('second', 0))}
+          minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0) : dayjs().add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0))}
         />
       </Box>
       <Typography sx={{marginTop:"30px", fontSize:'18px'}}>
         {`Your rental starts on when picked up on `}
-        {ReservationMain.pickup ? <b>{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
+        {ReservationMain.pickup ? <b>{`${storeDetails.pickup_time} `}{dayjs(ReservationMain.pickup).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
         {` and ends at `}
-        {ReservationMain.dropoff ? <b>{`10:00AM `}{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
+        {ReservationMain.dropoff ? <b>{`${storeDetails.dropoff_time} `}{dayjs(ReservationMain.dropoff).format('MM/DD/YYYY')}</b> : <b>{"n/a"}</b>}
       </Typography>
     </Box>
   );

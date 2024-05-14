@@ -120,8 +120,8 @@ export default function CheckoutForm() {
     localStorage.setItem('_r_name', ReservationMain.name);
     localStorage.setItem('_r_email', ReservationMain.email);
     localStorage.setItem('_r_phone', ReservationMain.phone_number);
-    localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY'));
-    localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY'));
+    localStorage.setItem('_r_pickup', dayjs(ReservationMain.pickup).format('MMMM DD, YYYY') + ' ' + storeDetails.pickup_time);
+    localStorage.setItem('_r_dropoff', dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') + ' ' + storeDetails.dropoff_time);
     localStorage.setItem('_r_logo_url', encodeURI(API_URL + storeDetails.logo_url));
     localStorage.setItem('_r_store_name', storeDetails.store_name);
   }
