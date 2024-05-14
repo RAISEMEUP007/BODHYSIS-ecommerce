@@ -14,14 +14,15 @@ import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseSto
 
 interface props {
   sx?: object;
+  addressError?: boolean
 }
 
-const ReserveProducts: React.FC<props> = ({sx}) => {
+const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
 
+  const { storeDetails } = useStoreDetails();
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const [productFamilies, setProductFamilies] = useState<Array<any>>([]);
   const { matches900 } = useResponsiveValues();
-  const { storeDetails } = useStoreDetails();
 
   const [extras, setExtras] = useState<Array<any>>([]);
 
@@ -73,6 +74,7 @@ const ReserveProducts: React.FC<props> = ({sx}) => {
             isShowSearchBox={true}
             sx={{marginTop:'20px'}}
             contentStyle={styles.contentPadding}
+            emptyError={addressError}
           />
         </Box>
         <Box>

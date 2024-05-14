@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Purchase from '../common/Purchase';
 import { Box } from '@mui/material';
 import { useSnackbar } from 'notistack';
@@ -16,6 +16,10 @@ const Reservation: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { ReservationItems, ReservationMain } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
+
+  const [ addressError, setAddressError ] = useState<boolean | undefined>();
+
+  console.log(ReservationItems);
 
   const onComplete = (event: any) => {
     if (!ReservationMain.pickup) {
@@ -46,13 +50,14 @@ const Reservation: React.FC = () => {
         autoHideDuration: 3000,
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
-    }else if(!ReservationMain.address_id) {
+    }else if(!ReservationMain.address_id && !ReservationMain.manual_address) {
       enqueueSnackbar("The reservation should have a delivery address", {
         variant: 'error',
         style: { width: '350px' },
         autoHideDuration: 3000,
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
+      setAddressError(true);
     }else navigate('/review');
   }
 
@@ -64,7 +69,10 @@ const Reservation: React.FC = () => {
   const renderReservation = () => (
     <BasicLayout>
       <Box sx={styles.container}>
-        <ReserveProducts sx={styles.ReserveProducts}/>
+        <ReserveProducts 
+          sx={styles.ReserveProducts}
+          addressError={addressError}
+        />
         <Purchase
           title='Order Details'
           buttonTitle="Review & Pay"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createContext } from 'react';
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { STRIPE_PUBLIC_KEY } from '../../AppConstants';
@@ -28,12 +28,13 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
   const [amount, setAmount] = useState<number>(0);
   const [clientSecret, setClientSecret] = useState<string>('');
 
-  let stripePromise: Promise<Stripe | null>;
-  if(storeDetails.store_name.toLocaleLowerCase().includes('stannd')){
-    stripePromise = loadStripe(STRIPE_PUBLIC_KEY_STAND as string);
-  }else{
-    stripePromise = loadStripe(STRIPE_PUBLIC_KEY as string);
-  }
+  const stripePromise = useMemo(() => {
+    if (storeDetails.store_name && storeDetails.store_name.toLocaleLowerCase().includes('stand')) {
+      return loadStripe(STRIPE_PUBLIC_KEY_STAND as string);
+    } else {
+      return loadStripe(STRIPE_PUBLIC_KEY as string);
+    }
+  }, [storeDetails.store_name]);
 
   const values = {
     amount,

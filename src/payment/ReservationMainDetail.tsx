@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography, Checkbox, FormControlLabel, List, Link } from '@mui/material';
-import { useNavigate } from 'react-router';
 
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import CustomBorderInput from '../common/CustomBorderInput';
@@ -16,7 +15,6 @@ interface props {
 
 const ReservationMainDetail: React.FC<props> = ({ sx }) => {
 
-  const navigate = useNavigate();
   const { ReservationItems, ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
 
