@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { Box } from '@mui/material';
 
 import { getClientSecret } from '../api/Stripe';
+import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import Purchase from '../common/Purchase';
 import BasicLayout from '../common/BasicLayout';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
@@ -16,6 +17,7 @@ const Payment: React.FC = () => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { storeDetails } = useStoreDetails();
   const { ReservationItems, ReservationMain, setReservationValue } = useCustomerReservation();
   const { setClientSecret, setAmount } = useCustomStripe();
   const [ isLoading, setIsLoading ] = useState(false);
@@ -42,6 +44,7 @@ const Payment: React.FC = () => {
     const payload:any = {
       ...ReservationMain,
       amount : Math.round(ReservationMain.prices.total * 100),
+      store_name : storeDetails.store_name
     }
 
     if (!ReservationMain.email) {

@@ -12,15 +12,21 @@ interface props {
   isShowAddress?: boolean;
   isShowSearchBox?: boolean;
   contentStyle?: object;
+  emptyError?: boolean;
 }
 
-const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, isShowSearchBox, contentStyle}) => {
+const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, isShowSearchBox, contentStyle, emptyError}) => {
   const { ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
 
   const [expandSearchBox, setExpandSearchBox] = useState<boolean>(false);
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchedAddresses, setSearchedAddresses] = useState<Array<any>>([]);
+
+  const [addressError, setAddressError] = useState(emptyError);
+  useEffect(()=>{
+    setAddressError(emptyError)
+  }, [emptyError]);
 
   useEffect(()=>{
     if(isShowSearchBox) setExpandSearchBox(true);
@@ -34,7 +40,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           setSearchedAddresses(
             jsonRes.map((address, index) => ({
               ...address,
-              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''} ${address.property_name? `- ${address.property_name}` :''} <span style="display:none;">${index}</span>`
+              label: `${address.number || ''} ${address.street || ''}, ${address.plantation || ''}${address.property_name? ` - ${address.property_name}` :''}<span style="display:none;">${index}</span>`
             }))
           );
         } else {
@@ -56,7 +62,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           {ReservationMain.use_manual ? 
             (ReservationMain.manual_address || ' ') :
             (ReservationMain.selectedAddress && 
-              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''} ${ReservationMain.selectedAddress.property_name ? `- ${ReservationMain.selectedAddress.property_name}` :  ''}`
+              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''}${ReservationMain.selectedAddress.property_name ? ` - ${ReservationMain.selectedAddress.property_name}` :  ''}`
             )
           }
         </Typography>
@@ -89,11 +95,14 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
             sx={{ 
               width: matches900?'60%':'100%', 
               boxShadow: '2px 2px 6px #b3b3b3', 
+              border: addressError === true ? '1px solid #f7776e' : '1px solid transparent',
+              borderRadius: '4px',
             }}
             disableClearable
             options={searchedAddresses}
             value={ReservationMain.selectedAddress}
             onChange={(event, value)=>{
+              setAddressError(false);
               setReservationValue('selectedAddress', value);
               setReservationValue('address_id', value.id);
             }}
