@@ -19,8 +19,6 @@ const Reservation: React.FC = () => {
 
   const [ addressError, setAddressError ] = useState<boolean | undefined>();
 
-  console.log(ReservationItems);
-
   const onComplete = (event: any) => {
     if (!ReservationMain.pickup) {
       enqueueSnackbar("Select pickup date", {

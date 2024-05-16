@@ -22,7 +22,6 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
     setReservationValue('is_accept', e.target.checked)
   }
 
-  console.log(ReservationItems);
   const fullName = localStorage.getItem('full-name');
 
   return (
@@ -82,6 +81,17 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
         contentStyle={{paddingLeft:matches900?'0px':'0px'}}
       />
       <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Order Items`}</Typography>
+      <FormControlLabel
+        sx={{alignItems:'flex-start', ml:'0px', mb: '20px' }}
+        label={(
+          <span>
+            {'I accept the HHI Rentals LLC '}
+            <Link href="/termsandconditions" target="_blank">{`Terms and agree`}</Link>
+            {'  to the use of my phone number and/or email address for updates about my order delivery, use, and pickup.*'}
+          </span>
+        )}
+        control={<Checkbox checked={ReservationMain.is_accept} sx={{padding:'0px', mr:'10px'}} onChange={handleAccountCheck} />}
+      />
       <List sx={{padding:'0px 14px', width:'80%', backgroundColor:'#F8F8F8', borderRadius:'4px', border:'1px solid #999'}}>
         {ReservationItems.length ?
           <>
@@ -110,17 +120,6 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
           </>
         : <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px', color: '#999' }}>{"No one reserved"}</div>}
       </List>
-      <FormControlLabel
-        sx={{alignItems:'flex-start', ml:'0px', mt: '30px' }}
-        label={(
-          <span>
-            {'I accept the HHI Rentals LLC '}
-            <Link href="/termsandconditions" target="_blank">{`Terms and agree`}</Link>
-            {'  to the use of my phone number and/or email address for updates about my order delivery, use, and pickup.*'}
-          </span>
-        )}
-        control={<Checkbox checked={ReservationMain.is_accept} sx={{padding:'0px', mr:'10px'}} onChange={handleAccountCheck} />}
-      />
     </Box>
   );
 }
