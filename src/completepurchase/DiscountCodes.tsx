@@ -79,6 +79,7 @@ const DiscountCodes: React.FC = () => {
           updateDiscount(event.target.value);
         })}
         onChange={(event)=>{
+          updateDiscount(event.target.value);
           setValidation(null);
         }}
         helperText={
