@@ -1,66 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
+
 import CustomSelect from '../common/CustomSelect';
-import { getDiscountCodes } from '../api/Product';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import CustomBorderInput from '../common/CustomBorderInput';
 
-const DiscountCodes: React.FC = () => {
+interface Props {
+  isDisableDiscount?:boolean;
+}
+
+const DiscountCodes: React.FC<Props> = ({isDisableDiscount}) => {
 
   const { ReservationMain, setReservationValue } = useCustomerReservation();
-  const { storeDetails } = useStoreDetails();
-  const [discounts, SetDiscounts] = useState([]);
-  const [selectedDiscount, selectDiscount] = useState(0);
+  const { discounts } = useStoreDetails();
   const [validation, setValidation] = useState<boolean | null>(null);
-  
-  useEffect(()=>{
-    getDiscountCodes((jsonRes:any, status:any)=>{
-      if(status === 200) SetDiscounts(jsonRes);
-      else SetDiscounts([]);
-    });
-  }, []);
 
   useEffect(()=>{
-    const prices = ReservationMain.prices;
-    let discountAmount = 0;
-    if(selectedDiscount){
-      discountAmount = (Math.round(prices.subtotal * selectedDiscount) / 100);
-    }else{
-      discountAmount = 0;
-    }
-    const taxAmount = (prices.subtotal - discountAmount) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-    // console.log(prices.subtotal - discountAmount);
-    // console.log(storeDetails.sales_tax);
-    // console.log(taxAmount);
-    const total = prices.subtotal - discountAmount + taxAmount;
-    const newPrices = {
-      ...prices,
-      discount: discountAmount,
-      tax: taxAmount,
-      total: total,
-    }
-    setReservationValue('prices', newPrices);
-  }, [selectedDiscount]);
-
-  const updateDiscount = (discountCode:string) => {
-    if(discountCode){
+    if(ReservationMain.discount_code){
       const selectedDiscount:any = discounts.find((item:any) => {
         if (typeof item.code === 'string') {
-          return item.code.toLowerCase() === discountCode.toLowerCase();
+          return item.code.toLowerCase() === ReservationMain.discount_code.toLowerCase();
         }
         return false;
       });
-      if(!selectedDiscount) setValidation(false);
-      selectDiscount(selectedDiscount?.amount??0);
+
+      if(selectedDiscount){
+        setReservationValue('promo_code', selectedDiscount.id);
+        setReservationValue('discount_rate', selectedDiscount.amount);
+        setValidation(null);
+      }else {
+        setReservationValue('promo_code', null);
+        setReservationValue('discount_rate', null);
+        setValidation(false);
+      }
     }else {
-      selectDiscount(0);
+      setReservationValue('promo_code', null);
+      setReservationValue('discount_rate', null);
       setValidation(null);
     }
-  }
+  }, [ReservationMain.discount_code]);
 
   const renderDiscountCodes = () => (
-    <Box sx={{marginBottom:'30px'}}>
+    <Box>
       {/* <CustomSelect
         label={"Discount codes"}
         labelVariant={'subtitle1'}
@@ -74,13 +56,14 @@ const DiscountCodes: React.FC = () => {
       /> */}
       <CustomBorderInput
         error={(validation === false )?true:false}
-        label={"Discount codes"}
+        // label={"Discount codes"}
+        value={ReservationMain.discount_code}
+        disabled={isDisableDiscount}
         onBlur={(event=>{
-          updateDiscount(event.target.value);
+          setReservationValue('discount_code', event.target.value);
         })}
         onChange={(event)=>{
-          updateDiscount(event.target.value);
-          setValidation(null);
+          setReservationValue('discount_code', event.target.value);
         }}
         helperText={
           validation === false

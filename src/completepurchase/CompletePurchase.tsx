@@ -60,7 +60,6 @@ const CompletePurchase: React.FC = () => {
                 justifyContent:'center',
               }}>
               <Box sx={{width:'100%', maxWidth:'900px'}}>
-                <DiscountCodes/>
                 <CheckoutForm/>
               </Box>
             </Box>
@@ -70,6 +69,7 @@ const CompletePurchase: React.FC = () => {
           title='Reservation Details' 
           buttonTitle="Complete Purchase"
           isDisableDriverTip={true}
+          isDisableDiscount={true}
         />
       </Box>
     </BasicLayout>

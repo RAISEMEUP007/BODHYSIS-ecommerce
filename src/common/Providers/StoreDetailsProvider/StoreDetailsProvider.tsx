@@ -29,6 +29,9 @@ interface ContextProps {
   getStoreDetails: () => StoreDetailProps;
   setStoreValue: (key: keyof StoreDetailProps, value: any) => void;
   getStoreValue: (key: keyof StoreDetailProps) => any | null;
+  discounts: any[];
+  setDiscounts: (discounts: any[]) => void;
+  getDiscounts: () => any[];
 }
 
 const initializedDetail: StoreDetailProps = {
@@ -59,10 +62,14 @@ export const StoreDetailsContext = createContext<ContextProps>({
   getStoreDetails: () => initializedDetail,
   setStoreValue: () => {},
   getStoreValue: () => null,
+  discounts: [],
+  setDiscounts: () => {},
+  getDiscounts: () => [],
 });
 
 export const StoreDetailsProvider = ({ children }:{children:React.ReactNode}) => {
   const [storeDetails, setStoreDetails] = useState<StoreDetailProps>(initializedDetail);
+  const [discounts, setDiscounts] = useState<any[]>([]);
 
   const getStoreDetails = () => {
     return storeDetails;
@@ -82,12 +89,19 @@ export const StoreDetailsProvider = ({ children }:{children:React.ReactNode}) =>
     return storeDetails ? storeDetails[key] : null;
   };
 
+  const getDiscounts = () => {
+    return discounts;
+  }
+
   const values: ContextProps = {
     storeDetails,
     setStoreDetails,
     getStoreDetails,
     setStoreValue,
     getStoreValue,
+    discounts,
+    setDiscounts,
+    getDiscounts,
   };
 
   return <StoreDetailsContext.Provider value={values}>{children}</StoreDetailsContext.Provider>;

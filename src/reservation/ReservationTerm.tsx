@@ -17,74 +17,8 @@ interface props {
 const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
 
   const { storeDetails } = useStoreDetails();
-  const { ReservationItems, ReservationMain, setReservationItems, setReservationValue } = useCustomerReservation();
+  const { ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
-
-  const [headerData, setHeaderData] = useState<Array<any>>([]);
-  const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
-
-  useEffect(() => {
-    getPriceLogicData((jsonRes: any) => { setPriceLogicData(jsonRes) });
-  }, []);
-
-  useEffect(() => {
-    if(ReservationMain.pickup){
-      const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
-      // console.log("----------- priceTable -----------");
-      // console.log(priceTable);
-      setReservationValue('price_table_id', priceTable?.id??null);
-    }
-  }, [priceLogicData, storeDetails, ReservationMain.pickup])
-
-  useEffect(() => {
-    if(ReservationMain.price_table_id){
-      getHeaderData(ReservationMain.price_table_id, (jsonRes:any, status, error) => {
-        switch (status) {
-          case 200:
-            setHeaderData(jsonRes);
-            break;
-          default:
-            setHeaderData([]);
-            break;
-        }
-      });
-    }else setHeaderData([]);
-  }, [ReservationMain.price_table_id]);
-
-  useEffect(()=>{
-    setReservationValue('headerData', headerData);
-  }, [headerData])
-
-  useEffect(()=>{
-    calcData(ReservationItems);
-  }, [headerData, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationItems.length, ReservationMain.driver_tip])
-
-  const calcData = async (ReservationItems:Array<any>) =>{
-    // console.log("---------------- headerData -----------------");
-    // console.log(headerData);
-    // console.log("--------------- ReservationItems ----------------------");
-    // console.log(ReservationItems);
-    const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
-    setReservationItems(calculatedReservedItems);
-
-    let prices = {
-      subtotal: 0,
-      tax: 0,
-      discount: 0,
-      total: 0,
-    }
-    
-    calculatedReservedItems.map((item:any)=>{
-      let subtotal = item.price || 0;
-      prices.subtotal += subtotal;
-    });
-
-    if(ReservationMain.driver_tip) prices.subtotal += ReservationMain.driver_tip;
-    prices.tax = prices.subtotal * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-    prices.total += prices.subtotal + prices.tax;
-
-    setReservationValue('prices', prices);
-  }
 
   const handlePickupChange = (value: any) => {
     const pickupDateTime = new Date(value);

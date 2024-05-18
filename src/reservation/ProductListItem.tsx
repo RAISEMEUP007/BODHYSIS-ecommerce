@@ -4,7 +4,7 @@ import { API_URL } from '../common/AppConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 
-import { getExtrasDataByDisplayName, verifyQuantityByDisplayName } from '../api/Product';
+import { getExtrasDataByDisplayName, getHeaderData, verifyQuantityByDisplayName } from '../api/Product';
 import CustomBorderInput from '../common/CustomBorderInput';
 import { useSnackbar } from 'notistack';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
@@ -35,13 +35,15 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const { enqueueSnackbar } = useSnackbar();
   const { storeDetails } = useStoreDetails();
-  const { ReservationItems, setReservationItems, ReservationMain } = useCustomerReservation();
+  const { ReservationItems, addReservationItems, ReservationMain } = useCustomerReservation();
 
   const [Product, SetProduct] = useState(product);
   const [imageLoadError, setImageLoadError] = useState(false);
   const [extraItems, setExtraItems] = useState<Array<any>>([]);
-  const [sizes, setSizes] = useState<Array<any>>([]);
+  // const [sizes, setSizes] = useState<Array<any>>([]);
   const { matches900 } = useResponsiveValues();
+
+  const [TimeOutVal, setTimeOutVal] = useState<any>(null);
 
   const [formValues, setFormValues] = useState<formValue>({
     size: null,
@@ -73,24 +75,31 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     if(Product.lines){
       if(Product.lines.length){
         var size = Product.lines[0].linesSizes.split(',')[0];
-        setSizes(Product.lines[0].linesSizes.split(','));
+        // setSizes(Product.lines[0].linesSizes.split(','));
         formValues.size = Product.lines[0].linesSizes.split(',')[0];
       }
       setFormValues(formValues);
-    }else setSizes([]);
+    }else {
+      // setSizes([]);
+    }
   }, [Product]);
 
   useEffect(()=>{
-    if(Product?.lines[0]?.price_group_id && ReservationMain.price_table_id){
-      const calc = async ()=>{
-        const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
-        const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, lines, ReservationMain.pickup, ReservationMain.dropoff);
-        SetProduct({ ...Product, lines: calculatedLines });
+    const calc = async ()=>{
+      if(Product?.lines[0]?.price_group_id && ReservationMain.price_table_id){
+        const res:any = await getHeaderData(ReservationMain.price_table_id);
+        if(res.status == 200){
+          const headerData = await res.json();
+          const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
+          const calculatedLines = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, lines, ReservationMain.pickup, ReservationMain.dropoff);
+          // console.log(calculatedLines);
+          SetProduct({ ...Product, lines: calculatedLines });
+        }
       }
-      calc();
     }
-  }, [ReservationMain.headerData, product, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff]);
-  // console.log(Product);
+    calc();
+  }, [product, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff]);
+
   const setSelected = (index:number, selected:boolean) => {
     const updatedExtras = [...extraItems];
     updatedExtras[index] = { ...updatedExtras[index], selected };
@@ -109,8 +118,24 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   }
 
   const updateQuantity = async (value:any) => {
-    const result = await verifyQuantity(value);
-    if(result) updateFormValue('quantity', parseInt(value));
+    if(ReservationMain.pickup && ReservationMain.dropoff){
+      if(TimeOutVal){
+        clearTimeout(TimeOutVal);
+        setTimeOutVal(null);
+      }
+  
+      const timeout = setTimeout(async () => {
+        const result = await verifyQuantity(value);
+        if(result) updateFormValue('quantity', parseInt(value));
+        setTimeOutVal(null);
+      }, 200);
+
+      setTimeOutVal(timeout);
+    }else{
+      updateFormValue('quantity', parseInt(value));
+      clearTimeout(TimeOutVal);
+      setTimeOutVal(null);
+    }
   }
 
   const verifyQuantity = async (value:any) => {
@@ -124,6 +149,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         pre_quantity: ReservationItems.filter(item => item.display_name === product.display_name).length,
       }
       const respose:any = await verifyQuantityByDisplayName(payload);
+      // console.log("respose.status", respose.status);
       if(respose.status == 200){
         return true;
       }else if(respose.status == 400){
@@ -176,11 +202,20 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         //   break;
       }
     }
+
     setFormValidation(updatedFormValidation);
     if(flag == false) return false;
 
     const quantityVerify = verifyQuantity(formValues.quantity);
-    if(!quantityVerify) return false;
+    if(!quantityVerify){
+      enqueueSnackbar("This product is out of stock.", {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return false;
+    }
     
     const newItem = {
       family_id: Product.id,
@@ -194,38 +229,37 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       size: formValues.size,
     }
 
-    let updatedReservationItems = [...ReservationItems];
+    let newItems = [];
     
     if(formValues.quantity){
       for(let i=0; i<formValues.quantity; i++){
-        updatedReservationItems.push(newItem);
+        newItems.push(newItem);
       }
     }
 
-    setReservationItems(updatedReservationItems);
-
-    // addReservationItem(newItem);
+    addReservationItems(newItems);
 
     setTimeout(()=>{
       // setFormValues({size:null, quantity:null});
-      let formValues = {
-        size: null,
-        quantity: 1,
-      }
-      if(Product.lines){
-        if(Product.lines.length){
-          var size = Product.lines[0].linesSizes.split(',')[0];
-          setSizes(Product.lines[0].linesSizes.split(','));
-          formValues.size = Product.lines[0].linesSizes.split(',')[0];
-        }
-        setFormValues(formValues);
-      }else setSizes([]);
+      // let formValues = {
+      //   size: null,
+      //   quantity: 1,
+      // }
+      // if(Product.lines){
+      //   if(Product.lines.length){
+      //     var size = Product.lines[0].linesSizes.split(',')[0];
+      //     setSizes(Product.lines[0].linesSizes.split(','));
+      //     formValues.size = Product.lines[0].linesSizes.split(',')[0];
+      //   }
+      //   setFormValues(formValues);
+      // }else setSizes([]);
 
-      setFormValidation({size:null, quantity:null});
+      // setFormValidation({size:null, quantity:null});
       // setExtraItems(extraItems.map(item => ({ ...item, selected: false })));
+      verifyQuantity(formValues.quantity);
     }, 100);
   }
-  // console.log(formValues);
+
   const renderAddToCartFC = () => (
     <Box sx={{width:matches900?'86%':'100%'}}>
       {/* {(Product.lines && Product.lines.length) ? 

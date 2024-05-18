@@ -53,8 +53,10 @@ export default function CheckoutForm() {
         driver_tip: ReservationMain.driver_tip,
         customer_id : localStorage.getItem('customerId'),
         items : ReservationItems,
+        discount_code: ReservationMain.discount_code,
+        promo_code: ReservationMain.promo_code,
       };
-      // console.log(forSavingOnDB);
+
       const createdReservation:any = await createReservation(forSavingOnDB);
       const newReservationData = await createdReservation.clone().json();
       if(!newReservationData) {
