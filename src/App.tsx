@@ -55,7 +55,7 @@ const InitializeApp = ({ children } : {children:any}) => {
 
   if (!storeDetails.brand_id) return <div>{"Loading Store Details..."}</div>;
 
-  if(loadingFailed) return <div>{"Error occured while loading store data..."}</div>;
+  if(loadingFailed) return <div>{"Error occured while loading the store datail..."}</div>;
 
   return children;
 };
