@@ -84,8 +84,10 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     }
   }, [Product]);
 
+  // console.log(ReservationMain);
   useEffect(()=>{
     const calc = async ()=>{
+      console.log(ReservationMain);
       if(Product?.lines[0]?.price_group_id && ReservationMain.price_table_id){
         const res:any = await getHeaderData(ReservationMain.price_table_id);
         if(res.status == 200){
@@ -97,7 +99,9 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         }
       }
     }
-    calc();
+
+    const timeout = setTimeout(()=>{calc()}, 100);
+    return ()=>{clearTimeout(timeout)}
   }, [product, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff]);
 
   const setSelected = (index:number, selected:boolean) => {
