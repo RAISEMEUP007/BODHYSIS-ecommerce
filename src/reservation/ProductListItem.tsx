@@ -88,21 +88,23 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   useEffect(()=>{
     const calc = async ()=>{
       console.log(ReservationMain);
-      if(Product?.lines[0]?.price_group_id && ReservationMain.price_table_id){
-        // const res:any = await getHeaderData(ReservationMain.price_table_id);
-        // if(res.status == 200){
-          // const headerData = await res.json();
-          const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
-          const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, lines, ReservationMain.pickup, ReservationMain.dropoff);
-          // console.log(calculatedLines);
-          SetProduct({ ...Product, lines: calculatedLines });
-        // }
+      if(Product?.lines[0]?.price_group_id){
+        const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
+        const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, lines, ReservationMain.pickup, ReservationMain.dropoff);
+        // console.log(calculatedLines);
+        SetProduct({ ...Product, lines: calculatedLines });
       }
     }
 
     const timeout = setTimeout(()=>{calc()}, 100);
     return ()=>{clearTimeout(timeout)}
-  }, [product, ReservationMain.price_table_id, ReservationMain.pickup, ReservationMain.dropoff, ReservationMain.headerData]);
+  }, [product, 
+    ReservationMain.headerData,
+    ReservationMain.price_table_id,
+    ReservationMain.priceTableData,
+    ReservationMain.pickup, 
+    ReservationMain.dropoff
+  ]);
 
   const setSelected = (index:number, selected:boolean) => {
     const updatedExtras = [...extraItems];

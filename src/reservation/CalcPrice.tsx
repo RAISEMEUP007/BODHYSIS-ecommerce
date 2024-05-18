@@ -1,6 +1,6 @@
 import { getPriceDataByGroup, getTableData } from "../api/Product";
 
-export const getPriceTableByBrandAndDate = (priceLogicData:Array<any>, brandId:any, date:Date) => {
+export const  getPriceTableByBrandAndDate = (priceLogicData:Array<any>, brandId:any, date:Date) => {
   if(!priceLogicData || !priceLogicData.length) return {};
   let selectedPriceLogic = priceLogicData.find(group => 
     group.brand_id == brandId &&
@@ -38,17 +38,10 @@ export const getPriceTableByBrandAndDate = (priceLogicData:Array<any>, brandId:a
   }
 }
 
-export const calculatePricedEquipmentData = async (headerData:Array<any>, tableId : number|null, equipmentData : Array<any>, startDate:Date | null, endDate:Date | null) => {
-  // console.log("headerData", headerData);
-  // console.log("tableId", tableId);
-  // console.log("startDate", startDate);
-  // console.log("endDate", endDate);
-  if(!tableId || startDate === null || endDate === null){
+export const calculatePricedEquipmentData = async (headerData:Array<any>, tableId : number|null, priceTableData : Array<any>, equipmentData : Array<any>, startDate:Date | null, endDate:Date | null) => {
+  if(startDate === null || endDate === null){
     return equipmentData.map((item)=>({...item, price:0}));
   }
-  
-  const priceTableDataRes:any = await getTableData(tableId);
-  const priceTableData = await priceTableDataRes.json();
 
   const pricedEquipmentData = await Promise.all(equipmentData.map(async (item) => {
     const payload = {
