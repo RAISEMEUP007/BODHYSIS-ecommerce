@@ -27,7 +27,7 @@ export default function CheckoutForm() {
   
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    if (stripe && elements && clientSecret){
+    if (stripe && elements && clientSecret && ReservationMain.pickup){
       setIsLoading(true);
     
       const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);

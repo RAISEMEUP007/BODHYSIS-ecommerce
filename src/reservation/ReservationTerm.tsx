@@ -20,6 +20,10 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   const { ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
 
+  useEffect(()=>{
+    setReservationValue('pickup', new Date());
+  }, [])
+
   const handlePickupChange = (value: any) => {
     const pickupDateTime = new Date(value);
     pickupDateTime.setHours(0, 0, 0, 0);

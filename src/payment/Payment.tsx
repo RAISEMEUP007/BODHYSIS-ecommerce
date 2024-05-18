@@ -111,6 +111,8 @@ const Payment: React.FC = () => {
   }
 
   const proceedFreeReservation = async () => {
+    if(!ReservationMain.pickup) return;
+    
     const forSavingOnDB = {
       brand_id : storeDetails.brand_id,
       start_date : formatDateString(ReservationMain.pickup),
