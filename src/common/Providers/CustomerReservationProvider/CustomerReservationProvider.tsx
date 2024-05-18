@@ -5,7 +5,7 @@ import { getHeaderData } from '../../../api/Product';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from '../../../reservation/CalcPrice';
 
 export interface ReservationMainProps {
-  pickup: Date;
+  pickup: Date | null;
   dropoff: Date | null;
   prices: {
     subtotal: number;
@@ -49,7 +49,7 @@ interface ContextProps {
 }
 
 const initializedMain: ReservationMainProps = {
-  pickup: new Date(),
+  pickup: null,
   dropoff: null,
   prices: {
     subtotal: 0,
