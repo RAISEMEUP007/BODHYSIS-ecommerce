@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { useStoreDetails } from '../StoreDetailsProvider/UseStoreDetails';
-import { getHeaderData } from '../../../api/Product';
+import { getHeaderData, getTableData } from '../../../api/Product';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from '../../../reservation/CalcPrice';
 
 export interface ReservationMainProps {
@@ -36,6 +36,7 @@ export interface ReservationMainProps {
   promo_code: number | null,
   discount_rate: number | null,
   headerData: Array<any>,
+  priceTableData: Array<any>,
 }
 
 interface ContextProps {
@@ -81,6 +82,7 @@ const initializedMain: ReservationMainProps = {
   promo_code: null,
   discount_rate: null,
   headerData: [],
+  priceTableData: [],
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({
@@ -99,9 +101,6 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
 
   const [ReservationMain, setReservationMain] = useState<ReservationMainProps>(initializedMain);
   const [ReservationItems, setReservationItems] = useState<Array<any>>([]);
-  // const [headerData, setHeaderData] = useState<Array<any>>([]);
-
-  // const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
 
   const setReservationValue = (key: keyof ReservationMainProps, value: any) => {
     setReservationMain((prev) => {
@@ -124,7 +123,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
 
   const calcAndSetData = async (ReservationItems:Array<any>) =>{
     // console.log("--------------- calcAndSetData ----------------------");
-    const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
+    const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
     // console.log(calculatedReservedItems);
     setReservationItems(calculatedReservedItems);
 
@@ -188,7 +187,19 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
             break;
         }
       });
-    }else setReservationValue('headerData', []);
+      getTableData(ReservationMain.price_table_id, (jsonRes:any, status, error) => {
+        switch (status) {
+          case 200:
+            setReservationValue('priceTableData', jsonRes);
+            break;
+          default:
+            setReservationValue('priceTableData', []);
+            break;
+        }
+      });
+    }else {
+      setReservationValue('priceTableData', []);
+    }
   }, [ReservationMain.price_table_id]);
 
   useEffect(()=>{
@@ -196,6 +207,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   }, [
     ReservationMain.headerData, 
     ReservationMain.price_table_id, 
+    ReservationMain.priceTableData, 
     ReservationMain.pickup, 
     ReservationMain.dropoff, 
     ReservationMain.driver_tip, 

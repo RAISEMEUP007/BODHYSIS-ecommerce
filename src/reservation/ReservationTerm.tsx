@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-import { getHeaderData, getPriceLogicData } from '../api/Product';
 import CustomDatePicker from '../common/CustomDatePicker';
 import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
-import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from './CalcPrice';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 interface props {
   sx?: object;
