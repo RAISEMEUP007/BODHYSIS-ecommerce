@@ -35,6 +35,7 @@ export interface ReservationMainProps {
   discount_code: string,
   promo_code: number | null,
   discount_rate: number | null,
+  headerData: Array<any>,
 }
 
 interface ContextProps {
@@ -79,6 +80,7 @@ const initializedMain: ReservationMainProps = {
   discount_code: "",
   promo_code: null,
   discount_rate: null,
+  headerData: [],
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({
@@ -97,7 +99,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
 
   const [ReservationMain, setReservationMain] = useState<ReservationMainProps>(initializedMain);
   const [ReservationItems, setReservationItems] = useState<Array<any>>([]);
-  const [headerData, setHeaderData] = useState<Array<any>>([]);
+  // const [headerData, setHeaderData] = useState<Array<any>>([]);
 
   // const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
 
@@ -122,7 +124,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
 
   const calcAndSetData = async (ReservationItems:Array<any>) =>{
     // console.log("--------------- calcAndSetData ----------------------");
-    const calculatedReservedItems = await calculatePricedEquipmentData(headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
+    const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
     // console.log(calculatedReservedItems);
     setReservationItems(calculatedReservedItems);
 
@@ -179,20 +181,20 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
       getHeaderData(ReservationMain.price_table_id, (jsonRes:any, status, error) => {
         switch (status) {
           case 200:
-            setHeaderData(jsonRes);
+            setReservationValue('headerData', jsonRes);
             break;
           default:
-            setHeaderData([]);
+            setReservationValue('headerData', []);
             break;
         }
       });
-    }else setHeaderData([]);
+    }else setReservationValue('headerData', []);
   }, [ReservationMain.price_table_id]);
 
   useEffect(()=>{
     calcAndSetData(ReservationItems);
   }, [
-    headerData, 
+    ReservationMain.headerData, 
     ReservationMain.price_table_id, 
     ReservationMain.pickup, 
     ReservationMain.dropoff, 
