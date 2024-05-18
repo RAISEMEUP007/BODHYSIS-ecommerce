@@ -3,10 +3,12 @@ import { Box, Typography } from '@mui/material';
 import BasicLayout from '../common/BasicLayout';
 import { useNavigate } from 'react-router';
 import { sendReservationConfirmationEmail } from '../api/Stripe';
+import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
 const Thankyou: React.FC = () => {
 
   const navigate = useNavigate();
+  const { initReservation } = useCustomerReservation();
 
   const name = localStorage.getItem('full-name');
   const id = localStorage.getItem('_r_id');
@@ -18,6 +20,8 @@ const Thankyou: React.FC = () => {
   const store_name = localStorage.getItem('_r_store_name');
 
   useEffect(()=>{
+    initReservation();
+
     if(!pickup || !dropoff){
       navigate('/reservation');
     }
