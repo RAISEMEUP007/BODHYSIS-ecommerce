@@ -39,6 +39,10 @@ export const getPriceTableByBrandAndDate = (priceLogicData:Array<any>, brandId:a
 }
 
 export const calculatePricedEquipmentData = async (headerData:Array<any>, tableId : number|null, equipmentData : Array<any>, startDate:Date | null, endDate:Date | null) => {
+  // console.log("headerData", headerData);
+  // console.log("tableId", tableId);
+  // console.log("startDate", startDate);
+  // console.log("endDate", endDate);
   if(!tableId || startDate === null || endDate === null){
     return equipmentData.map((item)=>({...item, price:0}));
   }

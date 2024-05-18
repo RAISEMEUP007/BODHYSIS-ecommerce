@@ -41,13 +41,6 @@ const Reservation: React.FC = () => {
         autoHideDuration: 3000,
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
-    }else if(!ReservationMain.prices.total) {
-      enqueueSnackbar("The reservation should have a price value", {
-        variant: 'error',
-        style: { width: '350px' },
-        autoHideDuration: 3000,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      })
     }else if(!ReservationMain.address_id && !ReservationMain.manual_address) {
       enqueueSnackbar("The reservation should have a delivery address", {
         variant: 'error',

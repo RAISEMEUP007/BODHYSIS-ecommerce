@@ -13,6 +13,7 @@ import { useStoreDetails } from './Providers/StoreDetailsProvider/UseStoreDetail
 import { useMenuValues } from './Providers/MenuValuesProvider/UseMenuValues';
 import { useResponsiveValues } from './Providers/DimentionsProvider/UseResponsiveValues';
 import CustomBorderInput from './CustomBorderInput';
+import DiscountCodes from '../completepurchase/DiscountCodes';
 
 interface Props {
   title: string;
@@ -21,6 +22,7 @@ interface Props {
   isShowItems?:boolean;
   isRemovalItems?:boolean;
   isDisableDriverTip?:boolean;
+  isDisableDiscount?:boolean;
   onComplete?: (event: any) => void;
 }
 
@@ -28,7 +30,7 @@ type inputValidation = {
   driver_tip: boolean | null | 'negative',
 }
 
-const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, isDisableDriverTip, onComplete }) => {
+const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems, isRemovalItems, isDisableDriverTip, isDisableDiscount, onComplete }) => {
 
   const { ReservationItems, ReservationMain, setReservationValue, removeReservationItem } = useCustomerReservation();
   const { storeDetails } = useStoreDetails();
@@ -110,8 +112,12 @@ const Purchase: React.FC<Props> = ({ title, buttonTitle, isLoading, isShowItems,
           <b style={{fontSize:'1.1em', fontWeight:700}}>{ReservationMain.dropoff ? dayjs(ReservationMain.dropoff).format('MMMM DD, YYYY') : 'n/a'}</b>
         </Alert>
       </Collapse>
+      <Box sx={{display:'flex', alignItems:'flex-start', flexDirection:'row', justifyContent:'space-between', marginTop:'30px'}}>
+        <Typography sx={{fontSize:'20px', fontWeight:500, mt:'3px'}}><b>{"Discount Code"}</b></Typography>
+        <DiscountCodes isDisableDiscount={isDisableDiscount}/>
+      </Box>
       <Box>
-        <Typography sx={{fontSize:'20px', fontWeight:500, marginTop:'30px'}}><b>{"Stand Attendant"}</b></Typography>
+        <Typography sx={{fontSize:'20px', fontWeight:500, marginTop:'20px'}}><b>{"Stand Attendant"}</b></Typography>
         <Box sx={{display:'flex', flexDirection:'row', alignItems:'flex-start', justifyContent:'space-between'}}>
           <Typography sx={{fontWeight:400, marginTop:'18px'}}>{"Tip"}</Typography>
           <CustomBorderInput 

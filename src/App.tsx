@@ -14,10 +14,11 @@ import UserNotFound from './error/UserNotFound';
 import PageNotFound from './error/PageNotFound';
 import Temp from './thankyou/Temp';
 import TermsAndconditions from './payment/TermsAndConditions';
+import { getDiscountCodes } from './api/Product';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
-  const { storeDetails, setStoreDetails } = useStoreDetails();
+  const { storeDetails, setStoreDetails, setDiscounts } = useStoreDetails();
 
   const [ loadingFailed, setLoadingFailed ] = useState(false);
 
@@ -31,6 +32,11 @@ const InitializeApp = ({ children } : {children:any}) => {
           document.title = jsonRes.store_name;
         }else setLoadingFailed(true);
       });
+      await getDiscountCodes((jsonRes:any, status)=>{
+        if(status == 200){
+          setDiscounts(jsonRes);
+        }else setDiscounts([]);
+      })
     };
 
     fetchData();
