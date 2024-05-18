@@ -14,11 +14,11 @@ import UserNotFound from './error/UserNotFound';
 import PageNotFound from './error/PageNotFound';
 import Temp from './thankyou/Temp';
 import TermsAndconditions from './payment/TermsAndConditions';
-import { getDiscountCodes } from './api/Product';
+import { getDiscountCodes, getPriceLogicData } from './api/Product';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
-  const { storeDetails, setStoreDetails, setDiscounts } = useStoreDetails();
+  const { storeDetails, setStoreDetails, setDiscounts, setPriceLogicData } = useStoreDetails();
 
   const [ loadingFailed, setLoadingFailed ] = useState(false);
 
@@ -35,8 +35,19 @@ const InitializeApp = ({ children } : {children:any}) => {
       await getDiscountCodes((jsonRes:any, status)=>{
         if(status == 200){
           setDiscounts(jsonRes);
-        }else setDiscounts([]);
+        }else{
+          setDiscounts([]);
+          setLoadingFailed(true);
+        } 
       })
+      await getPriceLogicData((jsonRes: any, status) => { 
+        if(status == 200){
+          setPriceLogicData(jsonRes) ;
+        }else {
+          setDiscounts([]);
+          setLoadingFailed(true);
+        } 
+      });
     };
 
     fetchData();
@@ -44,7 +55,7 @@ const InitializeApp = ({ children } : {children:any}) => {
 
   if (!storeDetails.brand_id) return <div>{"Loading Store Details..."}</div>;
 
-  if(loadingFailed) return <div>{"Not registered store..."}</div>;
+  if(loadingFailed) return <div>{"Error occured while loading the store datail..."}</div>;
 
   return children;
 };

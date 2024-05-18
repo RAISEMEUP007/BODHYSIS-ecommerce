@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { useStoreDetails } from '../StoreDetailsProvider/UseStoreDetails';
-import { getHeaderData, getPriceLogicData } from '../../../api/Product';
+import { getHeaderData } from '../../../api/Product';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from '../../../reservation/CalcPrice';
 
 export interface ReservationMainProps {
@@ -93,13 +93,13 @@ export const CustomerReservationContext = createContext<ContextProps>({
 });
 
 export const CustomerReservationProvider = ({ children }:{children:React.ReactNode}) => {
-  const { storeDetails, discounts } = useStoreDetails();
+  const { storeDetails, discounts, priceLogicData } = useStoreDetails();
 
   const [ReservationMain, setReservationMain] = useState<ReservationMainProps>(initializedMain);
   const [ReservationItems, setReservationItems] = useState<Array<any>>([]);
   const [headerData, setHeaderData] = useState<Array<any>>([]);
 
-  const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
+  // const [priceLogicData, setPriceLogicData] = useState<Array<any>>([]);
 
   const setReservationValue = (key: keyof ReservationMainProps, value: any) => {
     setReservationMain((prev) => {
@@ -162,18 +162,17 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   }
 
   useEffect(() => {
-    getPriceLogicData((jsonRes: any) => { setPriceLogicData(jsonRes) });
-  }, []);
-
-  useEffect(() => {
     if(ReservationMain.pickup){
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
-      // console.log("----------- priceTable -----------");
-      // console.log(priceTable);
+      console.log("----------- priceTable -----------");
+      console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
     }
   }, [priceLogicData, storeDetails.brand_id, ReservationMain.pickup])
 
+  useEffect(()=>{console.log("priceLogicData")}, [priceLogicData]);
+  useEffect(()=>{console.log("storeDetails.brand_id")}, [storeDetails.brand_id]);
+  useEffect(()=>{console.log("ReservationMain.pickup")}, [ReservationMain.pickup]);
 
   useEffect(() => {
     if(ReservationMain.price_table_id){
