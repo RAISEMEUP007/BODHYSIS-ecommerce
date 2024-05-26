@@ -73,7 +73,7 @@ const Thankyou: React.FC = () => {
             {`${pickup} - ${dropoff} `}
           </Typography>
         </Box>
-        <Typography>{"You will receive an email and text message with informatio on your sheduled delivery and lock information."}</Typography>
+        <Typography>{"You will receive an email and text message with information on your sheduled delivery and lock information."}</Typography>
       </Box>
     </BasicLayout>
   );
