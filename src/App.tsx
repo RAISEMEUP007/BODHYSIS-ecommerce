@@ -21,16 +21,21 @@ const InitializeApp = ({ children } : {children:any}) => {
   const { storeDetails, setStoreDetails, setDiscounts, setPriceLogicData } = useStoreDetails();
 
   const [ loadingFailed, setLoadingFailed ] = useState(false);
+  const [ errorMsg, setErrorMsg ] = useState('Error occured while loading the store datail...');
 
   useEffect(() => {
     const fetchData = async () => {
       const currentURL = window.location.href;
       const host = new URL(currentURL).host;
-      await getStoreDetailDB({store_url:host}, (jsonRes:any, status)=>{
+      await getStoreDetailDB({store_url:host}, (jsonRes:any, status, error:any)=>{
         if(status == 200){
           setStoreDetails(jsonRes);
           document.title = jsonRes.store_name;
-        }else setLoadingFailed(true);
+        }else{
+          setLoadingFailed(true);
+          if(jsonRes && jsonRes.error) setErrorMsg(jsonRes.error)
+          if(error && error.error) setErrorMsg(error.error)
+        } 
       });
       await getDiscountCodes((jsonRes:any, status)=>{
         if(status == 200){
@@ -52,10 +57,10 @@ const InitializeApp = ({ children } : {children:any}) => {
 
     fetchData();
   }, []);
+  
+  if(loadingFailed) return <div>{errorMsg}</div>;
 
   if (!storeDetails.brand_id) return <div>{"Loading Store Details..."}</div>;
-
-  if(loadingFailed) return <div>{"Error occured while loading the store datail..."}</div>;
 
   return children;
 };
