@@ -42,6 +42,8 @@ const Reservation: React.FC = () => {
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
     }else if(!ReservationMain.address_id && !ReservationMain.manual_address) {
+      console.log(ReservationMain.address_id);
+      console.log(ReservationMain.manual_address);
       enqueueSnackbar("The reservation should have a delivery address", {
         variant: 'error',
         style: { width: '350px' },

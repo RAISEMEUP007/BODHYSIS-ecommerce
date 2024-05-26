@@ -86,7 +86,7 @@ export default function CheckoutForm() {
       const host = url.host;
       const fullHost = protocol + "//" + host; 
   
-      setStorageValues(reservationId);
+      setStorageValues(reservationId, newReservationData.reservation.order_number);
   
       const { error } = await stripe.confirmPayment({
         elements,
@@ -117,8 +117,9 @@ export default function CheckoutForm() {
     }
   };
 
-  const setStorageValues = (reservationId:number) =>{
+  const setStorageValues = (reservationId:number, order_number:string) =>{
     localStorage.setItem('_r_id', reservationId.toString());
+    localStorage.setItem('_r_order_number', order_number);
     localStorage.setItem('_r_name', ReservationMain.name);
     localStorage.setItem('_r_email', ReservationMain.email);
     localStorage.setItem('_r_phone', ReservationMain.phone_number);
@@ -130,6 +131,7 @@ export default function CheckoutForm() {
 
   const removeStorageValues = () =>{
     localStorage.removeItem('_r_id');
+    localStorage.removeItem('_r_order_number');
     localStorage.removeItem('_r_name');
     localStorage.removeItem('_r_email');
     localStorage.removeItem('_r_phone');

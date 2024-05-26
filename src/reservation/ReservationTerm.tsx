@@ -19,7 +19,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   const { matches900 } = useResponsiveValues();
 
   useEffect(()=>{
-    setReservationValue('pickup', new Date());
+    if(ReservationMain.pickup === null) setReservationValue('pickup', new Date());
   }, [])
 
   const handlePickupChange = (value: any) => {

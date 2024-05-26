@@ -87,7 +87,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
   // console.log(ReservationMain);
   useEffect(()=>{
     const calc = async ()=>{
-      console.log(ReservationMain);
+      // console.log(ReservationMain);
       if(Product?.lines[0]?.price_group_id){
         const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
         const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, lines, ReservationMain.pickup, ReservationMain.dropoff);

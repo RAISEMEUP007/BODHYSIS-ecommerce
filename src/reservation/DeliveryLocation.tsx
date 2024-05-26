@@ -24,6 +24,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
   const [searchedAddresses, setSearchedAddresses] = useState<Array<any>>([]);
 
   const [addressError, setAddressError] = useState(emptyError);
+
   useEffect(()=>{
     setAddressError(emptyError)
   }, [emptyError]);
@@ -51,7 +52,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
       setSearchedAddresses([]);
     }
   }, [searchKey]);
-
+// console.log(ReservationMain.address_id);
   return (
     <Box sx={sx}>
       <Typography sx={{textDecoration:'underline', fontSize:'20px', marginBottom:'6px'}}>{`Vacation Address`}</Typography>
@@ -107,7 +108,16 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
               setReservationValue('address_id', value.id);
             }}
             // inputValue={searchKey}
-            onInputChange={(event, value)=>{setSearchKey(value)}}
+            onInputChange={(event, value)=>{
+              setSearchKey(value)
+              if(!value){
+                setReservationValue('selectedAddress', null);
+                setReservationValue('address_id', null);
+              }
+            }}
+            onClose = {(event: React.SyntheticEvent, reason: string)=>{
+              
+            }}
             filterOptions={(x) => {
               return x;
             }}

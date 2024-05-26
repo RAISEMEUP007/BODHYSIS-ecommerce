@@ -75,7 +75,7 @@ const Payment: React.FC = () => {
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
       return;
-    }else if(!ReservationMain.address_id) {
+    }else if(!ReservationMain.address_id && !ReservationMain.manual_address) {
       enqueueSnackbar("The reservation should have a delivery address", {
         variant: 'error',
         style: { width: '350px' },
@@ -149,6 +149,7 @@ const Payment: React.FC = () => {
     }
 
     localStorage.setItem('_r_id', newReservationData.reservation.id.toString());
+    localStorage.setItem('_r_order_number', newReservationData.reservation.order_number.toString());
     localStorage.setItem('_r_name', ReservationMain.name);
     localStorage.setItem('_r_email', ReservationMain.email);
     localStorage.setItem('_r_phone', ReservationMain.phone_number);
