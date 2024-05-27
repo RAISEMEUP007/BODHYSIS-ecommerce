@@ -27,11 +27,6 @@ const Thankyou: React.FC = () => {
       navigate('/reservation');
     }
 
-    const payload = {
-      customerId : localStorage.getItem('customerId'),
-    }
-    addLastPaymentMethosToCustomer(payload);
-
     const sendMail = setTimeout(()=>{
       const mailParams = { 
         id,
