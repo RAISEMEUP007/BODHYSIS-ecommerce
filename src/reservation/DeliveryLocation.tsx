@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, Box, Collapse, Link, TextField, Typography } from '@mui/material';
 
-import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 import { searchAddress } from '../api/Store';
+import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
+import { useStoreDetails } from '../common/Providers/StoreDetailsProvider/UseStoreDetails';
 import CustomBorderInput from '../common/CustomBorderInput';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
 
@@ -17,6 +18,7 @@ interface props {
 
 const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, isShowSearchBox, contentStyle, emptyError}) => {
   const { ReservationMain, setReservationValue } = useCustomerReservation();
+  const { storeDetails } = useStoreDetails();
   const { matches900 } = useResponsiveValues();
 
   const [expandSearchBox, setExpandSearchBox] = useState<boolean>(false);
@@ -36,7 +38,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
 
   useEffect(() => {
     if (searchKey) {
-      searchAddress(searchKey, (jsonRes:any, status) => {
+      searchAddress(searchKey, storeDetails.id, (jsonRes:any, status) => {
         if (status === 200 && Array.isArray(jsonRes)) {
           setSearchedAddresses(
             jsonRes.map((address, index) => ({
