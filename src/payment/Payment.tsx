@@ -48,7 +48,8 @@ const Payment: React.FC = () => {
     const payload:any = {
       ...ReservationMain,
       amount : Math.round(ReservationMain.prices.total * 100),
-      store_name : storeDetails.store_name
+      store_name : storeDetails.store_name,
+      customerId : localStorage.getItem('customerId'),
     }
 
     if (!ReservationMain.email) {
