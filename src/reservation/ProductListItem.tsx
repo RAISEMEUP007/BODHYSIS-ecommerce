@@ -308,7 +308,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         {/* <CustomNumberInput min={1}/> */}
         <Button 
           variant="contained"
-          disabled={formValidation.quantity === 'quantity'}
+          disabled={formValidation.quantity === 'quantity' || ReservationMain.dropoff === null}
           sx={{
             mt:matches900?'20px':'26px',
             padding:'14px 0',
