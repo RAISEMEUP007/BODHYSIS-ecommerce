@@ -293,7 +293,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           onChange={(event:any)=>updateFormValue('size', event.target.value)} />
         : <></>
       } */}
-      <p>{`Max Available:  ${quantities?.remainingQuantity??''}`}</p>
+      {/* <p>{`Max Available:  ${quantities?.remainingQuantity??''}`}</p> */}
       <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
         <CustomBorderInput
           error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
