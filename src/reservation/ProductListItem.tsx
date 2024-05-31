@@ -45,6 +45,10 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const [TimeOutVal, setTimeOutVal] = useState<any>(null);
 
+  const [quantities, setQuantities] = useState({
+    remainingQuantity: null,
+  });
+
   const [formValues, setFormValues] = useState<formValue>({
     size: null,
     quantity: 1,
@@ -146,6 +150,9 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const verifyQuantity = async (value:any) => {
     if(!isNaN(parseInt(value)) && parseInt(value) && value > 0 && ReservationMain.pickup && ReservationMain.dropoff) {
+      // setQuantities({
+      //   remainingQuantity: null
+      // });
       const payload = {
         start_date: formatDateString(ReservationMain.pickup),
         end_date: formatDateString(ReservationMain.dropoff),
@@ -156,14 +163,20 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       }
       const respose:any = await verifyQuantityByDisplayName(payload);
       // console.log("respose.status", respose.status);
+      const data = await respose.json();
       if(respose.status == 200){
+        setQuantities(data.quantities);
         return true;
       }else if(respose.status == 400){
+        setQuantities(data.quantities);
         setFormValidation(prevState => ({
           ...prevState,
           quantity: 'quantity'
         }));
       }else {
+        setQuantities({
+          remainingQuantity: null
+        });
         enqueueSnackbar("Server Error", {
           variant: 'error',
           style: { width: '300px' },
@@ -178,7 +191,7 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   useEffect(()=>{
     verifyQuantity(formValues.quantity)
-  }, [ReservationItems.length])
+  }, [ReservationItems.length, ReservationMain.dropoff, ReservationMain.pickup])
 
   const addToCart = () => {
     let flag = true;
@@ -280,11 +293,12 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           onChange={(event:any)=>updateFormValue('size', event.target.value)} />
         : <></>
       } */}
+      <p>{`Max Available:  ${quantities?.remainingQuantity??''}`}</p>
       <Box sx={{display:'flex', flexDirection:matches900?'column':'row', alignItems:'flex-start', justifyContent:'space-between'}}>
         <CustomBorderInput
           error={(formValidation.quantity === false || formValidation.quantity == 'negative')?true:false}
           label="Quantity"
-          containerstyle={{ marginBottom:'10px', width:matches900?'100%':'47%' }}
+          containerstyle={{ marginBottom:'2px', width:matches900?'100%':'47%' }}
           type="number"
           // min={1}
           inputProps={{
@@ -310,8 +324,10 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
           variant="contained"
           disabled={formValidation.quantity === 'quantity' || ReservationMain.dropoff === null}
           sx={{
-            mt:matches900?'20px':'26px',
-            padding:'14px 0',
+            // mt:matches900?'20px':'26px',
+            alignSelf:'flex-end',
+            marginTop:'20px',
+            padding:'15px 0',
             textTransform: 'none',
             width:matches900?'100%':'47%',
           }}
