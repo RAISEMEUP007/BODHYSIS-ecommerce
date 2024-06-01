@@ -11,7 +11,7 @@ const Thankyou: React.FC = () => {
   const { initReservation } = useCustomerReservation();
 
   const name = localStorage.getItem('full-name');
-  const id = localStorage.getItem('_r_id');
+  const id = parseInt(localStorage.getItem('_r_id') || '0');
   const order_number = localStorage.getItem('_r_order_number');
   const email = localStorage.getItem('_r_email');
   const phone_number = localStorage.getItem('_r_phone');
