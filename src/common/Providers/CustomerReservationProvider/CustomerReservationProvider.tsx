@@ -124,7 +124,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   const calcAndSetData = async (ReservationItems:Array<any>) =>{
     // console.log("--------------- calcAndSetData ----------------------");
     const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
-    // console.log(calculatedReservedItems);
+
     setReservationItems(calculatedReservedItems);
 
     let prices = {
@@ -133,16 +133,13 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
       discount: 0,
       total: 0,
     }
-    
+
     calculatedReservedItems.map((item:any)=>{
       let subtotal = item.price || 0;
       prices.subtotal += subtotal;
     });
 
-    if(ReservationMain.driver_tip) prices.subtotal += ReservationMain.driver_tip;
-
     if(ReservationMain.discount_code){
-
       const selectedDiscount:any = discounts.find((item:any) => {
         if (typeof item.code === 'string') {
           return item.code.toLowerCase() === ReservationMain.discount_code.toLowerCase();
@@ -156,8 +153,8 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
         prices.discount = 0;
       }
     }
-    prices.tax = (prices.subtotal - prices.discount) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
-    prices.total += prices.subtotal - prices.discount + prices.tax;
+    prices.tax = (prices.subtotal - prices.discount + ReservationMain.driver_tip) * (storeDetails.sales_tax?storeDetails.sales_tax/100:0) ?? 0;
+    prices.total = prices.subtotal - prices.discount + ReservationMain.driver_tip + prices.tax;
 
     setReservationValue('prices', prices);
   }
@@ -215,18 +212,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     discounts, 
     storeDetails.sales_tax
   ]);
-
-  // useEffect(() => {console.log('************************************************')}, []);
-  // useEffect(()=>{console.log("headerData")}, [headerData])
-  // useEffect(()=>{console.log("ReservationMain.price_table_id")}, [ReservationMain.price_table_id])
-  // useEffect(()=>{console.log("ReservationMain.pickup")}, [ReservationMain.pickup])
-  // useEffect(()=>{console.log("ReservationMain.dropoff")}, [ReservationMain.dropoff])
-  // useEffect(()=>{console.log("ReservationMain.driver_tip")}, [ReservationMain.driver_tip])
-  // useEffect(()=>{console.log("ReservationMain.discount_code")}, [ReservationMain.discount_code])
-  // useEffect(()=>{console.log("discounts")}, [discounts])
-  // useEffect(()=>{console.log("storeDetails.sales_tax")}, [storeDetails.sales_tax])
-  // useEffect(()=>{console.log('length', ReservationItems.length)}, [ReservationItems.length]);
-
+  
   const values: ContextProps = {
     ReservationMain,
     ReservationItems,
