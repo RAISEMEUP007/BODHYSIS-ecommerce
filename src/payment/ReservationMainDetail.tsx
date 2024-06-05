@@ -66,13 +66,13 @@ const ReservationMainDetail: React.FC<props> = ({ sx }) => {
       <CustomBorderInput
         containerstyle={{ width: matches900?'80%':'100%', mt:'20px' }}
         label = {'Special Instructions'}
-        value={ReservationMain.special_instructions} 
+        value={ReservationMain.note} 
         placeholder="Special Instructions" 
         multiline
         rows={6}
         sx={{marginLeft:'-14px', marginTop:'-16px'}}
         onChange={(e: any) => {
-          setReservationValue('special_instructions', e.target.value);
+          setReservationValue('note', e.target.value);
         }} 
       />
       <DeliveryLocation

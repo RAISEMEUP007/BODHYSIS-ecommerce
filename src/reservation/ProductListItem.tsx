@@ -243,7 +243,6 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
       quantity: 1, 
       price_group_id: Product?.lines[0]?.price_group_id ?? 0, 
       extras: extraItems.filter(item => item.selected),
-      special_instructions: "", 
       img_url: Product?.img_url ?? '',
       size: formValues.size,
     }
