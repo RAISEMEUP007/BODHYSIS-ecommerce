@@ -8,7 +8,6 @@ import BasicLayout from '../common/BasicLayout';
 import { useCustomStripe } from '../common/Providers/CustomStripeProvider/UseCustomStripe';
 import CheckoutForm from './CheckoutForm';
 import { useResponsiveValues } from '../common/Providers/DimentionsProvider/UseResponsiveValues';
-import DiscountCodes from './DiscountCodes';
 
 const CompletePurchase: React.FC = () => {
   

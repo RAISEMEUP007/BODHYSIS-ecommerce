@@ -15,7 +15,7 @@ export interface ReservationMainProps {
   },
   price_table_id: number | null;
   name: string;
-  special_instructions: string;
+  note: string;
   address: string;
   address2: string;
   city: string;
@@ -61,7 +61,7 @@ const initializedMain: ReservationMainProps = {
   },
   price_table_id: null,
   name: "",
-  special_instructions: "",
+  note: "",
   address: "",
   address2: "",
   city: "",
@@ -122,7 +122,6 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   }
 
   const calcAndSetData = async (ReservationItems:Array<any>) =>{
-    // console.log("--------------- calcAndSetData ----------------------");
     const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
 
     setReservationItems(calculatedReservedItems);
@@ -162,15 +161,9 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
   useEffect(() => {
     if(ReservationMain.pickup){
       const priceTable = getPriceTableByBrandAndDate(priceLogicData, storeDetails.brand_id, ReservationMain.pickup);
-      console.log("----------- priceTable -----------");
-      console.log(priceTable);
       setReservationValue('price_table_id', priceTable?.id??null);
     }
   }, [priceLogicData, storeDetails.brand_id, ReservationMain.pickup])
-
-  useEffect(()=>{console.log("priceLogicData")}, [priceLogicData]);
-  useEffect(()=>{console.log("storeDetails.brand_id")}, [storeDetails.brand_id]);
-  useEffect(()=>{console.log("ReservationMain.pickup")}, [ReservationMain.pickup]);
 
   useEffect(() => {
     if(ReservationMain.price_table_id){

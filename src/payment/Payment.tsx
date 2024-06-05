@@ -88,9 +88,6 @@ const Payment: React.FC = () => {
 
     setIsLoading(true);
     if(payload.amount == 0 && ReservationMain.discount_code && ReservationMain.discount_rate){
-      console.log(payload.amount);
-      console.log(ReservationMain.discount_code);
-      console.log(ReservationMain.discount_rate);
       proceedFreeReservation();
     }else {
       getClientSecret(payload, (jsonRes:any, status:any, error:any)=>{
