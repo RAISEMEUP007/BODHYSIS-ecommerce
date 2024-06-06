@@ -55,6 +55,7 @@ export default function CheckoutForm() {
         items : ReservationItems,
         discount_code: ReservationMain.discount_code,
         promo_code: ReservationMain.promo_code,
+        note: ReservationMain.note,
       };
 
       const createdReservation:any = await createReservation(forSavingOnDB);
