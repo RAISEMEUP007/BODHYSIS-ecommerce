@@ -65,7 +65,7 @@ const DeliveryLocation: React.FC<props> = ({sx, isDescription, isShowAddress, is
           {ReservationMain.use_manual ? 
             (ReservationMain.manual_address || ' ') :
             (ReservationMain.selectedAddress && 
-              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}, ${ReservationMain.selectedAddress.plantation ?? ''}${ReservationMain.selectedAddress.property_name ? ` - ${ReservationMain.selectedAddress.property_name}` :  ''}`
+              `${ReservationMain.selectedAddress.number ?? ''} ${ReservationMain.selectedAddress.street ?? ''}${ReservationMain.selectedAddress.property_name ? `${ReservationMain.selectedAddress.property_name}` :  ''}, ${ReservationMain.selectedAddress.plantation ?? ''}`
             )
           }
         </Typography>
