@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import BasicLayout from '../common/BasicLayout';
 import { useNavigate } from 'react-router';
-import { addLastPaymentMethosToCustomer, sendReservationConfirmationEmail } from '../api/Stripe';
+import { sendReservationConfirmationEmail } from '../api/Stripe';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
 const Thankyou: React.FC = () => {
@@ -74,6 +74,27 @@ const Thankyou: React.FC = () => {
           </Typography>
         </Box>
         <Typography>{"You will receive an email and text message with information on your sheduled delivery and lock information."}</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: '24px' }}>
+          <Button
+            variant="contained"
+            sx={{ padding:'10px 0', width:'150px', textTransform: 'none', fontSize:'16px', marginRight:'40px' }}
+            onClick={()=>{
+              navigate("/reservation");
+            }}
+          >
+            {"Go Home"}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ padding:'10px 0', width:'150px', textTransform: 'none', fontSize:'16px' }}
+            onClick={()=>{
+              localStorage.clear();
+              navigate("/");
+            }}
+          >
+            {"Log out"}
+          </Button>
+        </Box>
       </Box>
     </BasicLayout>
   );

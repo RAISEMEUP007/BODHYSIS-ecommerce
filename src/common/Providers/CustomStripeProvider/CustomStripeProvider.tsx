@@ -30,8 +30,10 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
 
   const stripePromise = useMemo(() => {
     if (storeDetails.store_name && storeDetails.store_name.toLocaleLowerCase().includes('stand')) {
+      console.log('using bike stand key');
       return loadStripe(STRIPE_PUBLIC_KEY_STAND as string);
     } else {
+      console.log('using default key');
       return loadStripe(STRIPE_PUBLIC_KEY as string);
     }
   }, [storeDetails.store_name]);
