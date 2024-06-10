@@ -39,7 +39,7 @@ const CompletePurchase: React.FC = () => {
   }
 
   const options = {
-    clientSecret: clientSecret,
+    clientSecret: clientSecret?.client_secret??'',
     appearance: appearanceOptions,
   };
 
