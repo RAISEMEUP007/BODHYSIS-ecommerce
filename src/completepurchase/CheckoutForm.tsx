@@ -4,6 +4,7 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router";
 import dayjs from "dayjs";
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
@@ -18,6 +19,7 @@ import { formatDateString } from "../common/Utils";
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
   const { clientSecret } = useCustomStripe();
@@ -29,90 +31,94 @@ export default function CheckoutForm() {
     e.preventDefault();
     if (stripe && elements && clientSecret && ReservationMain.pickup){
       setIsLoading(true);
-    
-      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret.client_secret);
-
-      if (!paymentIntent) return;
       
-      const forSavingOnDB = {
-        brand_id : storeDetails.brand_id,
-        start_date : formatDateString(ReservationMain.pickup),
-        end_date : ReservationMain.dropoff? formatDateString(ReservationMain.dropoff): '',
-        subtotal : ReservationMain.prices.subtotal,
-        tax_rate : storeDetails.sales_tax,
-        tax_amount : ReservationMain.prices.tax,
-        discount_amount : ReservationMain.prices.discount,
-        total_price: paymentIntent.amount/100,
-        price_table_id: ReservationMain.price_table_id,
-        stage : 2,
-        address_id : ReservationMain.address_id,
-        use_manual : ReservationMain.use_manual,
-        manual_address : ReservationMain.manual_address,
-        email : ReservationMain.email,
-        phone_number : ReservationMain.phone_number,
-        driver_tip: ReservationMain.driver_tip,
-        customer_id : localStorage.getItem('customerId'),
-        items : ReservationItems,
-        discount_code: ReservationMain.discount_code,
-        promo_code: ReservationMain.promo_code,
-        note: ReservationMain.note,
-        stripe_cus_id: clientSecret.customer,
-      };
-
-      const createdReservation:any = await createReservation(forSavingOnDB);
-      const newReservationData = await createdReservation.clone().json();
-      if(!newReservationData) {
-        enqueueSnackbar(`Reservation failed!`, {
-          variant: 'error',
-          style: { width: '350px' },
-          autoHideDuration: 3000,
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        })
-        return;
-      }
-
-      const reservationId = newReservationData.reservation.id;
-  
-      const payload = {
-        payment_intent : paymentIntent?.id,
-        reservation_id : reservationId,
-        method: 'Stripe',
-        amount: paymentIntent.amount/100,
-      }
-      
-      await createTransaction(payload);
-  
       const currentURL = window.location.href;
       const url = new URL(currentURL);
       const protocol = url.protocol;
       const host = url.host;
       const fullHost = protocol + "//" + host; 
   
-      setStorageValues(reservationId, newReservationData.reservation.order_number);
-  
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: fullHost + "/thankyou",
         },
+        redirect: "if_required",
       });
+      if(error){
+        if (error.type === "card_error" || error.type === "validation_error") {
+          enqueueSnackbar(error.message as string, {
+            variant: 'error',
+            style: { width: '350px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          removeStorageValues();
+        } else {
+          enqueueSnackbar("An unexpected error occurred.", {
+            variant: 'error',
+            style: { width: '350px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          removeStorageValues();
+        }
+      } else{
+        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret.client_secret);
+
+        if (!paymentIntent) return;
+        
+        const forSavingOnDB = {
+          brand_id : storeDetails.brand_id,
+          start_date : formatDateString(ReservationMain.pickup),
+          end_date : ReservationMain.dropoff? formatDateString(ReservationMain.dropoff): '',
+          subtotal : ReservationMain.prices.subtotal,
+          tax_rate : storeDetails.sales_tax,
+          tax_amount : ReservationMain.prices.tax,
+          discount_amount : ReservationMain.prices.discount,
+          total_price: paymentIntent.amount/100,
+          price_table_id: ReservationMain.price_table_id,
+          stage : 2,
+          address_id : ReservationMain.address_id,
+          use_manual : ReservationMain.use_manual,
+          manual_address : ReservationMain.manual_address,
+          email : ReservationMain.email,
+          phone_number : ReservationMain.phone_number,
+          driver_tip: ReservationMain.driver_tip,
+          customer_id : localStorage.getItem('customerId'),
+          items : ReservationItems,
+          discount_code: ReservationMain.discount_code,
+          promo_code: ReservationMain.promo_code,
+          note: ReservationMain.note,
+          stripe_cus_id: clientSecret.customer,
+        };
   
-      if (error.type === "card_error" || error.type === "validation_error") {
-        enqueueSnackbar(error.message as string, {
-          variant: 'error',
-          style: { width: '350px' },
-          autoHideDuration: 3000,
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        })
-        removeStorageValues();
-      } else {
-        enqueueSnackbar("An unexpected error occurred.", {
-          variant: 'error',
-          style: { width: '350px' },
-          autoHideDuration: 3000,
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        })
-        removeStorageValues();
+        const createdReservation:any = await createReservation(forSavingOnDB);
+        const newReservationData = await createdReservation.clone().json();
+        if(!newReservationData) {
+          enqueueSnackbar(`Reservation failed!`, {
+            variant: 'error',
+            style: { width: '350px' },
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          })
+          return;
+        }
+  
+        const reservationId = newReservationData.reservation.id;
+    
+        const payload = {
+          payment_intent : paymentIntent?.id,
+          reservation_id : reservationId,
+          method: 'Stripe',
+          amount: paymentIntent.amount/100,
+        }
+        
+        await createTransaction(payload);
+        
+        setStorageValues(reservationId, newReservationData.reservation.order_number);
+
+        navigate("/thankyou");
       }
   
       setIsLoading(false);
