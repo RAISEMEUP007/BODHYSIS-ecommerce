@@ -30,7 +30,7 @@ export default function CheckoutForm() {
     if (stripe && elements && clientSecret && ReservationMain.pickup){
       setIsLoading(true);
     
-      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+      const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret.client_secret);
 
       if (!paymentIntent) return;
       
@@ -56,6 +56,7 @@ export default function CheckoutForm() {
         discount_code: ReservationMain.discount_code,
         promo_code: ReservationMain.promo_code,
         note: ReservationMain.note,
+        stripe_cus_id: clientSecret.customer,
       };
 
       const createdReservation:any = await createReservation(forSavingOnDB);

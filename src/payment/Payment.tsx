@@ -92,7 +92,7 @@ const Payment: React.FC = () => {
     }else {
       getClientSecret(payload, (jsonRes:any, status:any, error:any)=>{
         if(status == 200){
-          setClientSecret(jsonRes.client_secret);
+          setClientSecret(jsonRes);
           navigate("/completepurchase");
         }else{
           const errorMessage = jsonRes?.raw?.message??"Error occured on the server.";

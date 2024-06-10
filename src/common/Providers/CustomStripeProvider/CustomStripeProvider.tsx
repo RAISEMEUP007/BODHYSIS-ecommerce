@@ -7,15 +7,15 @@ import { useStoreDetails } from '../StoreDetailsProvider/UseStoreDetails';
 
 interface ContextProps {
   amount: number;
-  clientSecret: string;
+  clientSecret: any;
   stripePromise: Promise<Stripe | null>;
   setAmount: (amount:number) => void;
-  setClientSecret: (client_secret:string) => void;
+  setClientSecret: (client_secret:any) => void;
 }
 
 export const CustomStripeProviderContext = createContext<ContextProps>({
   amount: 0,
-  clientSecret: '',
+  clientSecret: null,
   stripePromise: Promise.resolve(null),
   setAmount: () => {},
   setClientSecret: () => {},
@@ -26,7 +26,7 @@ export const CustomStripeProvider = ({ children }:{children:React.ReactNode}) =>
   const { storeDetails } = useStoreDetails();
 
   const [amount, setAmount] = useState<number>(0);
-  const [clientSecret, setClientSecret] = useState<string>('');
+  const [clientSecret, setClientSecret] = useState<any>(null);
 
   const stripePromise = useMemo(() => {
     if (storeDetails.store_name && storeDetails.store_name.toLocaleLowerCase().includes('stand')) {
