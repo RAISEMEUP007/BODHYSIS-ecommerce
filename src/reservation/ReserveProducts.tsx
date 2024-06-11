@@ -60,9 +60,7 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
     }
   };
 
-  const ReservationTermEl = useMemo(()=>(<ReservationTerm
-    contentStyle={styles(matches900).contentPadding}
-  />), [])
+  const ReservationTermEl = useMemo(()=>(<ReservationTerm/>), [])
 
   const DeliveryLocationEl = useMemo(()=>(<DeliveryLocation
     isDescription={true}
