@@ -175,8 +175,8 @@ const Payment: React.FC = () => {
 
   const renderReview = () => (
     <BasicLayout>
-      <Box sx={styles.container}>
-        <ReservationMainDetail sx={styles.ReservationMainDetail}/>
+      <Box sx={styles(matches900).container}>
+        <ReservationMainDetail sx={styles(matches900).ReservationMainDetail}/>
         <Purchase 
           title='Order Summary'
           buttonTitle="Complete Purchase"
@@ -187,19 +187,19 @@ const Payment: React.FC = () => {
     </BasicLayout>
   );
 
-  const styles ={
-    container: {
-      display:'flex', 
-      flexDirection: matches900? 'row': 'column',
-    },
-    ReservationMainDetail: {
-      flex:1, 
-      p:matches900?'60px 40px':'30px 24px',
-      overflow: 'auto',
-    },
-  }
-
   return renderReview();
 }
+
+const styles = (matches900:boolean) => ({
+  container: {
+    display:'flex', 
+    flexDirection: matches900? 'row': 'column',
+  },
+  ReservationMainDetail: {
+    flex:1, 
+    p:matches900?'60px 40px':'30px 24px',
+    overflow: 'auto',
+  },
+});
 
 export default Payment;

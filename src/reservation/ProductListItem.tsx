@@ -17,7 +17,6 @@ import { formatDateString } from '../common/Utils';
 
 interface props {
   product: any;
-  extras?: Array<any>;
   sx?: object;
 }
 
@@ -88,14 +87,11 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
     }
   }, [Product]);
 
-  // console.log(ReservationMain);
   useEffect(()=>{
     const calc = async ()=>{
-      // console.log(ReservationMain);
       if(Product?.lines[0]?.price_group_id){
         const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
         const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, lines, ReservationMain.pickup, ReservationMain.dropoff);
-        // console.log(calculatedLines);
         SetProduct({ ...Product, lines: calculatedLines });
       }
     }
@@ -162,7 +158,6 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
         pre_quantity: ReservationItems.filter(item => item.display_name === product.display_name).length,
       }
       const respose:any = await verifyQuantityByDisplayName(payload);
-      // console.log("respose.status", respose.status);
       const data = await respose.json();
       if(respose.status == 200){
         setQuantities(data.quantities);
@@ -195,7 +190,6 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   const addToCart = () => {
     let flag = true;
-    // console.log(formValues);
     const updatedFormValidation = { ...formValidation };
     for (const key in formValues) {
       switch(key){

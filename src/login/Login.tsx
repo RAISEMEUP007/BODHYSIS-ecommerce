@@ -383,6 +383,8 @@ const Login: React.FC = () => {
     }
   }, [])
 
+  const styles = pageStyles(matches900);
+  
   const renderLoigin = () => (
     <BasicLayout>
         
@@ -629,62 +631,62 @@ const Login: React.FC = () => {
     </BasicLayout>
   );
 
-  const styles = {
-    containerStyle:{
-      m: matches900 ? 5 : 2, 
-      mt: matches900 ? 8 : 4, 
-      flex:1, 
-      backgroundColor:'#F0F0F0', 
-      p: matches900 ? 4 : 3, 
-      border:'1px solid #A3A3A3', 
-      borderRadius:'5px', 
-      width:'100%', 
-      alignSelf:'flex-start'
-    },
-    description:{
-      display:'flex', 
-      flexDirection:'row', 
-      alignItems: matches900?'center':'flex-start'
-    },
-    form: {
-      display:'flex', 
-      flexDirection: matches900?'row':'column-reverse', 
-      mt: matches900 ? 5 : 3,
-    },
-    signUpForm: {
-      width: matches900?'65%':'auto', 
-      p: matches900?"0 4% 0 0":"20px 0 0 0", 
-      m: matches900?0:'40px 0 0',  
-      borderColor:'#A3A3A3', 
-      borderStyle:'solid', 
-      borderWidth: matches900?'0px 1px 0px 0px':'1px 0px 0px 0px'
-    },
-    signUpInput: { 
-      width: matches900?'48%':'100%', 
-      mb:'20px' 
-    },
-    signUpInput2: { 
-      width: matches900? '31%' : '100%',
-      mb:'20px' 
-    },
-    signInForm: {
-      width: matches900?'35%':'auto', 
-      pl: matches900?4:0,
-    },
-    signInInput: { 
-      width: '100%', 
-      mb: matches900?'20px' :'10px'
-    },
-    logInButton: { 
-      float:'right',
-      padding:'10px 50px', 
-      fontSize:'16px', 
-      textTransform: 'none',
-      mt: matches900? '30px' : '10px',
-    },
-  }
-
   return renderLoigin();
 }
+
+const pageStyles = (matches900:boolean) => ({
+  containerStyle:{
+    m: matches900 ? 5 : 2, 
+    mt: matches900 ? 8 : 4, 
+    flex:1, 
+    backgroundColor:'#F0F0F0', 
+    p: matches900 ? 4 : 3, 
+    border:'1px solid #A3A3A3', 
+    borderRadius:'5px', 
+    width:'100%', 
+    alignSelf:'flex-start'
+  },
+  description:{
+    display:'flex', 
+    flexDirection:'row', 
+    alignItems: matches900?'center':'flex-start'
+  },
+  form: {
+    display:'flex', 
+    flexDirection: matches900?'row':'column-reverse', 
+    mt: matches900 ? 5 : 3,
+  },
+  signUpForm: {
+    width: matches900?'65%':'auto', 
+    p: matches900?"0 4% 0 0":"20px 0 0 0", 
+    m: matches900?0:'40px 0 0',  
+    borderColor:'#A3A3A3', 
+    borderStyle:'solid', 
+    borderWidth: matches900?'0px 1px 0px 0px':'1px 0px 0px 0px'
+  },
+  signUpInput: { 
+    width: matches900?'48%':'100%', 
+    mb:'20px' 
+  },
+  signUpInput2: { 
+    width: matches900? '31%' : '100%',
+    mb:'20px' 
+  },
+  signInForm: {
+    width: matches900?'35%':'auto', 
+    pl: matches900?4:0,
+  },
+  signInInput: { 
+    width: '100%', 
+    mb: matches900?'20px' :'10px'
+  },
+  logInButton: { 
+    float:'right',
+    padding:'10px 50px', 
+    fontSize:'16px', 
+    textTransform: 'none',
+    mt: matches900? '30px' : '10px',
+  },
+})
 
 export default Login;

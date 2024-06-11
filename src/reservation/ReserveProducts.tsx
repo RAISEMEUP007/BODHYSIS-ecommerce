@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
@@ -60,35 +60,42 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
     }
   };
 
+  const ReservationTermEl = useMemo(()=>(<ReservationTerm
+    contentStyle={styles(matches900).contentPadding}
+  />), [])
+
+  const DeliveryLocationEl = useMemo(()=>(<DeliveryLocation
+    isDescription={true}
+    isShowSearchBox={true}
+    sx={{marginTop:'20px'}}
+    contentStyle={styles(matches900).contentPadding}
+    emptyError={addressError}
+  />), [addressError])
+
+  const CategorySlotEl = useMemo(()=>(<CategorySlot 
+    title={matches900?'Categories':'Pick a Cateogry'}
+    sx={styles(matches900).CategorySlot} 
+    selectedCategory={selectedCategory} 
+    setSelectedCategory={setSelectedCategory} />), [matches900, selectedCategory])
+
+  const ProductListEl = useMemo(()=>(<ProductList 
+    sx={styles(matches900).ProductList}
+    lists={productFamilies} />), [matches900, productFamilies])
+
   const renderReserveProducts = () => (
     <Box sx={sx}>
       <Box>
         <LogInAs/>
         <Box>
           <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Reservation Details`}</Typography>
-          <ReservationTerm
-            contentStyle={styles.contentPadding}
-          />
-          <DeliveryLocation
-            isDescription={true}
-            isShowSearchBox={true}
-            sx={{marginTop:'20px'}}
-            contentStyle={styles.contentPadding}
-            emptyError={addressError}
-          />
+          {ReservationTermEl}
+          {DeliveryLocationEl}
         </Box>
         <Box>
           <Typography style={{fontWeight:700, fontSize:'36px', marginTop:'50px', marginBottom:'20px'}}>{`Select Items`}</Typography>
-          <Box sx={styles.selectItemsBox}>
-            <CategorySlot 
-              title={matches900?'Categories':'Pick a Cateogry'}
-              sx={styles.CategorySlot} 
-              selectedCategory={selectedCategory} 
-              setSelectedCategory={setSelectedCategory} />
-            <ProductList 
-              sx={styles.ProductList} 
-              extras={extras} 
-              lists={productFamilies} />
+          <Box sx={styles(matches900).selectItemsBox}>
+            {CategorySlotEl}
+            {ProductListEl}
             {!matches900 && 
               <Button 
                 variant='contained' 
@@ -110,28 +117,28 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
     </Box>
   );
 
-  const styles = {
-    contentPadding:{
-      paddingLeft: matches900?"0px":'0px'
-    },
-    CategorySlot:{
-      width: matches900?'300px':'100%', 
-      border:'1px solid #BCBCBC', 
-      borderRadius:'4px', 
-      alignSelf:'flex-start',
-      marginBottom:'20px',
-    },
-    ProductList:{
-      flex:1,
-      marginLeft: matches900?'24px':'0px'
-    },
-    selectItemsBox: {
-      display:'flex', 
-      flexDirection: matches900?'row':'column'
-    }
-  }
-
   return renderReserveProducts();
 }
+
+const styles = (matches900:boolean) => ({
+  contentPadding:{
+    paddingLeft: '0px'
+  },
+  CategorySlot:{
+    width: matches900?'300px':'100%', 
+    border:'1px solid #BCBCBC', 
+    borderRadius:'4px', 
+    alignSelf:'flex-start',
+    marginBottom:'20px',
+  },
+  ProductList:{
+    flex:1,
+    marginLeft: matches900?'24px':'0px'
+  },
+  selectItemsBox: {
+    display:'flex', 
+    flexDirection: matches900?'row':'column'
+  }
+})
 
 export default ReserveProducts;

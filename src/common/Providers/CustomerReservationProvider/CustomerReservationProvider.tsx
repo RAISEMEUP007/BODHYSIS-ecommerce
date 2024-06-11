@@ -121,6 +121,12 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     calcAndSetData(updatedItems);
   }
 
+  const removeReservationItem = (index:number) => {
+    const updatedItems =  [...ReservationItems];
+    updatedItems.splice(index, 1);
+    calcAndSetData(updatedItems);
+  }
+
   const calcAndSetData = async (ReservationItems:Array<any>) =>{
     const calculatedReservedItems = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, ReservationItems, ReservationMain.pickup, ReservationMain.dropoff);
 
@@ -213,13 +219,7 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
     setReservationValue,
     getReservationValue,
     addReservationItems,
-    removeReservationItem: (index) => {
-      setReservationItems((prevItems) => {
-        const newItems = [...prevItems];
-        newItems.splice(index, 1);
-        return newItems;
-      });
-    },
+    removeReservationItem,
     initReservation: () => {
       setReservationMain(initializedMain);
       setReservationItems([]);
