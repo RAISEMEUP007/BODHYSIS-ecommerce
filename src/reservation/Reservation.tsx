@@ -61,9 +61,9 @@ const Reservation: React.FC = () => {
 
   const renderReservation = () => (
     <BasicLayout>
-      <Box sx={styles.container}>
+      <Box sx={styles(matches900).container}>
         <ReserveProducts 
-          sx={styles.ReserveProducts}
+          sx={styles(matches900).ReserveProducts}
           addressError={addressError}
         />
         <Purchase
@@ -77,19 +77,19 @@ const Reservation: React.FC = () => {
     </BasicLayout>
   );
 
-  const styles ={
-    container: {
-      display:'flex', 
-      flexDirection: matches900?'row':'column',
-    },
-    ReserveProducts: {
-      flex:1, 
-      p:matches900?'60px 40px':'30px 24px',
-      overflow: 'auto',
-    },
-  }
-
   return renderReservation();
 }
+
+const styles = (matches900:boolean) => ({
+  container: {
+    display:'flex', 
+    flexDirection: matches900?'row':'column',
+  },
+  ReserveProducts: {
+    flex:1, 
+    p:matches900?'60px 40px':'30px 24px',
+    overflow: 'auto',
+  },
+});
 
 export default Reservation;
