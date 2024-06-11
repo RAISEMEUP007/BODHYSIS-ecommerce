@@ -45,7 +45,7 @@ const CompletePurchase: React.FC = () => {
 
   const renderCompletePurchase = () => (
     <BasicLayout>
-      <Box sx={styles.container}>
+      <Box sx={styles(matches900).container}>
         {amount > 0 && clientSecret &&(
           <Elements stripe={stripePromise} options={options}>
             <Box 
@@ -55,7 +55,6 @@ const CompletePurchase: React.FC = () => {
                 padding:'50px', 
                 paddingTop: '50px', 
                 borderLeft:'1px solid #ccc',
-                // alignItems:'center',
                 justifyContent:'center',
               }}>
               <Box sx={{width:'100%', maxWidth:'900px'}}>
@@ -74,19 +73,19 @@ const CompletePurchase: React.FC = () => {
     </BasicLayout>
   );
 
-  const styles ={
-    container: {
-      display:'flex', 
-      flexDirection: matches900? 'row': 'column',
-    },
-    ReservationMainDetail: {
-      flex:1, 
-      p:matches900?'60px 40px':'30px 24px',
-      overflow: 'auto',
-    },
-  }
-
   return renderCompletePurchase();
 }
+
+const styles = (matches900:boolean) => ({
+  container: {
+    display:'flex', 
+    flexDirection: matches900? 'row': 'column',
+  },
+  ReservationMainDetail: {
+    flex:1, 
+    p:matches900?'60px 40px':'30px 24px',
+    overflow: 'auto',
+  },
+});
 
 export default CompletePurchase;
