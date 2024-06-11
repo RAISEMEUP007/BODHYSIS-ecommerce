@@ -66,7 +66,6 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
     isDescription={true}
     isShowSearchBox={true}
     sx={{marginTop:'20px'}}
-    contentStyle={styles(matches900).contentPadding}
     emptyError={addressError}
   />), [addressError])
 
@@ -119,9 +118,6 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
 }
 
 const styles = (matches900:boolean) => ({
-  contentPadding:{
-    paddingLeft: '0px'
-  },
   CategorySlot:{
     width: matches900?'300px':'100%', 
     border:'1px solid #BCBCBC', 
