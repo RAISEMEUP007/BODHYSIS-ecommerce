@@ -74,10 +74,6 @@ const DiscountCodes: React.FC<Props> = ({isDisableDiscount}) => {
     </Box>
   );
 
-  const styles ={
-
-  }
-
   return renderDiscountCodes();
 }
 
