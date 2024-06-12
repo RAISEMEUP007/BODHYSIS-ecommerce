@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import BasicLayout from '../common/BasicLayout';
-import { useNavigate } from 'react-router';
+import { redirect, useNavigate } from 'react-router';
 import { sendReservationConfirmationEmail } from '../api/Stripe';
 import { useCustomerReservation } from '../common/Providers/CustomerReservationProvider/UseCustomerReservation';
 
@@ -79,7 +79,8 @@ const Thankyou: React.FC = () => {
             variant="contained"
             sx={{ padding:'10px 0', width:'150px', textTransform: 'none', fontSize:'16px', marginRight:'40px' }}
             onClick={()=>{
-              navigate("/reservation");
+              // redirect("/reservation");
+              window.location.href = "/reservation";
             }}
           >
             {"Go Home"}
@@ -89,7 +90,7 @@ const Thankyou: React.FC = () => {
             sx={{ padding:'10px 0', width:'150px', textTransform: 'none', fontSize:'16px' }}
             onClick={()=>{
               localStorage.clear();
-              navigate("/");
+              window.location.href = "/";
             }}
           >
             {"Log out"}
