@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
 
-import { createReservation, createTransaction } from "../api/Product";
+import { createReservation, createTransaction, removeReservation } from "../api/Product";
 import { useCustomStripe } from "../common/Providers/CustomStripeProvider/UseCustomStripe";
 import { useCustomerReservation } from "../common/Providers/CustomerReservationProvider/UseCustomerReservation";
 import { useStoreDetails } from "../common/Providers/StoreDetailsProvider/UseStoreDetails";
@@ -37,6 +37,8 @@ export default function CheckoutForm() {
       const protocol = url.protocol;
       const host = url.host;
       const fullHost = protocol + "//" + host; 
+      
+      const reservationId = await createOrder();
   
       const { error } = await stripe.confirmPayment({
         elements,
@@ -63,67 +65,73 @@ export default function CheckoutForm() {
           })
           removeStorageValues();
         }
+        await removeReservation({id:reservationId});
       } else{
-        const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret.client_secret);
-
-        if (!paymentIntent) return;
-        
-        const forSavingOnDB = {
-          brand_id : storeDetails.brand_id,
-          start_date : formatDateString(ReservationMain.pickup),
-          end_date : ReservationMain.dropoff? formatDateString(ReservationMain.dropoff): '',
-          subtotal : ReservationMain.prices.subtotal,
-          tax_rate : storeDetails.sales_tax,
-          tax_amount : ReservationMain.prices.tax,
-          discount_amount : ReservationMain.prices.discount,
-          total_price: paymentIntent.amount/100,
-          price_table_id: ReservationMain.price_table_id,
-          stage : 2,
-          address_id : ReservationMain.address_id,
-          use_manual : ReservationMain.use_manual,
-          manual_address : ReservationMain.manual_address,
-          email : ReservationMain.email,
-          phone_number : ReservationMain.phone_number,
-          driver_tip: ReservationMain.driver_tip,
-          customer_id : localStorage.getItem('customerId'),
-          items : ReservationItems,
-          discount_code: ReservationMain.discount_code,
-          promo_code: ReservationMain.promo_code,
-          note: ReservationMain.note,
-          stripe_cus_id: clientSecret.customer,
-        };
-  
-        const createdReservation:any = await createReservation(forSavingOnDB);
-        const newReservationData = await createdReservation.clone().json();
-        if(!newReservationData) {
-          enqueueSnackbar(`Reservation failed!`, {
-            variant: 'error',
-            style: { width: '350px' },
-            autoHideDuration: 3000,
-            anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          })
-          return;
-        }
-  
-        const reservationId = newReservationData.reservation.id;
-    
-        const payload = {
-          payment_intent : paymentIntent?.id,
-          reservation_id : reservationId,
-          method: 'Stripe',
-          amount: paymentIntent.amount/100,
-        }
-        
-        await createTransaction(payload);
-        
-        setStorageValues(reservationId, newReservationData.reservation.order_number);
-
         navigate("/thankyou");
       }
   
       setIsLoading(false);
     }
   };
+
+  const createOrder = async () => {
+    if(!stripe) return null;
+    const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret.client_secret);
+
+    if (!paymentIntent || !ReservationMain.pickup) return null;
+    
+    const forSavingOnDB = {
+      brand_id : storeDetails.brand_id,
+      start_date : formatDateString(ReservationMain.pickup),
+      end_date : ReservationMain.dropoff? formatDateString(ReservationMain.dropoff): '',
+      subtotal : ReservationMain.prices.subtotal,
+      tax_rate : storeDetails.sales_tax,
+      tax_amount : ReservationMain.prices.tax,
+      discount_amount : ReservationMain.prices.discount,
+      total_price: paymentIntent.amount/100,
+      price_table_id: ReservationMain.price_table_id,
+      stage : 2,
+      address_id : ReservationMain.address_id,
+      use_manual : ReservationMain.use_manual,
+      manual_address : ReservationMain.manual_address,
+      email : ReservationMain.email,
+      phone_number : ReservationMain.phone_number,
+      driver_tip: ReservationMain.driver_tip,
+      customer_id : localStorage.getItem('customerId'),
+      items : ReservationItems,
+      discount_code: ReservationMain.discount_code,
+      promo_code: ReservationMain.promo_code,
+      note: ReservationMain.note,
+      stripe_cus_id: clientSecret.customer,
+    };
+
+    const response:any = await createReservation(forSavingOnDB);
+    const newReservationData = await response.clone().json();
+    if(!newReservationData) {
+      enqueueSnackbar(`Reservation failed!`, {
+        variant: 'error',
+        style: { width: '350px' },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      })
+      return;
+    }
+
+    const reservationId = newReservationData.reservation.id;
+
+    const payload = {
+      payment_intent : paymentIntent?.id,
+      reservation_id : reservationId,
+      method: 'Stripe',
+      amount: paymentIntent.amount/100,
+    }
+    
+    await createTransaction(payload);
+    
+    setStorageValues(reservationId, newReservationData.reservation.order_number);
+
+    return reservationId;
+  }
 
   const setStorageValues = (reservationId:number, order_number:string) =>{
     localStorage.setItem('_r_id', reservationId.toString());
