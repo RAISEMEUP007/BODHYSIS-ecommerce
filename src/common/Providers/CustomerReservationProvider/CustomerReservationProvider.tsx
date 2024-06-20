@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { useStoreDetails } from '../StoreDetailsProvider/UseStoreDetails';
-import { getHeaderData, getTableData } from '../../../api/Product';
+import { getHeaderData, getTableData, getAvaliableSheet } from '../../../api/Product';
 import { calculatePricedEquipmentData, getPriceTableByBrandAndDate } from '../../../reservation/CalcPrice';
+import { formatDateString } from '../../Utils';
 
 export interface ReservationMainProps {
   pickup: Date | null;
@@ -37,6 +38,7 @@ export interface ReservationMainProps {
   discount_rate: number | null,
   headerData: Array<any>,
   priceTableData: Array<any>,
+  availableSheet: any,
 }
 
 interface ContextProps {
@@ -83,6 +85,7 @@ const initializedMain: ReservationMainProps = {
   discount_rate: null,
   headerData: [],
   priceTableData: [],
+  availableSheet: null,
 }
 
 export const CustomerReservationContext = createContext<ContextProps>({
@@ -170,6 +173,19 @@ export const CustomerReservationProvider = ({ children }:{children:React.ReactNo
       setReservationValue('price_table_id', priceTable?.id??null);
     }
   }, [priceLogicData, storeDetails.brand_id, ReservationMain.pickup])
+
+  useEffect(()=>{
+    if(ReservationMain.pickup && ReservationMain.dropoff){
+      const payload = {
+        start_date: formatDateString(ReservationMain.pickup),
+        end_date: formatDateString(ReservationMain.dropoff)
+      }
+      getAvaliableSheet(payload, (jsonRes:any, status, error) => {
+        if(jsonRes) setReservationValue('availableSheet', jsonRes);
+        else setReservationValue('availableSheet', null);
+      })
+    }else setReservationValue('availableSheet', null);
+  }, [ReservationMain.pickup, ReservationMain.dropoff])
 
   useEffect(() => {
     if(ReservationMain.price_table_id){

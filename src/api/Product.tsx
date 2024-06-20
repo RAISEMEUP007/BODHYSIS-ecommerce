@@ -55,3 +55,7 @@ export const verifyQuantityByDisplayName = async (payload:any,callback=defaultCa
 export const getDiscountCodes = async (callback=defaultCallback) => {
   return await getAPICall({ route: 'settings/getdiscountcodesdata', callback });
 }
+
+export const getAvaliableSheet = async (payload:any,callback=defaultCallback) => {
+  return await postAPICall({ route: 'reservations/getavailablesheetecommerce/', payload, callback });
+}
