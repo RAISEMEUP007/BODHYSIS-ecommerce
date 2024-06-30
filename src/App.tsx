@@ -15,6 +15,9 @@ import PageNotFound from './error/PageNotFound';
 import Temp from './thankyou/Temp';
 import TermsAndconditions from './payment/TermsAndConditions';
 import { getDiscountCodes, getPriceLogicData } from './api/Product';
+import ResetPass from './login/ResetPass';
+import ChangePass from './login/ChangePass';
+import EmailSent from './login/EmailSent';
 
 const InitializeApp = ({ children } : {children:any}) => {
 
@@ -73,6 +76,10 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/resetpass" element={<ResetPass />} />
+            <Route path="/emailsent/:str" element={<EmailSent />} />
+            <Route path="/changepass/:recover_id" element={<ChangePass />} />
             <Route path="/usernotfound" element={<UserNotFound />} />
             <Route path="/reservation" element={<Reservation />} />
             <Route path="/review" element={<Payment />} />

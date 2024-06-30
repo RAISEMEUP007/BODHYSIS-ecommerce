@@ -4,6 +4,14 @@ export const logIn = async (payload:any, callback=defaultCallback) => {
   return await postAPICall({ route: 'customer/login', payload, callback });
 }
 
+export const resetpass = async (payload:any, callback=defaultCallback) => {
+  return await postAPICall({ route: 'resetpass', payload, callback });
+}
+
+export const newPasword = async (payload:any, callback=defaultCallback) => {
+  return await postAPICall({ route: 'customer/newpassword', payload, callback });
+};
+
 export const adminTry = async (payload:any, callback=defaultCallback) => {
   return await postAPICall({ route: 'customer/admintry', payload, callback });
 }
