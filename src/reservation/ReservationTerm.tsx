@@ -35,6 +35,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
       minDate = minDate.add(1, 'day');
     }
 
+    setMinDate(minDate);
     setReservationValue('pickup', new Date(minDate.toString()));
   }, [])
 
