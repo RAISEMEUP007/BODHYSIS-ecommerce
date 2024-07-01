@@ -17,25 +17,36 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
   const { storeDetails } = useStoreDetails();
   const { ReservationMain, setReservationValue } = useCustomerReservation();
   const { matches900 } = useResponsiveValues();
+  const [minDate, setMinDate] = useState(dayjs().set('hour', 0).set('minute', 0).set('second', 0));
 
   useEffect(()=>{
-    if(ReservationMain.pickup === null) setReservationValue('pickup', new Date());
+    const currentTime = new Date();
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayString = `${year}-${month}-${day}`;
+
+    const cutoffTime = new Date(`${todayString} ${storeDetails?.cut_off_time??'11:59 PM'}`);
+    
+    let minDate = dayjs().set('hour', 0).set('minute', 0).set('second', 0);
+
+    if(cutoffTime < currentTime){
+      minDate = minDate.add(1, 'day');
+    }
+
+    setReservationValue('pickup', new Date(minDate.toString()));
   }, [])
 
   const handlePickupChange = (value: any) => {
     const pickupDateTime = new Date(value);
     pickupDateTime.setHours(0, 0, 0, 0);
-    console.log(pickupDateTime);
-    console.log(ReservationMain.dropoff);
-    if(ReservationMain.dropoff === null)
-      setReservationValue('pickup', pickupDateTime);
-    else {
-      if(pickupDateTime.getTime() + (24 * 60 * 60 * 1000) > ReservationMain.dropoff.getTime()) {
-        const timeDifference = ReservationMain.dropoff.getTime() - pickupDateTime.getTime();
-        const newDropoffDateTime = new Date(pickupDateTime.getTime() + timeDifference + (24 * 60 * 60 * 1000));
+
+    if(ReservationMain.dropoff !== null){
+      if(pickupDateTime.getTime() + (24 * 60 * 60 * 1000) >= ReservationMain.dropoff.getTime()) {
+        const newDropoffDateTime = new Date(pickupDateTime.getTime() + (24 * 60 * 60 * 1000));
         setReservationValue('dropoff', newDropoffDateTime);
       } 
-      setReservationValue('pickup', pickupDateTime);
     }
   }
 
@@ -55,14 +66,14 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
           value={dayjs(ReservationMain.pickup)}
           onChange={handlePickupChange}
           // maxDate={dayjs(ReservationMain.dropoff)}
-          minDate = {dayjs().set('hour', 0).set('minute', 0).set('second', 0)}
+          minDate = {minDate}
         />
         <CustomDatePicker
           name="End Date"
           sx={{ boxSizing: 'boder-box', width: matches900?'250px':'100%', pr: '20px', mb:'20px' }}
           value={dayjs(ReservationMain.dropoff)}
           onChange={handleDropoffChange}
-          minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0) : dayjs().add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0))}
+          minDate={dayjs(ReservationMain.pickup ? dayjs(ReservationMain.pickup).add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0) : minDate.add(1, 'day').set('hour', 0).set('minute', 0).set('second', 0))}
         />
       </Box>
       <Typography sx={{marginTop:"30px", fontSize:'18px'}}>

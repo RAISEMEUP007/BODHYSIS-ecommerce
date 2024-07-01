@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
-import { Box, Typography, } from '@mui/material';
+import { Box, Link, Typography, } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 
@@ -612,13 +612,14 @@ const Login: React.FC = () => {
                   }
                 }}
               />
-                <LoadingButton
-                  variant="contained"
-                  sx={styles.logInButton}
-                  onClick={handleSignIn}
-                >
-                  {"Log in"}
-                </LoadingButton>
+              <Link href="/resetpass" >{"forgot password?"}</Link>
+              <LoadingButton
+                variant="contained"
+                sx={styles.logInButton}
+                onClick={handleSignIn}
+              >
+                {"Log in"}
+              </LoadingButton>
             </Box>
           </Box>
         </Box>
