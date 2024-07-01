@@ -21,6 +21,7 @@ export interface StoreDetailProps {
   is_document: boolean | null;
   pickup_time: string;
   dropoff_time: string;
+  cut_off_time: string;
 }
 
 interface ContextProps {
@@ -55,6 +56,7 @@ const initializedDetail: StoreDetailProps = {
   is_document: null,
   pickup_time: '8:00 AM',
   dropoff_time: '10:00 AM',
+  cut_off_time: '11:59 PM',
 }
 
 export const StoreDetailsContext = createContext<ContextProps>({

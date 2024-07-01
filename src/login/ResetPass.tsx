@@ -23,12 +23,10 @@ type signInFormValidation = {
 
 const ResetPass: React.FC = () => {
 
-  const location = useLocation();
   const navigate = useNavigate();
   
   const { matches900 } = useResponsiveValues();
   const { enqueueSnackbar } = useSnackbar();
-  const { initReservation } = useCustomerReservation();
 
   const [signInFormValues, setSignInFormValues] = useState<signInFormValues>({
     email: "",

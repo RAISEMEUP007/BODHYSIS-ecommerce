@@ -24,12 +24,10 @@ const ChangePass: React.FC = () => {
 
   const {recover_id} = useParams();
 
-  const location = useLocation();
   const navigate = useNavigate();
   
   const { matches900 } = useResponsiveValues();
   const { enqueueSnackbar } = useSnackbar();
-  const { initReservation } = useCustomerReservation();
 
   const [signInFormValues, setSignInFormValues] = useState<signInFormValues>({
     password: "",
