@@ -27,9 +27,12 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
     const day = String(today.getDate()).padStart(2, '0');
     const todayString = `${year}-${month}-${day}`;
 
-    const cutoffTime = new Date(`${todayString} ${storeDetails?.cut_off_time??'11:59 PM'}`);
+    const cutoffTime = new Date(`${todayString} ${storeDetails.cut_off_time || '11:59 PM'}`);
     
     let minDate = dayjs().set('hour', 0).set('minute', 0).set('second', 0);
+
+    console.log(currentTime);
+    console.log(cutoffTime);
 
     if(cutoffTime < currentTime){
       minDate = minDate.add(1, 'day');
@@ -43,6 +46,7 @@ const ReservationTerm: React.FC<props> = ({sx, contentStyle}) => {
     const pickupDateTime = new Date(value);
     pickupDateTime.setHours(0, 0, 0, 0);
 
+    setReservationValue('pickup', pickupDateTime);
     if(ReservationMain.dropoff !== null){
       if(pickupDateTime.getTime() + (24 * 60 * 60 * 1000) >= ReservationMain.dropoff.getTime()) {
         const newDropoffDateTime = new Date(pickupDateTime.getTime() + (24 * 60 * 60 * 1000));
