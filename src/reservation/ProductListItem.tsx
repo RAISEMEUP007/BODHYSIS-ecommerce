@@ -48,11 +48,17 @@ const ProductListItem: React.FC<props> = ({ sx, product }) => {
 
   useEffect(()=>{
     const calc = async ()=>{
+      let lines = [];
       if(Product?.lines[0]?.price_group_id){
-        const lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
-        const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, lines, ReservationMain.pickup, ReservationMain.dropoff);
-        SetProduct({ ...Product, lines: calculatedLines });
+        lines = Product.lines.map((item:any) => ({ ...item, quantity: 1 }));
+      }else{
+        lines = [{
+          price_group_id: Product.priceGroupIds.split(',')[0],
+          quantity: 1,
+        }]
       }
+      const calculatedLines = await calculatePricedEquipmentData(ReservationMain.headerData, ReservationMain.price_table_id, ReservationMain.priceTableData, lines, ReservationMain.pickup, ReservationMain.dropoff);
+      SetProduct({ ...Product, lines: calculatedLines });
     }
 
     const timeout = setTimeout(()=>{calc()}, 100);
