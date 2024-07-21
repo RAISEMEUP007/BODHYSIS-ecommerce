@@ -39,8 +39,9 @@ const ReserveProducts: React.FC<props> = ({sx, addressError}) => {
         if (status === 200 && Array.isArray(jsonRes) && jsonRes.length) {
           const filteredCategories = jsonRes.filter((item: any) => {
             if(!item.brand_ids) return false;
-            const brandsIds = JSON.parse(item.brand_ids);
-            return brandsIds.includes(storeDetails.brand_id);
+            const brandsIds = (item.brand_ids || '').split('-');
+            const brandsIdsArr = brandsIds.map((item:any)=>JSON.parse(item)).flat();
+            return brandsIdsArr.includes(storeDetails.brand_id);
           });
           setProductFamilies(filteredCategories);
         } else {
